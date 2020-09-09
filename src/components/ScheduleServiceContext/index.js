@@ -1,3 +1,10 @@
-import {ScheduleServiceConsumer, ScheduleServiceProvider} from './ScheduleServiceContext';
+import React from 'react';
 
-export {ScheduleServiceProvider, ScheduleServiceConsumer};
+const ScheduleServiceContext = React.createContext();
+
+const {
+  Provider: ScheduleServiceProvider,
+  Consumer: ScheduleServiceConsumer,
+} = ScheduleServiceContext;
+
+export {ScheduleServiceContext, ScheduleServiceProvider, ScheduleServiceConsumer};
