@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import {Space, Table, Tag} from 'antd';
 import React from 'react';
 import {useSelector} from 'react-redux';
@@ -9,7 +8,6 @@ const columns = [
     title: 'Date',
     dataIndex: 'date',
     key: 'date',
-    render: text => <a>{text}</a>,
   },
   {
     title: 'Time',
@@ -17,36 +15,25 @@ const columns = [
     key: 'time',
   },
   {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: tags => (
-      <>
-        {tags.map(tag => {
-          const color = tag.length > 5 ? 'geekblue' : 'green';
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
+    title: 'Type',
+    key: 'type',
+    dataIndex: 'type',
+    render: type => <Tag color="geekblue">{type.toUpperCase()}</Tag>,
   },
   {
-    title: 'Topic',
-    key: 'topic',
+    title: 'Name',
+    key: 'name',
     render: (text, record) => (
       <Space size="middle">
-        <a>{record.topic}</a>
+        <span>{record.name}</span>
       </Space>
     ),
   },
 ];
 
 const ScheduleTable = () => {
-  const data = useSelector(state => state.schedule);
-  return <Table columns={columns} dataSource={data} />;
+  const data = useSelector(state => state.events);
+  return <Table columns={columns} dataSource={data} rowKey={record => record.id} />;
 };
 
 export default ScheduleTable;
