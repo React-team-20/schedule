@@ -1,10 +1,12 @@
 import {
   CHANGE_SCHEDULE_VIEW,
   HIDE_ALERT,
+  HIDE_FORM_CREATION_EVENT,
   HIDE_LOADER,
-  SHOW_ALERT,
-  SHOW_LOADER,
   LOADED_SCHEDULE,
+  SHOW_ALERT,
+  SHOW_FORM_CREATION_EVENT,
+  SHOW_LOADER,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -42,6 +44,18 @@ export const changeScheduleView = newView => {
   return {
     type: CHANGE_SCHEDULE_VIEW,
     payload: newView,
+  };
+};
+
+export const showFormCreationEvent = () => {
+  return {
+    type: SHOW_FORM_CREATION_EVENT,
+  };
+};
+
+export const hideFormCreationEvent = () => {
+  return {
+    type: HIDE_FORM_CREATION_EVENT,
   };
 };
 
