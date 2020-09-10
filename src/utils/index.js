@@ -9,7 +9,9 @@ export const setTagColor = (tag) => {
     case 'TWITCH':
       return 'purple';
     case 'MEETUP':
-      return 'geekblue';           
+      return 'geekblue';
+    case 'OPTIONAL TASK':
+      return 'magenta';           
     case 'TASK':
       return '#87D068';
     case 'CROSS-CHECK':
@@ -19,6 +21,8 @@ export const setTagColor = (tag) => {
     case 'CODEWARS':
       return '#2db7f5'; 
     case 'TEST':
-      return '#854eca';    
+      return '#854eca';  
+    case 'INTERVIEW':
+      return '#854eca';   
   }
 }
