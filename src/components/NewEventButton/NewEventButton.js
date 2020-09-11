@@ -12,7 +12,7 @@ const NewEventButton = () => {
   };
   return (
     <Button type="primary" onClick={showDrawer}>
-      <PlusOutlined /> New event
+      <PlusOutlined style={{display: 'inline-flex'}} /> New event
     </Button>
   );
 };

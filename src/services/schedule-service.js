@@ -1,8 +1,10 @@
+import {dateTimeParse} from '../utils';
+
 export default class ScheduleService {
-  getEvents = async () => {
+  getEvents = async tz => {
     const res = await fetch('https://rs-react-schedule.firebaseapp.com/api/team/q20/events');
     const data = await res.json();
-    return data.data;
+    return this.transformEventData(data.data, tz);
   };
 
   addEvent = async event => {
@@ -40,5 +42,10 @@ export default class ScheduleService {
     );
     const data = await res.json();
     return data;
+  };
+
+  transformEventData = (data, tz) => {
+    const sortData = data.sort((a, b) => a.dateTime - b.dateTime);
+    return tz ? sortData.map(item => ({...item, ...dateTimeParse(item.dateTime, tz)})) : sortData;
   };
 }
