@@ -1,4 +1,4 @@
-import {LOADED_SCHEDULE, REMOVE_EVENT} from '../constants/actions-types';
+import {LOADED_SCHEDULE, REMOVE_EVENT } from '../constants/actions-types';
 
 const initialState = [];
 

@@ -1,38 +1,40 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './create-event.css';
 import 'antd/dist/antd.css';
 import {Drawer, Form, Button, Col, Row, Input, Select, DatePicker} from 'antd';
-import {hideFormCreationEvent} from '../../actions/index';
+import {hideFormCreationEvent, scheduleLoaded} from '../../actions/index';
 import {connect} from 'react-redux';
-import ScheduleService from '../../services/schedule-service'
-
-const {addEvent} = new ScheduleService()
+import ScheduleService from '../../services/schedule-service';
+const emptyEvent = {
+  id: '',
+  topic: '1',
+  description: '',
+  descriptionUrl: '',
+  type: '',
+  timeZone: '',
+  date: '',
+  time: '',
+  dateTime: 0,
+  taskObj: {
+    demoUrl: '',
+    materials: '',
+  },
+  place: '',
+  comment: '',
+  organizer: '',
+};
+const {addEvent, getEvents} = new ScheduleService();
 
 const {Option} = Select;
 
-const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent}) => {
+const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleLoaded, tz}) => {
   const onClose = () => {
     hideFormCreationEvent();
   };
 
+  const [form] = Form.useForm();
   const [hideSubFieldsFlag, setHideSubFieldsFlag] = useState(true);
-  const [event, setEvent] = useState({
-    topic: '',
-    description: '',
-    descriptionUrl: '',
-    type: '',
-    timeZone: '',
-    date: '',
-    time: '',
-    dataTime: '',
-    taskObj: {
-      demoUrl: '',
-      materials: '',
-    },
-    place: '',
-    comment: '',
-    organizer: '',
-  });
+  const [event, setEvent] = useState(emptyEvent);
 
   const onSelectType = e => {
     if (e === 'task' || e === 'optional-task') {
@@ -43,29 +45,19 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent}) => {
     setEvent({...event, type: e});
   };
 
-  const onSubmit = e => {
+  const onSubmit = async () => {
     hideFormCreationEvent();
+    await addEvent(event);
+    const events = await getEvents(tz);
+    await scheduleLoaded(events);
+    setEvent(emptyEvent);
+    form.resetFields();
   };
 
-  const onChangeDate = e => {
-    console.log(e)
+  const onChangeTimeAndDate = e => {
     setEvent({
       ...event,
-      dataTime: e._d.getTime(),
-      date: `${e._d.getFullYear().toString()}-${(e._d.getMonth() + 1)
-        .toString()
-        .padStart(2, 0)}-${e._d.getDate().toString().padStart(2, 0)}`,
-    });
-  };
-
-  const onChangeTime = e => {
-    setEvent({
-      ...event,
-      dataTime: e._d.getTime(),
-      time: `${e._d.getHours().toString().padStart(2, 0)}:${e._d
-        .getMinutes()
-        .toString()
-        .padStart(2, 0)}`,
+      dateTime: Date.parse(e._d.toString()),
     });
   };
 
@@ -132,16 +124,17 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent}) => {
           </div>
         }
       >
-        <Form layout="vertical" hideRequiredMark id="create-form" onFinish={onSubmit}>
+        <Form layout="vertical" hideRequiredMark id="create-form" onFinish={onSubmit} form={form}>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="topic"
                 label="Topic"
                 onChange={onChangeInputs}
+                value="asd"
                 rules={[{required: true, message: 'Please enter event topic'}]}
               >
-                <Input name="topic" placeholder="Please enter event topic" />
+                <Input name="topic" placeholder="Please enter event topic" value={event.topic} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -189,37 +182,24 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent}) => {
                   <Option value="meetup">Meetup</Option>
                   <Option value="live-coding">Live coding</Option>
                   <Option value="twitch">Twitch</Option>
+                  <Option value="cross-check">Cross-check</Option>
                 </Select>
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Form.Item
                 name="date"
-                label="Date"
-                rules={[{required: true, message: 'Please choose the date'}]}
+                label="Date and time"
+                rules={[{required: true, message: 'Please choose the Date and Time'}]}
               >
                 <DatePicker
-                  onChange={onChangeDate}
                   name="date"
                   style={{width: '100%'}}
-                  getPopupContainer={trigger => trigger.parentElement}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="time"
-                label="Time"
-                rules={[{required: true, message: 'Please choose the Time'}]}
-              >
-                <DatePicker
-                  name="time"
-                  style={{width: '100%'}}
-                  picker="time"
-                  format="HH:mm"
-                  onChange={onChangeTime}
+                  showTime={{format: 'HH:mm'}}
+                  format="YYYY-MM-DD HH:mm"
+                  onChange={onChangeTimeAndDate}
                 />
               </Form.Item>
             </Col>
@@ -281,7 +261,7 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent}) => {
                 rules={[
                   {
                     required: true,
-                    message: 'please add comment',
+                    message: 'Please add comment',
                   },
                 ]}
               >
@@ -298,11 +278,13 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent}) => {
 const mapStateToProps = state => {
   return {
     isShowFormСreationEvent: state.app.isShowFormСreationEvent,
+    tz: state.app.timezone,
   };
 };
 
 const mapDispatchToProps = {
   hideFormCreationEvent,
+  scheduleLoaded,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateEvent);
