@@ -1,0 +1,24 @@
+.list-wrapper {
+  margin: 0 30px;
+}
+
+.list-item-tag {
+    margin-right: 20px;
+}
+  
+.tag-wrapper {
+    min-width: 110px;
+}
+
+.item-organizer {
+    margin-right: 10px;
+}
+
+.list-item-divider {
+    color: #1890FF !important;
+    margin-bottom: 20px !important;
+}
+
+.list-item-wrapper {
+    margin-bottom: 40px;
+}
