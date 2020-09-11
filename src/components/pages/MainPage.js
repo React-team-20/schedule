@@ -7,6 +7,7 @@ import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import ScheduleTable from '../ScheduleTable';
 import ScheduleСalendar from '../ScheduleСalendar';
 import Spinner from '../Spinner';
+import CreateEvent from '../CreateEvent'
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -24,9 +25,9 @@ const MainPage = () => {
   }
 
   return {
-    table: <ScheduleTable />,
-    list: <ScheduleList />,
-    calendar: <ScheduleСalendar />,
+    table: <><ScheduleTable /><CreateEvent/> </>,
+    list: <><ScheduleList /><CreateEvent/></>,
+    calendar: <><ScheduleСalendar /><CreateEvent/></>,
   }[currentView];
 };
 
