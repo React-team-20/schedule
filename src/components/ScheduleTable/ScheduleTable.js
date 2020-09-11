@@ -1,6 +1,7 @@
 import {Space, Table, Tag} from 'antd';
 import React from 'react';
 import {useSelector} from 'react-redux';
+import {setTagColor} from '../../utils';
 import EditEventButton from './EditEventButton';
 import DeleteEventButton from './RemoveEventButton';
 import './schedule-table.css';
@@ -19,7 +20,11 @@ const ScheduleTable = () => {
     {
       title: 'Type',
       dataIndex: 'type',
-      render: type => <Tag color="geekblue">{type.toUpperCase()}</Tag>,
+      render: (text, record) => (
+        <Tag className="list-item-tag" color={setTagColor(record.type.toUpperCase())}>
+          {text}
+        </Tag>
+      ),
     },
     {
       title: 'Topic',
