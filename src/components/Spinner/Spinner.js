@@ -1,8 +1,13 @@
+import {Spin} from 'antd';
 import React from 'react';
 import './spinner.css';
 
 const Spinner = () => {
-  return <div>loading...</div>;
+  return (
+    <div className="spin-container">
+      <Spin tip="Loading..." size="large" />
+    </div>
+  );
 };
 
 export default Spinner;

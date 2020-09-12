@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import {
   EllipsisOutlined,
   UserOutlined,
@@ -12,6 +13,10 @@ import {
   Dropdown,
   Menu
 } from 'antd';
+=======
+import ScheduleViewSelect from '../ScheduleViewSelect';
+import TimeZoneSelect from '../TimeZoneSelect';
+>>>>>>> d891fced8b8e52dbb0b2b5afee388a102dcc70d9
 import NewEventButton from '../NewEventButton';
 import ScheduleViewSelect from '../ScheduleViewSelect';
 import Avatar from 'antd/lib/avatar/avatar';
@@ -75,6 +80,7 @@ const Header = () => {
     >
       <ScheduleViewSelect />
 
+      <TimeZoneSelect />
       <NewEventButton />
     </PageHeader >
   );

@@ -1,16 +1,23 @@
 import {
   CHANGE_SCHEDULE_VIEW,
+  CHANGE_TIMEZONE,
   HIDE_ALERT,
   HIDE_FORM_CREATION_EVENT,
+  HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
   SHOW_ALERT,
   SHOW_FORM_CREATION_EVENT,
+  SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
 } from '../constants/actions-types';
+import {DEFAULT_TIMEZONE} from '../constants/timezones';
 
 const initialState = {
   viewSelect: localStorage.getItem('scheduleView') || 'table',
+  timezone: localStorage.getItem('timezone') || DEFAULT_TIMEZONE,
   isShowFormСreationEvent: false,
+  isShowFormEditEvent: false,
+  currentEvent: null,
   loading: true,
   alert: null,
 };
@@ -29,8 +36,14 @@ const appReducer = (state = initialState, action) => {
       return {...state, isShowFormСreationEvent: true};
     case HIDE_FORM_CREATION_EVENT:
       return {...state, isShowFormСreationEvent: false};
+    case SHOW_FORM_EDIT_EVENT:
+      return {...state, isShowFormEditEvent: true, currentEvent: action.payload};
+    case HIDE_FORM_EDIT_EVENT:
+      return {...state, isShowFormEditEvent: false, currentEvent: null};
     case CHANGE_SCHEDULE_VIEW:
       return {...state, viewSelect: action.payload};
+    case CHANGE_TIMEZONE:
+      return {...state, timezone: action.payload};
     default:
       return state;
   }
