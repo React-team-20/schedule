@@ -1,11 +1,11 @@
-import {Select} from 'antd';
+import { Select } from 'antd';
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {changeTimezone} from '../../actions';
-import {TIMEZONES} from '../../constants/timezones';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeTimezone } from '../../actions';
+import { TIMEZONES } from '../../constants/timezones';
 import './time-zone-select.css';
 
-const {Option} = Select;
+const { Option } = Select;
 
 const TimeZoneSelect = () => {
   const selectOptions = TIMEZONES.map(timezone => (
@@ -21,7 +21,7 @@ const TimeZoneSelect = () => {
   }
 
   return (
-    <Select defaultValue={timezone} style={{width: 200}} onChange={handleChange}>
+    <Select defaultValue={timezone} style={{ width: 150 }} onChange={handleChange}>
       {selectOptions}
     </Select>
   );
