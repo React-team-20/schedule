@@ -1,6 +1,7 @@
 import React, {useContext, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {hideLoader, scheduleLoaded} from '../../actions';
+import CreateEvent from '../CreateEvent';
 import ScheduleList from '../ScheduleList';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import ScheduleTable from '../ScheduleTable';
@@ -35,11 +36,18 @@ const MainPage = () => {
     return <Spinner />;
   }
 
-  return {
-    table: <ScheduleTable />,
-    list: <ScheduleList />,
-    calendar: <ScheduleСalendar />,
-  }[currentView];
+  return (
+    <>
+      {
+        {
+          table: <ScheduleTable />,
+          list: <ScheduleList />,
+          calendar: <ScheduleСalendar />,
+        }[currentView]
+      }
+      <CreateEvent />
+    </>
+  );
 };
 
 export default MainPage;
