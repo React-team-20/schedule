@@ -15,8 +15,12 @@ const getListItem = data => {
         renderItem={item => (
           <List.Item>
             <div className="tag-wrapper">
-              <Tag className="list-item-tag" color={setTagColor(item.type.toUpperCase())}>
-                {item.type}
+              <Tag className="list-item-tag" color={setTagColor(item.type)}>
+                {item.type
+                  .toUpperCase()
+                  .split('')
+                  .map(i => (i === '-' ? ' ' : i))
+                  .join('')}
               </Tag>
             </div>
             <List.Item.Meta

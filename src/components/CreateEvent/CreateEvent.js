@@ -1,7 +1,7 @@
-import {Button, Col, DatePicker, Drawer, Form, Input, Row, Select} from 'antd';
+import {Button, Col, DatePicker, Drawer, Form, Input, message, Row, Select} from 'antd';
 import React, {useContext, useState} from 'react';
 import {connect} from 'react-redux';
-import {hideFormCreationEvent, showLoader} from '../../actions';
+import {hideFormCreationEvent, hideLoader, setAlertMessage, showLoader} from '../../actions';
 import eventsTypes from '../../constants/events-types';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import './create-event.css';
@@ -27,7 +27,14 @@ const emptyEvent = {
 
 const {Option} = Select;
 
-const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, showLoader, fetchEvents}) => {
+const CreateEvent = ({
+  isShowFormСreationEvent,
+  hideFormCreationEvent,
+  showLoader,
+  setAlertMessage,
+  hideLoader,
+  fetchEvents,
+}) => {
   const {addEvent} = useContext(ScheduleServiceContext);
   const onClose = () => {
     hideFormCreationEvent();
@@ -46,13 +53,20 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, showLoade
     setEvent({...event, type: e});
   };
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     hideFormCreationEvent();
     showLoader();
-    await addEvent(event);
-    fetchEvents();
-    setEvent(emptyEvent);
-    form.resetFields();
+    addEvent(event)
+      .then(() => {
+        setAlertMessage('Event added successfully!');
+        fetchEvents();
+        setEvent(emptyEvent);
+        form.resetFields();
+      })
+      .catch(() => {
+        hideLoader();
+        message.error('Something went wrong');
+      });
   };
 
   const onChangeTimeAndDate = e => {
@@ -277,6 +291,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   hideFormCreationEvent,
   showLoader,
+  hideLoader,
+  setAlertMessage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateEvent);

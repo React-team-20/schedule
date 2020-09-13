@@ -1,6 +1,6 @@
 import React from 'react';
-import { EditOutlined, EyeOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Menu, Space } from 'antd';
+import {EditOutlined, EyeOutlined, LogoutOutlined} from '@ant-design/icons';
+import {Button, Dropdown, Menu, Space} from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import RoleSelect from '../RoleSelect';
 
@@ -40,7 +40,7 @@ const HeaderTitle = () => {
         <Dropdown overlay={myProfileMenu} placement="bottomLeft">
           <Button type="dashed" size="large" icon={<Avatar src={avatarUrl} />}>
             My Profile
-        </Button>
+          </Button>
         </Dropdown>
       </Space>
     </div>

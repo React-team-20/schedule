@@ -7,11 +7,12 @@ import {
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
   LOADED_SCHEDULE,
+  REMOVE_EVENT,
+  SET_ALERT_MESSAGE,
   SHOW_ALERT,
   SHOW_FORM_CREATION_EVENT,
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
-  REMOVE_EVENT,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -26,22 +27,22 @@ export const hideLoader = () => {
   };
 };
 
+export const showAlert = () => {
+  return {
+    type: SHOW_ALERT,
+  };
+};
+
 export const hideAlert = () => {
   return {
     type: HIDE_ALERT,
   };
 };
 
-export const showAlert = text => {
-  return dispatch => {
-    dispatch({
-      type: SHOW_ALERT,
-      payload: text,
-    });
-
-    setTimeout(() => {
-      dispatch(hideAlert());
-    }, 3000);
+export const setAlertMessage = text => {
+  return {
+    type: SET_ALERT_MESSAGE,
+    payload: text,
   };
 };
 

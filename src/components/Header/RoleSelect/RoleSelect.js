@@ -1,12 +1,12 @@
 import React from 'react';
-import { Select } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeUserRole } from '../../../actions';
-import { USER_ROLES_ARRAY } from '../../../constants/user-role';
+import {Select} from 'antd';
+import {useDispatch, useSelector} from 'react-redux';
+import {changeUserRole} from '../../../actions';
+import {USER_ROLES_ARRAY} from '../../../constants/user-role';
 
 import './role-select.css';
 
-const { Option } = Select;
+const {Option} = Select;
 
 const TimeZoneSelect = () => {
   const selectOptions = USER_ROLES_ARRAY.map(role => (
@@ -22,7 +22,7 @@ const TimeZoneSelect = () => {
   }
 
   return (
-    <Select defaultValue={userRole} style={{ width: 100 }} bordered={false} onChange={handleChange}>
+    <Select defaultValue={userRole} style={{width: 100}} bordered={false} onChange={handleChange}>
       {selectOptions}
     </Select>
   );

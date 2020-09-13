@@ -3,9 +3,7 @@ import eventsTypes from '../constants/events-types';
 
 export const dateTimeParse = (dateTime, timezone) => {
   return {
-    date: moment(+dateTime)
-      .tz(timezone)
-      .format('YYYY-MM-DD'),
+    date: moment(dateTime).tz(timezone).format('YYYY-MM-DD'),
     time: moment(dateTime).tz(timezone).format('HH:mm'),
   };
 };
