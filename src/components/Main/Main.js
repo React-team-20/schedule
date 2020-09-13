@@ -1,40 +1,38 @@
 import React, {useContext, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {hideLoader, scheduleLoaded} from '../../actions';
+import {hideLoader, scheduleLoaded, showLoader} from '../../actions';
 import CreateEvent from '../CreateEvent';
 import ScheduleList from '../ScheduleList';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import ScheduleTable from '../ScheduleTable';
 import ScheduleСalendar from '../ScheduleСalendar';
-import Spinner from '../Spinner';
 
-const MainPage = () => {
+const Main = () => {
   const dispatch = useDispatch();
   const events = useSelector(state => state.events);
   const currentView = useSelector(state => state.app.viewSelect);
-  const loading = useSelector(state => state.app.loading);
   const tz = useSelector(state => state.app.timezone);
-  const scheduleService = useContext(ScheduleServiceContext);
+  const {getEvents, transformEventData} = useContext(ScheduleServiceContext);
 
-  useEffect(() => {
-    scheduleService
-      .getEvents(tz)
+  const fetchEvents = () => {
+    dispatch(showLoader());
+    getEvents(tz)
       .then(evts => {
         dispatch(scheduleLoaded(evts));
       })
       .finally(() => dispatch(hideLoader()));
+  };
+
+  useEffect(() => {
+    fetchEvents();
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    const newEvents = scheduleService.transformEventData(events, tz);
+    const newEvents = transformEventData(events, tz);
     dispatch(scheduleLoaded(newEvents));
     // eslint-disable-next-line
   }, [tz]);
-
-  if (loading) {
-    return <Spinner />;
-  }
 
   return (
     <>
@@ -45,9 +43,9 @@ const MainPage = () => {
           calendar: <ScheduleСalendar />,
         }[currentView]
       }
-      <CreateEvent />
+      <CreateEvent fetchEvents={fetchEvents} />
     </>
   );
 };
 
-export default MainPage;
+export default Main;

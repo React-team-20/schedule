@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import './create-event.css';
-import 'antd/dist/antd.css';
-import {Drawer, Form, Button, Col, Row, Input, Select, DatePicker} from 'antd';
-import {hideFormCreationEvent, scheduleLoaded} from '../../actions/index';
+import {Button, Col, DatePicker, Drawer, Form, Input, Row, Select} from 'antd';
+import React, {useContext, useState} from 'react';
 import {connect} from 'react-redux';
-import ScheduleService from '../../services/schedule-service';
+import {hideFormCreationEvent, showLoader} from '../../actions';
+import eventsTypes from '../../constants/events-types';
+import {ScheduleServiceContext} from '../ScheduleServiceContext';
+import './create-event.css';
+
 const emptyEvent = {
   id: '',
   topic: '1',
@@ -23,11 +24,11 @@ const emptyEvent = {
   comment: '',
   organizer: '',
 };
-const {addEvent, getEvents} = new ScheduleService();
 
 const {Option} = Select;
 
-const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleLoaded, tz}) => {
+const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, showLoader, fetchEvents}) => {
+  const {addEvent} = useContext(ScheduleServiceContext);
   const onClose = () => {
     hideFormCreationEvent();
   };
@@ -47,9 +48,9 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleL
 
   const onSubmit = async () => {
     hideFormCreationEvent();
+    showLoader();
     await addEvent(event);
-    const events = await getEvents(tz);
-    await scheduleLoaded(events);
+    fetchEvents();
     setEvent(emptyEvent);
     form.resetFields();
   };
@@ -97,7 +98,7 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleL
         setEvent({...event, comment: e.target.value});
         break;
       default:
-        return;
+        return null;
     }
   };
 
@@ -105,7 +106,7 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleL
     <>
       <Drawer
         title="Create a new event"
-        width={'50%'}
+        width="50%"
         onClose={onClose}
         visible={isShowFormСreationEvent}
         bodyStyle={{paddingBottom: 80}}
@@ -170,19 +171,11 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleL
                 rules={[{required: true, message: 'Please choose the type'}]}
               >
                 <Select name="type" onSelect={onSelectType} placeholder="Please choose the type">
-                  <Option value="youtube-live">Youtube live</Option>
-                  <Option value="offline-lecture">Offline lecture</Option>
-                  <Option value="task">Task</Option>
-                  <Option value="optional-task">Optional task</Option>
-                  <Option value="interview">Interview</Option>
-                  <Option value="deadline">Deadline</Option>
-                  <Option value="codewars">Codewars</Option>
-                  <Option value="self-education">Self-education</Option>
-                  <Option value="test">Test</Option>
-                  <Option value="meetup">Meetup</Option>
-                  <Option value="live-coding">Live coding</Option>
-                  <Option value="twitch">Twitch</Option>
-                  <Option value="cross-check">Cross-check</Option>
+                  {eventsTypes.map(item => (
+                    <Option value={item.value} key={item.value}>
+                      {item.title}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
@@ -278,13 +271,12 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleL
 const mapStateToProps = state => {
   return {
     isShowFormСreationEvent: state.app.isShowFormСreationEvent,
-    tz: state.app.timezone,
   };
 };
 
 const mapDispatchToProps = {
   hideFormCreationEvent,
-  scheduleLoaded,
+  showLoader,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateEvent);

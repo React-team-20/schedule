@@ -1,4 +1,4 @@
-import {Space, Table, Tag} from 'antd';
+import {Table, Tag} from 'antd';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {setTagColor} from '../../utils';
@@ -11,37 +11,45 @@ const ScheduleTable = () => {
     {
       title: 'Date',
       dataIndex: 'date',
+      width: 120,
       render: text => <span>{text}</span>,
     },
     {
       title: 'Time',
       dataIndex: 'time',
+      width: 60,
     },
     {
       title: 'Type',
       dataIndex: 'type',
+      width: 100,
       render: (text, record) => (
-        <Tag className="list-item-tag" color={setTagColor(record.type.toUpperCase())}>
-          {text}
+        <Tag className="list-item-tag" color={setTagColor(record.type)}>
+          {record.type
+            .toUpperCase()
+            .split('')
+            .map(item => (item === '-' ? ' ' : item))
+            .join('')}
         </Tag>
       ),
     },
     {
       title: 'Topic',
       dataIndex: 'topic',
-      render: text => (
-        <Space size="middle">
-          <span>{text}</span>
-        </Space>
-      ),
+      render: (text, record) => {
+        return record.descriptionUrl ? (
+          <a target="_blank" rel="noopener noreferrer" href={record.descriptionUrl}>
+            {text}
+          </a>
+        ) : (
+          text
+        );
+      },
     },
     {
       title: 'BroadcastUrl',
+      width: 140,
       dataIndex: 'descriptionUrl',
-    },
-    {
-      title: 'Place',
-      dataIndex: 'place',
     },
     {
       title: 'Comment',
