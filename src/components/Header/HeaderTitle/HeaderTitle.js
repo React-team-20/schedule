@@ -1,7 +1,8 @@
-import { EditOutlined, EyeOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Menu } from 'antd';
-import Avatar from 'antd/lib/avatar/avatar';
 import React from 'react';
+import { EditOutlined, EyeOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Menu, Space } from 'antd';
+import Avatar from 'antd/lib/avatar/avatar';
+import RoleSelect from '../RoleSelect';
 
 import './headerTitle.css';
 import logoImage from './logo-rsschool3.png';
@@ -34,11 +35,14 @@ const HeaderTitle = () => {
         <span className="subtitle"> RSS React 2020 Q3 </span>
       </div>
 
-      <Dropdown overlay={myProfileMenu} placement="bottomLeft">
-        <Button type="dashed" size="large" icon={<Avatar src={avatarUrl} />}>
-          My Profile
+      <Space>
+        <RoleSelect />
+        <Dropdown overlay={myProfileMenu} placement="bottomLeft">
+          <Button type="dashed" size="large" icon={<Avatar src={avatarUrl} />}>
+            My Profile
         </Button>
-      </Dropdown>
+        </Dropdown>
+      </Space>
     </div>
   );
 };

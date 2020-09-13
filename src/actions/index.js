@@ -1,6 +1,7 @@
 import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
+  CHANGE_USER_ROLE,
   HIDE_ALERT,
   HIDE_FORM_CREATION_EVENT,
   HIDE_FORM_EDIT_EVENT,
@@ -55,6 +56,13 @@ export const changeTimezone = newTimezone => {
   return {
     type: CHANGE_TIMEZONE,
     payload: newTimezone,
+  };
+};
+
+export const changeUserRole = newUserRole => {
+  return {
+    type: CHANGE_USER_ROLE,
+    payload: newUserRole,
   };
 };
 
