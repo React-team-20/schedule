@@ -1,8 +1,8 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import {PlusOutlined} from '@ant-design/icons';
+import {Button} from 'antd';
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { showFormCreationEvent } from '../../actions';
+import {useDispatch} from 'react-redux';
+import {showFormCreationEvent} from '../../actions';
 import './new-event-button.css';
 
 const NewEventButton = () => {
@@ -11,8 +11,8 @@ const NewEventButton = () => {
     dispatch(showFormCreationEvent());
   };
   return (
-    <Button type="primary" shape="round" onClick={showDrawer} >
-      <PlusOutlined style={{ display: 'inline-flex' }} /> New event
+    <Button type="primary" shape="round" onClick={showDrawer}>
+      <PlusOutlined style={{display: 'inline-flex'}} /> New event
     </Button>
   );
 };

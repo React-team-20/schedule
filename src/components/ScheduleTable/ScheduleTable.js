@@ -1,47 +1,59 @@
-import {Space, Table, Tag} from 'antd';
+import {Button, Table, Tag} from 'antd';
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {showTaskOverview} from '../../actions';
 import {setTagColor} from '../../utils';
 import EditEventButton from './EditEventButton';
-import DeleteEventButton from './RemoveEventButton';
+import RemoveEventButton from './RemoveEventButton';
 import './schedule-table.css';
 
 const ScheduleTable = () => {
+  const dispatch = useDispatch();
+  const showTaskInfo = id => {
+    dispatch(showTaskOverview(id));
+  };
+
   const columns = [
     {
       title: 'Date',
       dataIndex: 'date',
+      width: 120,
       render: text => <span>{text}</span>,
     },
     {
       title: 'Time',
       dataIndex: 'time',
+      width: 60,
     },
     {
       title: 'Type',
       dataIndex: 'type',
+      width: 100,
       render: (text, record) => (
-        <Tag className="list-item-tag" color={setTagColor(record.type.toUpperCase())}>
-          {text}
+        <Tag className="list-item-tag" color={setTagColor(record.type)}>
+          {record.type
+            .toUpperCase()
+            .split('')
+            .map(item => (item === '-' ? ' ' : item))
+            .join('')}
         </Tag>
       ),
     },
     {
       title: 'Topic',
       dataIndex: 'topic',
-      render: text => (
-        <Space size="middle">
-          <span>{text}</span>
-        </Space>
-      ),
+      render: (text, record) => {
+        return (
+          <Button type="link" onClick={() => showTaskInfo(record.id)}>
+            {text}
+          </Button>
+        );
+      },
     },
     {
       title: 'BroadcastUrl',
+      width: 140,
       dataIndex: 'descriptionUrl',
-    },
-    {
-      title: 'Place',
-      dataIndex: 'place',
     },
     {
       title: 'Comment',
@@ -54,7 +66,7 @@ const ScheduleTable = () => {
       render: (text, record) => (
         <>
           <EditEventButton id={record.id} />
-          <DeleteEventButton id={record.id} />
+          <RemoveEventButton id={record.id} />
         </>
       ),
     },

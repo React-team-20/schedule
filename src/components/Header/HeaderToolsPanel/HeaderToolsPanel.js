@@ -1,6 +1,14 @@
 import React from 'react';
-import { ExportOutlined, EyeOutlined, LeftOutlined, MoreOutlined, QuestionCircleOutlined, RightOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Menu, Space, Tooltip, Typography } from 'antd';
+import {
+  ExportOutlined,
+  EyeOutlined,
+  LeftOutlined,
+  MoreOutlined,
+  QuestionCircleOutlined,
+  RightOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
+import {Button, Dropdown, Menu, Space, Tooltip, Typography} from 'antd';
 import NewEventButton from '../../NewEventButton';
 
 import TimeZoneSelect from '../../TimeZoneSelect';
@@ -8,7 +16,7 @@ import ScheduleViewSelect from '../ScheduleViewSelect';
 
 import './headerToolsPanel.css';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 const HeaderToolsPanel = () => {
   const moreMenu = (
@@ -23,7 +31,7 @@ const HeaderToolsPanel = () => {
       <Menu.Item icon={<QuestionCircleOutlined />}>
         <a href="/"> Help </a>
       </Menu.Item>
-    </Menu >
+    </Menu>
   );
 
   const DropdownMenu = () => {
@@ -64,7 +72,6 @@ const HeaderToolsPanel = () => {
           <TimeZoneSelect />
         </Tooltip>
       </Space>
-
 
       <Space>
         <ScheduleViewSelect />
