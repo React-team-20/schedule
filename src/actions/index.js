@@ -6,6 +6,7 @@ import {
   HIDE_FORM_CREATION_EVENT,
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
+  HIDE_TASK_OVERVIEW,
   LOADED_SCHEDULE,
   REMOVE_EVENT,
   SET_ALERT_MESSAGE,
@@ -13,6 +14,7 @@ import {
   SHOW_FORM_CREATION_EVENT,
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
+  SHOW_TASK_OVERVIEW,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -86,16 +88,29 @@ export const showFormEditEvent = id => {
   };
 };
 
-export const removeEvent = id => {
+export const hideFormEditEvent = () => {
   return {
-    type: REMOVE_EVENT,
+    type: HIDE_FORM_EDIT_EVENT,
+  };
+};
+
+export const showTaskOverview = id => {
+  return {
+    type: SHOW_TASK_OVERVIEW,
     payload: id,
   };
 };
 
-export const hideFormEditEvent = () => {
+export const hideTaskOverview = () => {
   return {
-    type: HIDE_FORM_EDIT_EVENT,
+    type: HIDE_TASK_OVERVIEW,
+  };
+};
+
+export const removeEvent = id => {
+  return {
+    type: REMOVE_EVENT,
+    payload: id,
   };
 };
 

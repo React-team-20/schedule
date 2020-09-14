@@ -6,11 +6,13 @@ import {
   HIDE_FORM_CREATION_EVENT,
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
+  HIDE_TASK_OVERVIEW,
   SET_ALERT_MESSAGE,
   SHOW_ALERT,
   SHOW_FORM_CREATION_EVENT,
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
+  SHOW_TASK_OVERVIEW,
 } from '../constants/actions-types';
 import {DEFAULT_TIMEZONE} from '../constants/timezones';
 import {DEFAULT_USER_ROLE} from '../constants/user-role';
@@ -21,6 +23,7 @@ const initialState = {
   userRole: localStorage.getItem('userRole') || DEFAULT_USER_ROLE,
   isShowFormСreationEvent: false,
   isShowFormEditEvent: false,
+  isShowTaskOverview: false,
   currentEvent: null,
   loading: true,
   alert: false,
@@ -47,6 +50,10 @@ const appReducer = (state = initialState, action) => {
       return {...state, isShowFormEditEvent: true, currentEvent: action.payload};
     case HIDE_FORM_EDIT_EVENT:
       return {...state, isShowFormEditEvent: false, currentEvent: null};
+    case SHOW_TASK_OVERVIEW:
+      return {...state, isShowTaskOverview: true, currentEvent: action.payload};
+    case HIDE_TASK_OVERVIEW:
+      return {...state, isShowTaskOverview: false, currentEvent: null};
     case CHANGE_SCHEDULE_VIEW:
       return {...state, scheduleView: action.payload};
     case CHANGE_TIMEZONE:

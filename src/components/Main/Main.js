@@ -14,6 +14,7 @@ import ScheduleList from '../ScheduleList';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import ScheduleTable from '../ScheduleTable';
 import ScheduleСalendar from '../ScheduleСalendar';
+import TaskOverview from '../TaskOverview';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -65,6 +66,7 @@ const Main = () => {
         }[scheduleView]
       }
       <CreateEvent fetchEvents={fetchEvents} />
+      <TaskOverview />
     </>
   );
 };

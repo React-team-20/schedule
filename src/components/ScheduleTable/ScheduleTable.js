@@ -1,12 +1,18 @@
-import {Table, Tag} from 'antd';
+import {Button, Table, Tag} from 'antd';
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {showTaskOverview} from '../../actions';
 import {setTagColor} from '../../utils';
 import EditEventButton from './EditEventButton';
-import DeleteEventButton from './RemoveEventButton';
+import RemoveEventButton from './RemoveEventButton';
 import './schedule-table.css';
 
 const ScheduleTable = () => {
+  const dispatch = useDispatch();
+  const showTaskInfo = id => {
+    dispatch(showTaskOverview(id));
+  };
+
   const columns = [
     {
       title: 'Date',
@@ -37,12 +43,10 @@ const ScheduleTable = () => {
       title: 'Topic',
       dataIndex: 'topic',
       render: (text, record) => {
-        return record.descriptionUrl ? (
-          <a target="_blank" rel="noopener noreferrer" href={record.descriptionUrl}>
+        return (
+          <Button type="link" onClick={() => showTaskInfo(record.id)}>
             {text}
-          </a>
-        ) : (
-          text
+          </Button>
         );
       },
     },
@@ -62,7 +66,7 @@ const ScheduleTable = () => {
       render: (text, record) => (
         <>
           <EditEventButton id={record.id} />
-          <DeleteEventButton id={record.id} />
+          <RemoveEventButton id={record.id} />
         </>
       ),
     },
