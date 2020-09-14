@@ -9,3 +9,20 @@ export const dateTimeParse = (dateTime, timezone) => {
 };
 
 export const setTagColor = tag => eventsTypes.find(item => item.value === tag).color;
+
+export const filterDateByMonthAndYear = data => {
+  const newData = {};
+
+  data.map((item) => {
+    const dataTime = moment(item.dateTime).format("MMMM YYYY");
+
+    if (newData[dataTime]) {
+      newData[dataTime].push(item);
+    } else {
+      newData[dataTime] = [];
+      newData[dataTime].push(item);
+    }
+  })
+
+  return newData;
+}
