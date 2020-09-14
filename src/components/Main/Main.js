@@ -18,10 +18,9 @@ import ScheduleСalendar from '../ScheduleСalendar';
 const Main = () => {
   const dispatch = useDispatch();
   const events = useSelector(state => state.events);
-  const currentView = useSelector(state => state.app.scheduleView);
-  const tz = useSelector(state => state.app.timezone);
-  const isAlert = useSelector(state => state.app.alert);
-  const alertMessage = useSelector(state => state.app.alertMessage);
+  const {alert: isAlert, alertMessage, timezone: tz, scheduleView} = useSelector(
+    state => state.app
+  );
   const {getEvents, transformEventData} = useContext(ScheduleServiceContext);
 
   const fetchEvents = () => {
@@ -63,7 +62,7 @@ const Main = () => {
           table: <ScheduleTable />,
           list: <ScheduleList />,
           calendar: <ScheduleСalendar />,
-        }[currentView]
+        }[scheduleView]
       }
       <CreateEvent fetchEvents={fetchEvents} />
     </>
