@@ -1,0 +1,18 @@
+.item-organizer {
+  min-width: 210px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.link-user-name {
+  margin-left: 10px;
+}
+
+.link-github-label {
+  margin-left: 6px;
+  visibility: hidden;
+}
+
+.link-user-name:hover .link-github-label {
+  visibility: visible;
+}
