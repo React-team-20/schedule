@@ -1,3 +1,4 @@
+import {EditOutlined} from '@ant-design/icons';
 import {Button} from 'antd';
 import React from 'react';
 import {useDispatch} from 'react-redux';
@@ -9,11 +10,7 @@ const EditEventButton = ({id}) => {
   const showFormEdit = () => {
     dispatch(showFormEditEvent(id));
   };
-  return (
-    <Button type="link" onClick={showFormEdit}>
-      Edit
-    </Button>
-  );
+  return <Button type="dashed" onClick={showFormEdit} icon={<EditOutlined />} />;
 };
 
 export default EditEventButton;

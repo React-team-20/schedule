@@ -1,4 +1,5 @@
-import {Button, message} from 'antd';
+import {DeleteOutlined} from '@ant-design/icons';
+import {Button, message, Popconfirm} from 'antd';
 import React, {useContext} from 'react';
 import {useDispatch} from 'react-redux';
 import {hideLoader, removeEvent, showLoader} from '../../../actions';
@@ -19,9 +20,9 @@ const RemoveEventButton = ({id}) => {
       .finally(() => dispatch(hideLoader()));
   };
   return (
-    <Button type="link" onClick={onRemoveEvent}>
-      Delete
-    </Button>
+    <Popconfirm title="Sure to delete?" onConfirm={onRemoveEvent}>
+      <Button type="dashed" icon={<DeleteOutlined />} />
+    </Popconfirm>
   );
 };
 
