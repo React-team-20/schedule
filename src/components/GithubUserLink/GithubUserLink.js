@@ -12,26 +12,32 @@ class GithubUserLink extends React.Component {
   };
 
   componentDidMount() {
+    console.log(this.props.user)
     axios.get(`https://api.github.com/users/${this.props.user}`)
       .then(res => {
         const data = res.data;
         const url = data.html_url;
         const avatarUrl = data.avatar_url;
         const {name} = data;
-        this.setState({avatarUrl: avatarUrl, name: name, profileUrl: url});
+        this.setState({avatarUrl: avatarUrl, name: name, profileUrl: url})
       })
       .catch(error => {
         // handle error
-        console.log(error);
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          this.setState({name: this.props.user})
+        }  
       })   
   }   
 
   render() {
     const {name, avatarUrl, profileUrl} = this.state;
+    const defaultAvatarUrl = 'https://avatars2.githubusercontent.com/u/75544?v=4';
 
     return (
       <a target="_blank" className="link-user-profile" href={profileUrl}>
-        <Avatar src={avatarUrl} />
+        <Avatar src={avatarUrl ? avatarUrl : defaultAvatarUrl } />
         <span className="link-user-name">
           {name ? name : ''}
           <GithubFilled className="link-github-label"/>
