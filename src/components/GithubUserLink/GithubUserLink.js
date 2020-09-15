@@ -2,22 +2,43 @@
 import React from 'react';
 import {Avatar} from 'antd';
 import {GithubFilled} from '@ant-design/icons';
+import axios from 'axios';
 
-const GithubUserLink = (item) => {
-  const organizerLink = 'https://github.com/yuliaHope';
+class GithubUserLink extends React.Component {
+  state = {
+    name: null,
+    avatarUrl: null,
+    profileUrl: null
+  };
 
-  return (
-    <div className="item-organizer">
-      <span className="item-organizer-label">organizer:</span>
-      <a target="_blank" className="link-user-profile" href={organizerLink}>
-        <Avatar src="https://avatars1.githubusercontent.com/u/14111020?v=4" />
+  componentDidMount() {
+    axios.get(`https://api.github.com/users/${this.props.user}`)
+      .then(res => {
+        const data = res.data;
+        const url = data.html_url;
+        const avatarUrl = data.avatar_url;
+        const {name} = data;
+        this.setState({avatarUrl: avatarUrl, name: name, profileUrl: url});
+      })
+      .catch(error => {
+        // handle error
+        console.log(error);
+      })   
+  }   
+
+  render() {
+    const {name, avatarUrl, profileUrl} = this.state;
+
+    return (
+      <a target="_blank" className="link-user-profile" href={profileUrl}>
+        <Avatar src={avatarUrl} />
         <span className="link-user-name">
-          {item}
+          {name ? name : ''}
           <GithubFilled className="link-github-label"/>
         </span>
       </a>
-    </div>
-  )
+    )
+  }
 }
 
 export default GithubUserLink;
