@@ -7,8 +7,10 @@ import EditEventButton from './EditEventButton';
 import RemoveEventButton from './RemoveEventButton';
 import './schedule-table.css';
 
-const ScheduleTable = () => {
+const ScheduleTable = ({events}) => {
   const dispatch = useDispatch();
+  const {userRole} = useSelector(state => state.app);
+
   const showTaskInfo = id => {
     dispatch(showTaskOverview(id));
   };
@@ -17,7 +19,7 @@ const ScheduleTable = () => {
     {
       title: 'Date',
       dataIndex: 'date',
-      width: 120,
+      width: 90,
       render: text => <span>{text}</span>,
     },
     {
@@ -28,7 +30,7 @@ const ScheduleTable = () => {
     {
       title: 'Type',
       dataIndex: 'type',
-      width: 100,
+      width: 120,
       render: (text, record) => (
         <Tag className="list-item-tag" color={setTagColor(record.type)}>
           {record.type
@@ -42,6 +44,7 @@ const ScheduleTable = () => {
     {
       title: 'Topic',
       dataIndex: 'topic',
+      width: 500,
       render: (text, record) => {
         return (
           <Button type="link" onClick={() => showTaskInfo(record.id)}>
@@ -52,31 +55,37 @@ const ScheduleTable = () => {
     },
     {
       title: 'BroadcastUrl',
-      width: 140,
+      width: 400,
       dataIndex: 'descriptionUrl',
     },
     {
       title: 'Comment',
       dataIndex: 'comment',
-    },
-    {
-      title: 'Action',
-      dataIndex: '',
-      key: 'x',
-      render: (text, record) => (
-        <>
-          <EditEventButton id={record.id} />
-          <RemoveEventButton id={record.id} />
-        </>
-      ),
+      width: 250,
     },
   ];
-  const data = useSelector(state => state.events);
+
+  const actions = {
+    title: 'Action',
+    key: 'operation',
+    fixed: 'right',
+    width: 80,
+    render: (text, record) => (
+      <>
+        <EditEventButton id={record.id} />
+        <RemoveEventButton id={record.id} />
+      </>
+    ),
+  };
+
+  if (userRole === 'mentor') columns.push(actions);
+
   return (
     <Table
       size="small"
       columns={columns}
-      dataSource={data}
+      pagination={false}
+      dataSource={events}
       rowKey={record => record.id}
       scroll={{
         x: '100vw',

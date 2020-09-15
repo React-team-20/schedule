@@ -1,22 +1,16 @@
-import React from 'react';
 import {
   ExportOutlined,
   EyeOutlined,
-  LeftOutlined,
   MoreOutlined,
   QuestionCircleOutlined,
-  RightOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
 import {Button, Dropdown, Menu, Space, Tooltip, Typography} from 'antd';
+import React from 'react';
 import NewEventButton from '../../NewEventButton';
-
 import TimeZoneSelect from '../../TimeZoneSelect';
 import ScheduleViewSelect from '../ScheduleViewSelect';
-
 import './headerToolsPanel.css';
-
-const {Text} = Typography;
 
 const HeaderToolsPanel = () => {
   const moreMenu = (
@@ -58,16 +52,6 @@ const HeaderToolsPanel = () => {
     <div className="header-tools_panel">
       <Space>
         <NewEventButton />
-        <Tooltip title="previous">
-          <Button className="button-center-icon button-no-border" icon={<LeftOutlined />} />
-        </Tooltip>
-
-        <Tooltip title="next">
-          <Button className="button-center-icon button-no-border" icon={<RightOutlined />} />
-        </Tooltip>
-
-        <Text strong>september 2020</Text>
-
         <Tooltip title="time zone">
           <TimeZoneSelect />
         </Tooltip>

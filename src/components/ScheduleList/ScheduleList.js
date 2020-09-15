@@ -1,5 +1,4 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
 import {Divider} from 'antd';
 import {filterDateByMonthAndYear} from '../../utils';
 import ScheduleListItem from './ScheduleListItem';
@@ -17,9 +16,8 @@ const getListItem = (key, data) => {
   )    
 };
 
-const ScheduleList = () => {
-  const data = useSelector(state => state.events);  
-  const filterData = filterDateByMonthAndYear(data);
+const ScheduleList = ({events}) => {
+  const filterData = filterDateByMonthAndYear(events);
   const listItems = [];
 
   for (let key in filterData) {  
@@ -29,7 +27,7 @@ const ScheduleList = () => {
 
   return (
     <div className="list-wrapper"> 
-      {listItems}  
+      {listItems}
     </div>  
   )
 };
