@@ -24,7 +24,12 @@ const ScheduleListItem = (data) => {
             title={<a href="https://ant.design">{item.topic}</a>}
             description={`${item.date}, ${item.time}`}
           />
-          {item.organizer ? GithubUserLink(item.organizer) : ''}
+          {item.organizer 
+            ? <div className="item-organizer">
+                <span className="item-organizer-label">organizer:</span> 
+                {<GithubUserLink user={item.organizer}/>}
+              </div>
+            : ''}               
         </List.Item>
       )}
     />
