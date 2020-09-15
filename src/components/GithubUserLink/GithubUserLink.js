@@ -12,7 +12,6 @@ class GithubUserLink extends React.Component {
   };
 
   componentDidMount() {
-    console.log(this.props.user)
     axios.get(`https://api.github.com/users/${this.props.user}`)
       .then(res => {
         const data = res.data;
