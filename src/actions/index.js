@@ -10,6 +10,7 @@ import {
   LOADED_SCHEDULE,
   REMOVE_EVENT,
   SET_ALERT_MESSAGE,
+  SET_EVENT_TYPE_FILTER,
   SHOW_ALERT,
   SHOW_FORM_CREATION_EVENT,
   SHOW_FORM_EDIT_EVENT,
@@ -118,5 +119,12 @@ export const scheduleLoaded = newSchedule => {
   return {
     type: LOADED_SCHEDULE,
     payload: newSchedule,
+  };
+};
+
+export const setEventTypeFilter = events => {
+  return {
+    type: SET_EVENT_TYPE_FILTER,
+    payload: events,
   };
 };
