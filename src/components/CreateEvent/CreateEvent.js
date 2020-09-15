@@ -2,9 +2,10 @@ import React, {useState, useEffect} from 'react';
 import './create-event.css';
 import 'antd/dist/antd.css';
 import {Drawer, Form, Button, Col, Row, Input, Select, DatePicker} from 'antd';
-import {hideFormCreationEvent, scheduleLoaded} from '../../actions/index';
 import {connect} from 'react-redux';
+import {hideFormCreationEvent, scheduleLoaded} from '../../actions/index';
 import ScheduleService from '../../services/schedule-service';
+
 const emptyEvent = {
   id: '',
   topic: '1',
@@ -97,7 +98,6 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleL
         setEvent({...event, comment: e.target.value});
         break;
       default:
-        return;
     }
   };
 
@@ -105,7 +105,7 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleL
     <>
       <Drawer
         title="Create a new event"
-        width={'50%'}
+        width="50%"
         onClose={onClose}
         visible={isShowFormСreationEvent}
         bodyStyle={{paddingBottom: 80}}
