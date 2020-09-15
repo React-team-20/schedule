@@ -1,5 +1,5 @@
 import {message} from 'antd';
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   hideAlert,
@@ -9,17 +9,21 @@ import {
   showAlert,
   showLoader,
 } from '../../actions';
+import {getFilteredEvents} from '../../selectors';
 import CreateEvent from '../CreateEvent';
+import EventTypeFilter from '../EventTypeFilter';
 import ScheduleList from '../ScheduleList';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import ScheduleTable from '../ScheduleTable';
 import ScheduleСalendar from '../ScheduleСalendar';
 import TaskOverview from '../TaskOverview';
-import EventTypeFilter from '../EventTypeFilter';
 
 const Main = () => {
   const dispatch = useDispatch();
-  const events = useSelector(state => state.events.events);
+  const data = useSelector(state => state.events);
+  const {events} = data;
+  const [filteredEvents, setFilteredEvents] = useState([]);
+
   const {alert: isAlert, alertMessage, timezone: tz, scheduleView} = useSelector(
     state => state.app
   );
@@ -57,14 +61,19 @@ const Main = () => {
     // eslint-disable-next-line
   }, [tz]);
 
+  useEffect(() => {
+    const {eventTypeFilter} = data;
+    setFilteredEvents(eventTypeFilter.length ? getFilteredEvents(data) : events);
+  }, [data, events]);
+
   return (
     <>
       <EventTypeFilter />
       {
         {
-          table: <ScheduleTable />,
-          list: <ScheduleList />,
-          calendar: <ScheduleСalendar />,
+          table: <ScheduleTable events={filteredEvents} />,
+          list: <ScheduleList events={filteredEvents} />,
+          calendar: <ScheduleСalendar events={filteredEvents} />,
         }[scheduleView]
       }
       <CreateEvent fetchEvents={fetchEvents} />

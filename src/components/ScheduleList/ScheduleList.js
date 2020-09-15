@@ -1,6 +1,5 @@
 import {Avatar, Divider, List, Tag} from 'antd';
 import React from 'react';
-import {useSelector} from 'react-redux';
 import {setTagColor} from '../../utils';
 
 const getListItem = data => {
@@ -37,13 +36,11 @@ const getListItem = data => {
   );
 };
 
-const ScheduleList = () => {
-  const data = useSelector(state => state.events.events);
-
+const ScheduleList = ({events}) => {
   return (
     <div className="list-wrapper">
-      {getListItem(data)}
-      {getListItem(data)}
+      {getListItem(events)}
+      {getListItem(events)}
     </div>
   );
 };
