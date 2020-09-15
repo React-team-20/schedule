@@ -1,0 +1,8 @@
+.button-icon-edit {
+  display: inline-flex;
+  width: 2.1em;
+  height: 2.1rem;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}

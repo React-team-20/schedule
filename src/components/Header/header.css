@@ -1,0 +1,20 @@
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header {
+  padding: 8px;
+}
+
+.header-title,
+.header-tools_panel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.header-tools_panel {
+  margin-top: 0.5rem;
+}

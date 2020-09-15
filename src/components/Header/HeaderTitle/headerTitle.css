@@ -1,0 +1,28 @@
+.title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.subtitle {
+  margin-left: 8px;
+}
+
+.logo img {
+  height: 1.8rem;
+}
+
+.container-title {
+  padding: 0.5rem;
+  display: flex;
+  align-items: baseline;
+}
+
+.align-icon {
+  line-height: 1.6rem;
+}
+
+.profile-menu .anticon {
+  display: inline-flex;
+}

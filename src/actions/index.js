@@ -1,16 +1,20 @@
 import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
+  CHANGE_USER_ROLE,
   HIDE_ALERT,
   HIDE_FORM_CREATION_EVENT,
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
+  HIDE_TASK_OVERVIEW,
   LOADED_SCHEDULE,
+  REMOVE_EVENT,
+  SET_ALERT_MESSAGE,
   SHOW_ALERT,
   SHOW_FORM_CREATION_EVENT,
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
-  REMOVE_EVENT,
+  SHOW_TASK_OVERVIEW,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -25,22 +29,22 @@ export const hideLoader = () => {
   };
 };
 
+export const showAlert = () => {
+  return {
+    type: SHOW_ALERT,
+  };
+};
+
 export const hideAlert = () => {
   return {
     type: HIDE_ALERT,
   };
 };
 
-export const showAlert = text => {
-  return dispatch => {
-    dispatch({
-      type: SHOW_ALERT,
-      payload: text,
-    });
-
-    setTimeout(() => {
-      dispatch(hideAlert());
-    }, 3000);
+export const setAlertMessage = text => {
+  return {
+    type: SET_ALERT_MESSAGE,
+    payload: text,
   };
 };
 
@@ -55,6 +59,13 @@ export const changeTimezone = newTimezone => {
   return {
     type: CHANGE_TIMEZONE,
     payload: newTimezone,
+  };
+};
+
+export const changeUserRole = newUserRole => {
+  return {
+    type: CHANGE_USER_ROLE,
+    payload: newUserRole,
   };
 };
 
@@ -77,16 +88,29 @@ export const showFormEditEvent = id => {
   };
 };
 
-export const removeEvent = id => {
+export const hideFormEditEvent = () => {
   return {
-    type: REMOVE_EVENT,
+    type: HIDE_FORM_EDIT_EVENT,
+  };
+};
+
+export const showTaskOverview = id => {
+  return {
+    type: SHOW_TASK_OVERVIEW,
     payload: id,
   };
 };
 
-export const hideFormEditEvent = () => {
+export const hideTaskOverview = () => {
   return {
-    type: HIDE_FORM_EDIT_EVENT,
+    type: HIDE_TASK_OVERVIEW,
+  };
+};
+
+export const removeEvent = id => {
+  return {
+    type: REMOVE_EVENT,
+    payload: id,
   };
 };
 

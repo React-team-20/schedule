@@ -2,12 +2,12 @@ import {LOADED_SCHEDULE, REMOVE_EVENT} from '../constants/actions-types';
 
 const initialState = [];
 
-const eventsReducer = (state = initialState, action) => {
-  switch (action.type) {
+const eventsReducer = (state = initialState, {type, payload}) => {
+  switch (type) {
     case LOADED_SCHEDULE:
-      return action.payload;
+      return payload;
     case REMOVE_EVENT:
-      return state.filter(evt => evt.id !== action.payload);
+      return state.filter(evt => evt.id !== payload);
     default:
       return state;
   }

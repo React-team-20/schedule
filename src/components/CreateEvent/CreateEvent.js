@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import './create-event.css';
-import 'antd/dist/antd.css';
-import {Drawer, Form, Button, Col, Row, Input, Select, DatePicker} from 'antd';
+import {Button, Col, DatePicker, Drawer, Form, Input, message, Row, Select} from 'antd';
+import React, {useContext, useState} from 'react';
 import {connect} from 'react-redux';
-import {hideFormCreationEvent, scheduleLoaded} from '../../actions/index';
-import ScheduleService from '../../services/schedule-service';
+import {hideFormCreationEvent, hideLoader, setAlertMessage, showLoader} from '../../actions';
+import eventsTypes from '../../constants/events-types';
+import {ScheduleServiceContext} from '../ScheduleServiceContext';
+import './create-event.css';
 
 const emptyEvent = {
   id: '',
@@ -24,11 +24,18 @@ const emptyEvent = {
   comment: '',
   organizer: '',
 };
-const {addEvent, getEvents} = new ScheduleService();
 
 const {Option} = Select;
 
-const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleLoaded, tz}) => {
+const CreateEvent = ({
+  isShowFormСreationEvent,
+  hideFormCreationEvent,
+  showLoader,
+  setAlertMessage,
+  hideLoader,
+  fetchEvents,
+}) => {
+  const {addEvent} = useContext(ScheduleServiceContext);
   const onClose = () => {
     hideFormCreationEvent();
   };
@@ -46,13 +53,20 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleL
     setEvent({...event, type: e});
   };
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     hideFormCreationEvent();
-    await addEvent(event);
-    const events = await getEvents(tz);
-    await scheduleLoaded(events);
-    setEvent(emptyEvent);
-    form.resetFields();
+    showLoader();
+    addEvent(event)
+      .then(() => {
+        setAlertMessage('Event added successfully!');
+        fetchEvents();
+        setEvent(emptyEvent);
+        form.resetFields();
+      })
+      .catch(() => {
+        hideLoader();
+        message.error('Something went wrong');
+      });
   };
 
   const onChangeTimeAndDate = e => {
@@ -98,6 +112,7 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleL
         setEvent({...event, comment: e.target.value});
         break;
       default:
+        return null;
     }
   };
 
@@ -170,19 +185,11 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleL
                 rules={[{required: true, message: 'Please choose the type'}]}
               >
                 <Select name="type" onSelect={onSelectType} placeholder="Please choose the type">
-                  <Option value="youtube-live">Youtube live</Option>
-                  <Option value="offline-lecture">Offline lecture</Option>
-                  <Option value="task">Task</Option>
-                  <Option value="optional-task">Optional task</Option>
-                  <Option value="interview">Interview</Option>
-                  <Option value="deadline">Deadline</Option>
-                  <Option value="codewars">Codewars</Option>
-                  <Option value="self-education">Self-education</Option>
-                  <Option value="test">Test</Option>
-                  <Option value="meetup">Meetup</Option>
-                  <Option value="live-coding">Live coding</Option>
-                  <Option value="twitch">Twitch</Option>
-                  <Option value="cross-check">Cross-check</Option>
+                  {eventsTypes.map(item => (
+                    <Option value={item.value} key={item.value}>
+                      {item.title}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
@@ -278,13 +285,14 @@ const CreateEvent = ({isShowFormСreationEvent, hideFormCreationEvent, scheduleL
 const mapStateToProps = state => {
   return {
     isShowFormСreationEvent: state.app.isShowFormСreationEvent,
-    tz: state.app.timezone,
   };
 };
 
 const mapDispatchToProps = {
   hideFormCreationEvent,
-  scheduleLoaded,
+  showLoader,
+  hideLoader,
+  setAlertMessage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateEvent);

@@ -11,7 +11,7 @@ const NewEventButton = () => {
     dispatch(showFormCreationEvent());
   };
   return (
-    <Button type="primary" onClick={showDrawer}>
+    <Button type="primary" shape="round" onClick={showDrawer}>
       <PlusOutlined style={{display: 'inline-flex'}} /> New event
     </Button>
   );
