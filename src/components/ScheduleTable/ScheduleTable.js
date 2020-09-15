@@ -45,6 +45,7 @@ const ScheduleTable = ({events}) => {
       title: 'Topic',
       dataIndex: 'topic',
       width: 500,
+      ellipsis: true,
       render: (text, record) => {
         return (
           <Button type="link" onClick={() => showTaskInfo(record.id)}>
@@ -55,8 +56,21 @@ const ScheduleTable = ({events}) => {
     },
     {
       title: 'BroadcastUrl',
-      width: 400,
+      width: 300,
       dataIndex: 'descriptionUrl',
+      ellipsis: true,
+      render: text => {
+        return (
+          <a target="_blank" rel="noopener noreferrer" href={text}>
+            {text}
+          </a>
+        );
+      },
+    },
+    {
+      title: 'Organizer',
+      dataIndex: 'organizer',
+      width: 200,
     },
     {
       title: 'Comment',
@@ -87,6 +101,19 @@ const ScheduleTable = ({events}) => {
       pagination={false}
       dataSource={events}
       rowKey={record => record.id}
+      sticky
+      rowSelection={{}}
+      onRow={(record, rowIndex) => {
+        return {
+          onClick: event => {
+            console.log(record.id);
+          }, // click row
+          onDoubleClick: event => {}, // double click row
+          onContextMenu: event => {}, // right button click row
+          onMouseEnter: event => {}, // mouse enter row
+          onMouseLeave: event => {}, // mouse leave row
+        };
+      }}
       scroll={{
         x: '100vw',
       }}

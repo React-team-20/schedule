@@ -22,25 +22,24 @@ import TaskOverview from '../TaskOverview';
 
 const Main = () => {
   const dispatch = useDispatch();
-  const data = useSelector(state => state.events);
-  const {events} = data;
+  const {getEvents, transformEventData, getOrganizers} = useContext(ScheduleServiceContext);
   const [filteredEvents, setFilteredEvents] = useState([]);
-
   const {alert: isAlert, alertMessage, timezone: tz, scheduleView} = useSelector(
     state => state.app
   );
-  const {getEvents, transformEventData, getOrganizers} = useContext(ScheduleServiceContext);
+  const data = useSelector(state => state.events);
+  const {events} = data;
 
   const fetchEvents = () => {
     dispatch(showLoader());
     getEvents(tz)
       .then(evts => {
+        getOrganizers().then(organizers => dispatch(organizersLoaded(organizers)));
         dispatch(scheduleLoaded(evts));
         dispatch(showAlert());
       })
       .catch(() => message.error('Something went wrong'))
       .finally(() => dispatch(hideLoader()));
-    getOrganizers().then(organizers => dispatch(organizersLoaded(organizers)));
   };
 
   useEffect(() => {
