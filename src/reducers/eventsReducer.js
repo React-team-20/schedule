@@ -1,13 +1,18 @@
-import {LOADED_SCHEDULE, REMOVE_EVENT} from '../constants/actions-types';
+import {LOADED_SCHEDULE, REMOVE_EVENT, SET_EVENT_TYPE_FILTER} from '../constants/actions-types';
 
-const initialState = [];
+const initialState = {
+  events: [],
+  eventTypeFilter: JSON.parse(localStorage.getItem('eventTypeFilter')) || [],
+};
 
 const eventsReducer = (state = initialState, {type, payload}) => {
   switch (type) {
     case LOADED_SCHEDULE:
-      return payload;
+      return {...state, events: payload};
     case REMOVE_EVENT:
-      return state.filter(evt => evt.id !== payload);
+      return {...state, events: state.events.filter(evt => evt.id !== payload)};
+    case SET_EVENT_TYPE_FILTER:
+      return {...state, eventTypeFilter: payload};
     default:
       return state;
   }

@@ -38,7 +38,7 @@ const getListItem = data => {
 };
 
 const ScheduleList = () => {
-  const data = useSelector(state => state.events);
+  const data = useSelector(state => state.events.events);
 
   return (
     <div className="list-wrapper">

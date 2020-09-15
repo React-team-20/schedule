@@ -1,7 +1,8 @@
 import {Button, Table, Tag} from 'antd';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {showTaskOverview} from '../../actions';
+import {getFilteredEvents} from '../../selectors';
 import {setTagColor} from '../../utils';
 import EditEventButton from './EditEventButton';
 import RemoveEventButton from './RemoveEventButton';
@@ -9,6 +10,14 @@ import './schedule-table.css';
 
 const ScheduleTable = () => {
   const dispatch = useDispatch();
+  const data = useSelector(state => state.events);
+  const [filteredEvents, setFilteredEvents] = useState([]);
+
+  useEffect(() => {
+    const {events, eventTypeFilter} = data;
+    setFilteredEvents(eventTypeFilter.length ? getFilteredEvents(data) : events);
+  }, [data]);
+
   const showTaskInfo = id => {
     dispatch(showTaskOverview(id));
   };
@@ -71,12 +80,12 @@ const ScheduleTable = () => {
       ),
     },
   ];
-  const data = useSelector(state => state.events);
+
   return (
     <Table
       size="small"
       columns={columns}
-      dataSource={data}
+      dataSource={filteredEvents}
       rowKey={record => record.id}
       scroll={{
         x: '100vw',

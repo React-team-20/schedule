@@ -15,10 +15,11 @@ import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import ScheduleTable from '../ScheduleTable';
 import ScheduleСalendar from '../ScheduleСalendar';
 import TaskOverview from '../TaskOverview';
+import EventTypeFilter from '../EventTypeFilter';
 
 const Main = () => {
   const dispatch = useDispatch();
-  const events = useSelector(state => state.events);
+  const events = useSelector(state => state.events.events);
   const {alert: isAlert, alertMessage, timezone: tz, scheduleView} = useSelector(
     state => state.app
   );
@@ -58,6 +59,7 @@ const Main = () => {
 
   return (
     <>
+      <EventTypeFilter />
       {
         {
           table: <ScheduleTable />,
