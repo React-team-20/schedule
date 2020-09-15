@@ -1,48 +1,35 @@
-import {Avatar, Divider, List, Tag} from 'antd';
 import React from 'react';
-import {setTagColor} from '../../utils';
+import {Divider} from 'antd';
+import {filterDateByMonthAndYear} from '../../utils';
+import ScheduleListItem from './ScheduleListItem';
 
-const getListItem = data => {
-  return (
-    <div className="list-item-wrapper">
-      <Divider className="list-item-divider" orientation="left">
-        September, 2020
-      </Divider>
-      <List
-        itemLayout="horizontal"
-        dataSource={data}
-        renderItem={item => (
-          <List.Item>
-            <div className="tag-wrapper">
-              <Tag className="list-item-tag" color={setTagColor(item.type)}>
-                {item.type
-                  .toUpperCase()
-                  .split('')
-                  .map(i => (i === '-' ? ' ' : i))
-                  .join('')}
-              </Tag>
-            </div>
-            <List.Item.Meta
-              title={<a href="https://ant.design">{item.topic}</a>}
-              description={`${item.date}, ${item.time}`}
-            />
-            <span className="item-organizer">organizer:</span>
-            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-            <a href="#">link</a>
-          </List.Item>
-        )}
-      />
-    </div>
-  );
+const getDivider = (data) => {
+  return <Divider className="list-item-divider" orientation="left">{data}</Divider>  
+};
+
+const getListItem = (key, data) => {
+  return ( 
+    <div key={key} className="list-item-wrapper">
+      {getDivider(key)}
+      {ScheduleListItem(data)}
+    </div>   
+  )    
 };
 
 const ScheduleList = ({events}) => {
+  const filterData = filterDateByMonthAndYear(events);
+  const listItems = [];
+
+  for (let key in filterData) {  
+    const item = getListItem(key, filterData[key]);
+    listItems.push(item)
+  }
+
   return (
-    <div className="list-wrapper">
-      {getListItem(events)}
-      {getListItem(events)}
-    </div>
-  );
+    <div className="list-wrapper"> 
+      {listItems}
+    </div>  
+  )
 };
 
 export default ScheduleList;

@@ -17,7 +17,7 @@ export default [
   {
     value: 'optional-task',
     title: 'Optional task',
-    color: '',
+    color: 'magenta',
   },
   {
     value: 'interview',
@@ -52,7 +52,7 @@ export default [
   {
     value: 'live-coding',
     title: 'Live coding',
-    color: '',
+    color: 'orange',
   },
   {
     value: 'twitch',
