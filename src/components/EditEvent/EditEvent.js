@@ -296,7 +296,7 @@ const mapStateToProps = state => {
     event: state.events,
     isShowFormEditEvent: state.app.isShowFormEditEvent,
     currentEventId: state.app.currentEvent,
-    events: state.events,
+    events: state.events.events,
     currentEventId: state.app.currentEvent,
     tz: state.app.timezone,
   };

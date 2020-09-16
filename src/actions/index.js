@@ -2,6 +2,7 @@ import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
   CHANGE_USER_ROLE,
+  GET_ORGANIZERS,
   HIDE_ALERT,
   HIDE_FORM_CREATION_EVENT,
   HIDE_FORM_EDIT_EVENT,
@@ -126,5 +127,12 @@ export const setEventTypeFilter = events => {
   return {
     type: SET_EVENT_TYPE_FILTER,
     payload: events,
+  };
+};
+
+export const organizersLoaded = organizers => {
+  return {
+    type: GET_ORGANIZERS,
+    payload: organizers
   };
 };

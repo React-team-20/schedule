@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   hideAlert,
   hideLoader,
+  organizersLoaded,
   scheduleLoaded,
   setAlertMessage,
   showAlert,
@@ -28,7 +29,7 @@ const Main = () => {
   const {alert: isAlert, alertMessage, timezone: tz, scheduleView} = useSelector(
     state => state.app
   );
-  const {getEvents, transformEventData} = useContext(ScheduleServiceContext);
+  const {getEvents, transformEventData, getOrganizers} = useContext(ScheduleServiceContext);
 
   const fetchEvents = () => {
     dispatch(showLoader());
@@ -39,6 +40,7 @@ const Main = () => {
       })
       .catch(() => message.error('Something went wrong'))
       .finally(() => dispatch(hideLoader()));
+    getOrganizers().then(organizers => dispatch(organizersLoaded(organizers)));
   };
 
   useEffect(() => {
