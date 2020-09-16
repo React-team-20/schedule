@@ -10,6 +10,7 @@ import {
   showLoader,
 } from '../../actions';
 import CreateEvent from '../CreateEvent';
+import EditEvent from '../EditEvent/EditEvent';
 import ScheduleList from '../ScheduleList';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import ScheduleTable from '../ScheduleTable';
@@ -60,7 +61,12 @@ const Main = () => {
     <>
       {
         {
-          table: <ScheduleTable />,
+          table: (
+            <>
+              <ScheduleTable />
+              <EditEvent fetchEvents={fetchEvents} />
+            </>
+          ),
           list: <ScheduleList />,
           calendar: <ScheduleСalendar />,
         }[scheduleView]
