@@ -1,11 +1,11 @@
 .drawer-calendar-container {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .event-box-drawer {
-    display: grid;
-    grid-template-columns: 15% 40% 40%;
-    margin-bottom: 5px;
-    cursor: pointer;
+  display: grid;
+  grid-template-columns: 15% 40% 40%;
+  margin-bottom: 5px;
+  cursor: pointer;
 }
