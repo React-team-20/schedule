@@ -25,7 +25,7 @@
     right: 5px;
     bottom: 5px;
 }
-.ant-radio-button-wrapper:nth-child(2) {
+.calendar-container .ant-radio-button-wrapper:nth-child(2) {
     display: none;
 }
 
