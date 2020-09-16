@@ -6,7 +6,7 @@ import './task-overview.css';
 
 const TaskOverview = () => {
   const dispatch = useDispatch();
-  const events = useSelector(state => state.events);
+  const events = useSelector(state => state.events.events);
   const {isShowTaskOverview, currentEvent} = useSelector(state => state.app);
   const [event, setEvent] = useState(null);
 

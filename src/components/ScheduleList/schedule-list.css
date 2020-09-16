@@ -7,15 +7,15 @@
 }
 
 .tag-wrapper {
-  min-width: 110px;
+  min-width: 140px;
 }
 
-.item-organizer {
+.item-organizer-label {
   margin-right: 10px;
 }
 
 .list-item-divider {
-  color: #1890ff !important;
+  /* color: #1890ff !important; */
   margin-bottom: 20px !important;
 }
 
