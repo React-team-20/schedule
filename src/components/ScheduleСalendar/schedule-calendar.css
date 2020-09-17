@@ -1,0 +1,43 @@
+.calendar-container {
+  padding: 0 20px;
+}
+
+.ant-picker-calendar-date-content {
+  overflow: hidden !important;
+}
+
+.ant-picker-calendar-date-content:hover {
+  overflow: auto !important;
+}
+
+.ant-picker-calendar-date-content::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 3px;
+  height: 3px;
+}
+
+.ant-picker-calendar-date-content::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.event-counter {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+}
+.calendar-container .ant-radio-button-wrapper:nth-child(2) {
+  display: none;
+}
+
+.tag-type-calendar {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 700px) {
+  .event-box {
+    display: none;
+  }
+  .event-counter {
+    position: static;
+  }
+}
