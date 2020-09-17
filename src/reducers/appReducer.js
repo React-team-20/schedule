@@ -2,12 +2,12 @@ import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
   CHANGE_USER_ROLE,
-  GET_ORGANIZERS,
   HIDE_ALERT,
   HIDE_FORM_CREATION_EVENT,
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
   HIDE_TASK_OVERVIEW,
+  LOADED_ORGANIZERS,
   SET_ALERT_MESSAGE,
   SHOW_ALERT,
   SHOW_FORM_CREATION_EVENT,
@@ -62,7 +62,7 @@ const appReducer = (state = initialState, action) => {
       return {...state, timezone: action.payload};
     case CHANGE_USER_ROLE:
       return {...state, userRole: action.payload};
-    case GET_ORGANIZERS:
+    case LOADED_ORGANIZERS:
       return {...state, organizers: action.payload};
     default:
       return state;

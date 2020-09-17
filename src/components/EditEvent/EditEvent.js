@@ -1,11 +1,18 @@
-import {Button, Col, DatePicker, Drawer, Form, Input, message, Row, Select} from 'antd';
+import {Button, Col, DatePicker, Drawer, Form, Input, message, Row, Select, Divider} from 'antd';
 import React, {useContext, useState, useEffect} from 'react';
 import moment from 'moment-timezone';
 import {connect} from 'react-redux';
-import {hideFormEditEvent, hideLoader, setAlertMessage, showLoader} from '../../actions';
+import {
+  hideFormEditEvent,
+  hideLoader,
+  setAlertMessage,
+  showLoader,
+  organizersLoaded,
+} from '../../actions';
 import eventsTypes from '../../constants/events-types';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import './edit-event.css';
+import {PlusOutlined} from '@ant-design/icons';
 
 const {Option} = Select;
 
@@ -19,10 +26,14 @@ const EditEvent = ({
   hideLoader,
   events,
   tz,
+  organizers,
+  organizersLoaded,
 }) => {
   const [form] = Form.useForm();
   const [event, setEvent] = useState({});
-  const {editEvent} = useContext(ScheduleServiceContext);
+  const {editEvent, getGithubData, addOrganizer, getOrganizers} = useContext(
+    ScheduleServiceContext
+  );
   const [hideSubFieldsFlag, setHideSubFieldsFlag] = useState(true);
 
   useEffect(() => {
@@ -44,7 +55,7 @@ const EditEvent = ({
     form.setFieldsValue({
       topic: event.topic,
       'description-url': event.descriptionUrl,
-      organizer: event.organizer,
+      organizer: event.organizer.name,
       type: event.type,
       date: moment(event.dateTime).tz(tz),
       'demo-url': event.demoUrl,
@@ -69,6 +80,31 @@ const EditEvent = ({
       });
   };
 
+  const addNewOrganizer = async () => {
+    const data = await getGithubData(event.organizerGitHub);
+
+    if (data.name === undefined) {
+      message.error('GitHub does not exist!');
+      setEvent({...event, organizerGitHub: ''});
+      return;
+    }
+
+    if (
+      organizers.find(
+        organizer => organizer.name.toLowerCase() === event.organizerGitHub.toLowerCase().trim()
+      ) === undefined
+    ) {
+      setEvent({...event, organizerGitHub: ''});
+      await addOrganizer(data);
+      const newOrganizers = await getOrganizers();
+      setAlertMessage('Event edited successfully!');
+      organizersLoaded(newOrganizers);
+    } else {
+      message.error('Such an organizer exists!');
+      setEvent({...event, organizerGitHub: ''});
+    }
+  };
+
   const onSelectType = e => {
     if (e === 'task' || e === 'optional-task') {
       setHideSubFieldsFlag(false);
@@ -76,6 +112,10 @@ const EditEvent = ({
       setHideSubFieldsFlag(true);
     }
     setEvent({...event, type: e});
+  };
+
+  const onSelectOrganizer = e => {
+    setEvent({...event, organizer: organizers.find(organizer => organizer.name === e)});
   };
 
   const onChangeInputs = e => {
@@ -86,8 +126,8 @@ const EditEvent = ({
       case 'description-url':
         setEvent({...event, descriptionUrl: e.target.value});
         break;
-      case 'organizer':
-        setEvent({...event, organizer: e.target.value});
+      case 'organizer-github':
+        setEvent({...event, organizerGitHub: e.target.value});
         break;
       case 'demo-url':
         setEvent({
@@ -184,7 +224,41 @@ const EditEvent = ({
                 label="Organizer"
                 rules={[{required: true, message: 'Please enter event organizer'}]}
               >
-                <Input name="organizer" placeholder="Please enter event organizer" />
+                <Select
+                  onSelect={onSelectOrganizer}
+                  placeholder={'Please enter event organizer'}
+                  dropdownRender={menu => (
+                    <div>
+                      {menu}
+                      <Divider style={{margin: '4px 0'}} />
+                      <div style={{display: 'flex', flexWrap: 'nowrap', padding: 8}}>
+                        <Input
+                          style={{flex: 'auto'}}
+                          name="organizer-github"
+                          onChange={onChangeInputs}
+                          value={event.organizerGitHub}
+                        />
+                        <a
+                          style={{
+                            flex: 'none',
+                            padding: '8px',
+                            display: 'block',
+                            cursor: 'pointer',
+                          }}
+                          onClick={addNewOrganizer}
+                        >
+                          <PlusOutlined /> Add github
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                >
+                  {organizers.map(organizer => (
+                    <Option value={organizer.name} key={organizer.id}>
+                      {organizer.name}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -297,8 +371,8 @@ const mapStateToProps = state => {
     isShowFormEditEvent: state.app.isShowFormEditEvent,
     currentEventId: state.app.currentEvent,
     events: state.events.events,
-    currentEventId: state.app.currentEvent,
     tz: state.app.timezone,
+    organizers: state.app.organizers,
   };
 };
 
@@ -307,6 +381,7 @@ const mapDispatchToProps = {
   showLoader,
   hideLoader,
   setAlertMessage,
+  organizersLoaded,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditEvent);
