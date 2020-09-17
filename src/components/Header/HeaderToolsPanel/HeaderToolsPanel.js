@@ -5,7 +5,7 @@ import {
   QuestionCircleOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import {Button, Dropdown, Menu, Space, Tooltip, Typography} from 'antd';
+import {Button, Dropdown, Menu, Space, Tooltip} from 'antd';
 import React from 'react';
 import NewEventButton from '../../NewEventButton';
 import TimeZoneSelect from '../../TimeZoneSelect';

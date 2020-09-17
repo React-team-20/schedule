@@ -1,5 +1,5 @@
 import {Button, Table, Tag} from 'antd';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {showTaskOverview} from '../../actions';
 import {setTagColor} from '../../utils';
@@ -10,6 +10,38 @@ import './schedule-table.css';
 const ScheduleTable = ({events}) => {
   const dispatch = useDispatch();
   const {userRole} = useSelector(state => state.app);
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  useEffect(() => {
+    const enableSelection = evt => {
+      if (evt.key === 'Shift') {
+        document.onselectstart = '';
+      }
+    };
+    const turnOffSelection = evt => {
+      if (evt.key === 'Shift') {
+        document.onselectstart = event => event.preventDefault();
+      }
+    };
+    document.addEventListener('keydown', turnOffSelection);
+    document.addEventListener('keyup', enableSelection);
+    return () => {
+      document.removeEventListener('keydown', turnOffSelection);
+      document.removeEventListener('keyup', enableSelection);
+    };
+  }, []);
+
+  const onSelectRow = (id, isShift = false) => {
+    if (isShift) {
+      if (selectedRows.includes(id)) {
+        setSelectedRows(selectedRows.filter(i => i !== id));
+      } else {
+        setSelectedRows([...selectedRows, id]);
+      }
+    } else {
+      setSelectedRows(selectedRows[0] === id ? [] : [id]);
+    }
+  };
 
   const showTaskInfo = id => {
     dispatch(showTaskOverview(id));
@@ -48,7 +80,7 @@ const ScheduleTable = ({events}) => {
       ellipsis: true,
       render: (text, record) => {
         return (
-          <Button type="link" onClick={() => showTaskInfo(record.id)}>
+          <Button type="link" className="info-event-button" onClick={() => showTaskInfo(record.id)}>
             {text}
           </Button>
         );
@@ -102,16 +134,26 @@ const ScheduleTable = ({events}) => {
       dataSource={events}
       rowKey={record => record.id}
       sticky
-      rowSelection={{}}
+      rowSelection={{
+        selectedRowKeys: selectedRows,
+      }}
       onRow={(record, rowIndex) => {
         return {
           onClick: event => {
-            console.log(record.id);
+            if (event.target.closest('.info-event-button')) return false;
+            if (event.shiftKey) {
+              onSelectRow(record.id, true);
+            } else {
+              onSelectRow(record.id);
+            }
           }, // click row
           onDoubleClick: event => {}, // double click row
           onContextMenu: event => {}, // right button click row
           onMouseEnter: event => {}, // mouse enter row
           onMouseLeave: event => {}, // mouse leave row
+          /* onselectstart: event => {
+            event.preventDefault();
+          } */
         };
       }}
       scroll={{
