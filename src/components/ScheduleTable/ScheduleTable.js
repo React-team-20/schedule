@@ -1,8 +1,10 @@
+import {RightOutlined} from '@ant-design/icons';
 import {Button, Table, Tag} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {showTaskOverview} from '../../actions';
-import {setTagColor} from '../../utils';
+import {isLinkRegExp, setTagColor} from '../../utils';
+import GithubUserLink from '../GithubUserLink';
 import EditEventButton from './EditEventButton';
 import RemoveEventButton from './RemoveEventButton';
 import './schedule-table.css';
@@ -80,22 +82,29 @@ const ScheduleTable = ({events}) => {
       ellipsis: true,
       render: (text, record) => {
         return (
-          <Button type="link" className="info-event-button" onClick={() => showTaskInfo(record.id)}>
+          <Button
+            type="link"
+            className="info-event-button"
+            onClick={() => showTaskInfo(record.id)}
+            style={{padding: '0'}}
+          >
             {text}
           </Button>
         );
       },
     },
     {
-      title: 'BroadcastUrl',
-      width: 300,
+      title: 'Link',
+      width: 200,
       dataIndex: 'descriptionUrl',
       ellipsis: true,
       render: text => {
-        return (
-          <a target="_blank" rel="noopener noreferrer" href={text}>
-            {text}
+        return isLinkRegExp.test(text) ? (
+          <a className="events-link" target="_blank" rel="noopener noreferrer" href={text}>
+            Go to <RightOutlined />
           </a>
+        ) : (
+          <span>{text}</span>
         );
       },
     },
@@ -103,11 +112,18 @@ const ScheduleTable = ({events}) => {
       title: 'Organizer',
       dataIndex: 'organizer',
       width: 200,
+      render: (_, record) => {
+        return record.organizer ? (
+          <div className="item-organizer">{GithubUserLink(record.organizer)}</div>
+        ) : (
+          ''
+        );
+      },
     },
     {
       title: 'Comment',
       dataIndex: 'comment',
-      width: 250,
+      width: 200,
     },
   ];
 
@@ -116,11 +132,11 @@ const ScheduleTable = ({events}) => {
     key: 'operation',
     fixed: 'right',
     width: 80,
-    render: (text, record) => (
-      <>
+    render: (_, record) => (
+      <div className="table-action-buttons">
         <EditEventButton id={record.id} />
         <RemoveEventButton id={record.id} />
-      </>
+      </div>
     ),
   };
 
@@ -137,23 +153,26 @@ const ScheduleTable = ({events}) => {
       rowSelection={{
         selectedRowKeys: selectedRows,
       }}
-      onRow={(record, rowIndex) => {
+      onRow={record => {
         return {
           onClick: event => {
-            if (event.target.closest('.info-event-button')) return false;
+            if (
+              event.target.closest('.info-event-button') ||
+              event.target.closest('.events-link') ||
+              event.target.closest('.item-organizer a') ||
+              event.target.closest('.table-action-buttons') ||
+              event.target.closest('.ant-popover-inner-content')
+            )
+              return false;
             if (event.shiftKey) {
               onSelectRow(record.id, true);
             } else {
               onSelectRow(record.id);
             }
-          }, // click row
-          onDoubleClick: event => {}, // double click row
-          onContextMenu: event => {}, // right button click row
-          onMouseEnter: event => {}, // mouse enter row
-          onMouseLeave: event => {}, // mouse leave row
-          /* onselectstart: event => {
-            event.preventDefault();
-          } */
+          },
+          onDoubleClick: () => {
+            showTaskInfo(record.id);
+          },
         };
       }}
       scroll={{
