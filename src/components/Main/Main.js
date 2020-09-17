@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   hideAlert,
   hideLoader,
+  organizersLoaded,
   scheduleLoaded,
   setAlertMessage,
   showAlert,
@@ -11,6 +12,7 @@ import {
 } from '../../actions';
 import {getFilteredEvents} from '../../selectors';
 import CreateEvent from '../CreateEvent';
+import EditEvent from '../EditEvent/EditEvent';
 import EventTypeFilter from '../EventTypeFilter';
 import ScheduleList from '../ScheduleList';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
@@ -27,7 +29,7 @@ const Main = () => {
   const {alert: isAlert, alertMessage, timezone: tz, scheduleView} = useSelector(
     state => state.app
   );
-  const {getEvents, transformEventData} = useContext(ScheduleServiceContext);
+  const {getEvents, transformEventData, getOrganizers} = useContext(ScheduleServiceContext);
 
   const fetchEvents = () => {
     dispatch(showLoader());
@@ -38,6 +40,7 @@ const Main = () => {
       })
       .catch(() => message.error('Something went wrong'))
       .finally(() => dispatch(hideLoader()));
+    getOrganizers().then(organizers => dispatch(organizersLoaded(organizers)));
   };
 
   useEffect(() => {
@@ -71,7 +74,12 @@ const Main = () => {
       <EventTypeFilter />
       {
         {
-          table: <ScheduleTable events={filteredEvents} />,
+          table: (
+            <>
+              <ScheduleTable events={filteredEvents} />
+              <EditEvent fetchEvents={fetchEvents} />
+            </>
+          ),
           list: <ScheduleList events={filteredEvents} />,
           calendar: <ScheduleСalendar events={filteredEvents} />,
         }[scheduleView]

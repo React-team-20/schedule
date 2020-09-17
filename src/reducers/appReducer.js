@@ -7,6 +7,7 @@ import {
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
   HIDE_TASK_OVERVIEW,
+  LOADED_ORGANIZERS,
   SET_ALERT_MESSAGE,
   SHOW_ALERT,
   SHOW_FORM_CREATION_EVENT,
@@ -28,6 +29,7 @@ const initialState = {
   loading: true,
   alert: false,
   alertMessage: null,
+  organizers: [],
 };
 
 const appReducer = (state = initialState, action) => {
@@ -60,6 +62,8 @@ const appReducer = (state = initialState, action) => {
       return {...state, timezone: action.payload};
     case CHANGE_USER_ROLE:
       return {...state, userRole: action.payload};
+    case LOADED_ORGANIZERS:
+      return {...state, organizers: action.payload};
     default:
       return state;
   }
