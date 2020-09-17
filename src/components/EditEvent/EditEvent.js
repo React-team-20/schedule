@@ -1,8 +1,9 @@
 import {Button, Col, DatePicker, Drawer, Form, Input, message, Row, Select, Divider} from 'antd';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
+import moment from 'moment-timezone';
 import {connect} from 'react-redux';
 import {
-  hideFormCreationEvent,
+  hideFormEditEvent,
   hideLoader,
   setAlertMessage,
   showLoader,
@@ -10,60 +11,73 @@ import {
 } from '../../actions';
 import eventsTypes from '../../constants/events-types';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
-import './create-event.css';
+import './edit-event.css';
 import {PlusOutlined} from '@ant-design/icons';
-
-const emptyEvent = {
-  id: '',
-  topic: '1',
-  description: '',
-  descriptionUrl: '',
-  type: '',
-  timeZone: '',
-  date: '',
-  time: '',
-  dateTime: 0,
-  taskObj: {
-    demoUrl: '',
-    materials: '',
-  },
-  place: '',
-  comment: '',
-  organizer: '',
-};
 
 const {Option} = Select;
 
-const CreateEvent = ({
-  isShowFormСreationEvent,
-  hideFormCreationEvent,
-  showLoader,
+const EditEvent = ({
+  isShowFormEditEvent,
+  hideFormEditEvent,
+  currentEventId,
   setAlertMessage,
-  hideLoader,
   fetchEvents,
+  showLoader,
+  hideLoader,
+  events,
+  tz,
   organizers,
   organizersLoaded,
 }) => {
-  const {addEvent, getGithubData, addOrganizer, getOrganizers} = useContext(ScheduleServiceContext);
+  const [form] = Form.useForm();
+  const [event, setEvent] = useState({});
+  const {editEvent, getGithubData, addOrganizer, getOrganizers} = useContext(
+    ScheduleServiceContext
+  );
+  const [hideSubFieldsFlag, setHideSubFieldsFlag] = useState(true);
+
+  useEffect(() => {
+    if (currentEventId !== null) {
+      setEvent(events.find(event => event.id === currentEventId));
+    }
+  }, [isShowFormEditEvent]);
+
   const onClose = () => {
-    hideFormCreationEvent();
+    hideFormEditEvent();
   };
 
-  const [form] = Form.useForm();
-  const [hideSubFieldsFlag, setHideSubFieldsFlag] = useState(true);
-  const [event, setEvent] = useState(emptyEvent);
-
-  const onSelectType = e => {
-    if (e === 'task' || e === 'optional-task') {
+  const initialFormValue = () => {
+    if (event.type === 'task' || event.type === 'optional-task') {
       setHideSubFieldsFlag(false);
     } else {
       setHideSubFieldsFlag(true);
     }
-    setEvent({...event, type: e});
+    form.setFieldsValue({
+      topic: event.topic,
+      'description-url': event.descriptionUrl,
+      organizer: event.organizer.name,
+      type: event.type,
+      date: moment(event.dateTime).tz(tz),
+      'demo-url': event.demoUrl,
+      description: event.description,
+      materials: event.materials,
+      comment: event.comment,
+    });
   };
 
-  const onSelectOrganizer = e => {
-    setEvent({...event, organizer: organizers.find(organizer => organizer.name === e)});
+  const onSubmit = () => {
+    hideFormEditEvent();
+    showLoader();
+    editEvent(event.id, event)
+      .then(() => {
+        setAlertMessage('Event edited successfully!');
+        fetchEvents();
+        form.resetFields();
+      })
+      .catch(() => {
+        hideLoader();
+        message.error('Something went wrong');
+      });
   };
 
   const addNewOrganizer = async () => {
@@ -83,6 +97,7 @@ const CreateEvent = ({
       setEvent({...event, organizerGitHub: ''});
       await addOrganizer(data);
       const newOrganizers = await getOrganizers();
+      setAlertMessage('Event edited successfully!');
       organizersLoaded(newOrganizers);
     } else {
       message.error('Such an organizer exists!');
@@ -90,27 +105,17 @@ const CreateEvent = ({
     }
   };
 
-  const onSubmit = () => {
-    hideFormCreationEvent();
-    showLoader();
-    addEvent(event)
-      .then(() => {
-        setAlertMessage('Event added successfully!');
-        fetchEvents();
-        setEvent(emptyEvent);
-        form.resetFields();
-      })
-      .catch(() => {
-        hideLoader();
-        message.error('Something went wrong');
-      });
+  const onSelectType = e => {
+    if (e === 'task' || e === 'optional-task') {
+      setHideSubFieldsFlag(false);
+    } else {
+      setHideSubFieldsFlag(true);
+    }
+    setEvent({...event, type: e});
   };
 
-  const onChangeTimeAndDate = e => {
-    setEvent({
-      ...event,
-      dateTime: Date.parse(e._d.toString()),
-    });
+  const onSelectOrganizer = e => {
+    setEvent({...event, organizer: organizers.find(organizer => organizer.name === e)});
   };
 
   const onChangeInputs = e => {
@@ -153,13 +158,21 @@ const CreateEvent = ({
     }
   };
 
+  const onChangeTimeAndDate = e => {
+    setEvent({
+      ...event,
+      dateTime: Date.parse(e._d.toString()),
+    });
+  };
+
   return (
     <>
       <Drawer
-        title="Create a new event"
+        title="Edit event"
         width="50%"
         onClose={onClose}
-        visible={isShowFormСreationEvent}
+        afterVisibleChange={initialFormValue}
+        visible={isShowFormEditEvent}
         bodyStyle={{paddingBottom: 80}}
         footer={
           <div
@@ -170,23 +183,22 @@ const CreateEvent = ({
             <Button onClick={onClose} style={{marginRight: 8}}>
               Cancel
             </Button>
-            <Button type="primary" form="create-form" htmlType="submit">
+            <Button type="primary" form="edit-form" htmlType="submit">
               Submit
             </Button>
           </div>
         }
       >
-        <Form layout="vertical" hideRequiredMark id="create-form" onFinish={onSubmit} form={form}>
+        <Form layout="vertical" hideRequiredMark id="edit-form" onFinish={onSubmit} form={form}>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="topic"
                 label="Topic"
                 onChange={onChangeInputs}
-                value="asd"
                 rules={[{required: true, message: 'Please enter event topic'}]}
               >
-                <Input name="topic" placeholder="Please enter event topic" value={event.topic} />
+                <Input name="topic" placeholder="Please enter event topic" />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -355,17 +367,21 @@ const CreateEvent = ({
 
 const mapStateToProps = state => {
   return {
-    isShowFormСreationEvent: state.app.isShowFormСreationEvent,
+    event: state.events,
+    isShowFormEditEvent: state.app.isShowFormEditEvent,
+    currentEventId: state.app.currentEvent,
+    events: state.events.events,
+    tz: state.app.timezone,
     organizers: state.app.organizers,
   };
 };
 
 const mapDispatchToProps = {
-  hideFormCreationEvent,
+  hideFormEditEvent,
   showLoader,
   hideLoader,
   setAlertMessage,
   organizersLoaded,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateEvent);
+export default connect(mapStateToProps, mapDispatchToProps)(EditEvent);

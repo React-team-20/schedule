@@ -7,6 +7,7 @@ import {
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
   HIDE_TASK_OVERVIEW,
+  LOADED_ORGANIZERS,
   LOADED_SCHEDULE,
   REMOVE_EVENT,
   SET_ALERT_MESSAGE,
@@ -126,5 +127,12 @@ export const setEventTypeFilter = events => {
   return {
     type: SET_EVENT_TYPE_FILTER,
     payload: events,
+  };
+};
+
+export const organizersLoaded = organizers => {
+  return {
+    type: LOADED_ORGANIZERS,
+    payload: organizers,
   };
 };

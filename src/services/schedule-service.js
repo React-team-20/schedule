@@ -48,4 +48,30 @@ export default class ScheduleService {
     const sortData = data.sort((a, b) => a.dateTime - b.dateTime);
     return tz ? sortData.map(item => ({...item, ...dateTimeParse(item.dateTime, tz)})) : sortData;
   };
+
+  getOrganizers = async () => {
+    const res = await fetch('https://rs-react-schedule.firebaseapp.com/api/team/q20/organizers');
+    const data = await res.json();
+    return data.data;
+  };
+
+  addOrganizer = async organizer => {
+    await fetch('https://rs-react-schedule.firebaseapp.com/api/team/q20/organizer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(organizer),
+    });
+  };
+
+  getGithubData = async login => {
+    const res = await fetch(`https://api.github.com/users/${login}`);
+    const data = await res.json();
+    return {
+      name: data.login,
+      avatar: data.avatar_url,
+      htmlUrl: data.html_url,
+    };
+  };
 }
