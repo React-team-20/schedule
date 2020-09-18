@@ -1,28 +1,4 @@
-.overview .topic {
-    margin-bottom: 20px;
-}
-
-.overview .organizer {
-    display: flex;
-    align-items: center;
-}
-
-.overview > div,
-.overview label {
-    line-height: 2em;
-}
-
-.overview .organizer > a {
-    display: flex;
-    align-items: center;
-}
-
-.overview .organizer > a > span {
-    margin: 0 5px;
-}
-
-.overview div > span,
-.overview label {
+.overview div > span {
     font-weight: 600;
 }
 
@@ -34,4 +10,47 @@
     max-width: 122px;
     position: relative;
     left: calc(100% - 122px);
+}
+
+.overview .ant-list-item-meta-description {
+    color: #000;
+    margin-left: 5px !important;
+}
+
+.overview .ant-menu-submenu-title,
+.overview .ant-menu-item.ant-menu-item-only-child {
+    margin: 0 !important;
+}
+
+.overview .ant-list-item-meta-description > a > span {
+    margin: 0 5px !important;
+}
+
+.overview .ant-list-item {
+    height: 40px !important;
+    padding: 0 !important;
+}
+
+.overview .ant-list-item-meta-content {
+    display: flex;
+}
+
+.overview .materials:hover {
+    cursor: pointer;
+}
+
+.overview .ant-list-item-meta-avatar {
+    margin-right: 10px !important;
+}
+
+.overview .ant-list-item-meta-title {
+    margin: 0 !important;
+}
+
+.overview .ant-menu-item.ant-menu-item-only-child {
+    padding: 0 24px !important;
+}
+
+.materials-menu > li > div {
+    padding: 0 !important;
 }

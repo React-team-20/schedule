@@ -1,8 +1,28 @@
-import {Modal, Avatar, Input, Button, Form} from 'antd';
+import {
+  Modal,
+  Avatar,
+  Input,
+  Button,
+  Form,
+  List,
+  Menu
+} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {
+  UserOutlined,
+  AlignLeftOutlined,
+  CopyOutlined,
+  EnvironmentOutlined,
+  MessageOutlined,
+  FlagOutlined,
+  FileImageOutlined,
+  FolderViewOutlined,
+} from "@ant-design/icons";
 import {hideTaskOverview} from '../../actions';
 import './task-overview.css';
+
+const { SubMenu } = Menu;
 
 const TaskOverview = () => {
   const dispatch = useDispatch();
@@ -34,7 +54,6 @@ const TaskOverview = () => {
   };
 
   const handleSubmit = () => {
-    form.resetFields();
     let feedbacksArray;
     if(localStorage.getItem("feedbacks")) {
       feedbacksArray = JSON.parse(localStorage.getItem("feedbacks"));
@@ -45,57 +64,108 @@ const TaskOverview = () => {
     const newFeedback = {feedbackId, feedback};
     feedbacksArray.push(newFeedback);
     localStorage.setItem('feedbacks', JSON.stringify(feedbacksArray));
+    setFeedback('');
   };
 
   return (
     <Modal
-      title="Task information"
+      title="Event information"
       visible={isShowTaskOverview}
       onOk={handleOk}
       onCancel={handleCancel}
     >
     {event &&
-      <div className="overview">
+      <List className="overview">
         <h2 className="topic">
           {event.topic}
         </h2>
-        {event.organizer && <div className="organizer">
-          <span>Organizer:</span>
-          <a href={event.organizer.htmlUrl} target="_blank">
-            <Avatar
-              size="small"
-              src={event.organizer.avatar}
-            />
-            {event.organizer.name}
-          </a>
-        </div>}
-        <div>
-          <span>Description:</span> {event.description}
-        </div>
-        {event.taskObj.demoUrl && <div><span>Demo:</span> {event.taskObj.demoUrl}</div>}
-        <div>
-          <span>Materials:</span>{event.taskObj.materials}
-        </div>
-        {event.place && <div><span>Materials:</span>{event.taskObj.materials}</div>}
-        <div>
-          <Form layout="vertical" id="feedback-form" form={form} onFinish={handleSubmit}>
-            <Form.Item
-              name="feedback"
-              label="Feedback:"
-            >
-              <Input.TextArea
-                rows={5}
-                placeholder="Please leave your feedback"
-                onChange={handleType}
-                value={feedback} 
+        <List.Item>
+          <List.Item.Meta
+            avatar={<UserOutlined />}
+            title="Organizer:" 
+            description = {
+            <a href={event.organizer.htmlUrl} target="_blank">
+              <Avatar
+                size="small"
+                src={event.organizer.avatar}
               />
-            </Form.Item>
-            <Button type="primary" form="feedback-form" htmlType="submit">
-              Send feedback
-            </Button>
-          </Form>
-        </div>
-      </div>
+              {event.organizer.name}
+            </a>
+            }
+          />
+        </List.Item>
+        <List.Item>
+          <List.Item.Meta
+            avatar={<FlagOutlined />}
+            title="Type:"
+            description={
+              event.type
+            }
+          />
+        </List.Item>
+        <List.Item>
+          <List.Item.Meta
+            avatar={<AlignLeftOutlined />}
+            title="Description:"
+            description={
+              event.description
+            }
+          />
+        </List.Item>
+        {event.taskObj.demoUrl &&
+        <List.Item>
+          <List.Item.Meta
+            avatar={<FileImageOutlined />}
+            title="Photo:"
+            description={
+              event.taskObj.demoUrl
+            }
+          />
+        </List.Item>}
+        {event.taskObj.demoUrl &&
+        <List.Item>
+          <List.Item.Meta
+            avatar={<FolderViewOutlined />}
+            title="Demo:"
+            description={
+              event.taskObj.demoUrl
+            }
+          />
+        </List.Item>}
+        {event.place &&
+        <List.Item>
+          <List.Item.Meta
+            avatar={<EnvironmentOutlined />}
+            title="Place:"
+            description={
+              event.place
+            }
+          />
+        </List.Item>}
+        {event.taskObj.materials &&
+          <Menu className="materials-menu" mode="inline">
+            <SubMenu title="Materials" icon={<CopyOutlined />}>
+              {event.taskObj.materials.split('\n').map((item, i) => (<Menu.Item key = {i}>{item}</Menu.Item>))}
+            </SubMenu>
+          </Menu>
+        }
+        <Form layout="vertical" id="feedback-form" form={form} onFinish={handleSubmit}>
+          <Form.Item>
+          <List.Item>
+            <List.Item.Meta avatar={<MessageOutlined />} title="Feedback:" />
+          </List.Item>
+            <Input.TextArea
+              rows={5}
+              placeholder="Please leave your feedback"
+              onChange={handleType}
+              value={feedback} 
+            />
+          </Form.Item>
+          <Button type="primary" form="feedback-form" htmlType="submit">
+            Send feedback
+          </Button>
+        </Form>
+      </List>
     }
     </Modal>
   );
