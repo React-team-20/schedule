@@ -27,7 +27,7 @@ const ScheduleListItem = (data) => {
           {item.organizer 
             ? <div className="item-organizer">
                 <span className="item-organizer-label">organizer:</span> 
-                {<GithubUserLink user={item.organizer}/>}
+                {GithubUserLink(item.organizer)}
               </div>
             : ''}               
         </List.Item>
