@@ -1,21 +1,36 @@
-.topic {
+.overview .topic {
     margin-bottom: 20px;
 }
 
-.organizer {
+.overview .organizer {
     display: flex;
     align-items: center;
 }
 
-.organizer > a {
+.overview > div {
+    line-height: 2em;
+}
+
+.overview .organizer > a {
     display: flex;
     align-items: center;
 }
 
-.organizer > a > span {
+.overview .organizer > a > span {
     margin: 0 5px;
 }
 
-p > span {
+.overview div > span,
+.overview label {
     font-weight: 600;
+}
+
+.overview textarea {
+    resize: none;
+}
+
+.overview button {
+    max-width: 122px;
+    position: relative;
+    left: calc(100% - 122px);
 }
