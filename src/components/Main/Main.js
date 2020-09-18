@@ -38,7 +38,6 @@ const Main = () => {
     dispatch(showLoader());
     getEvents(tz)
       .then(evts => {
-        getOrganizers().then(organizers => dispatch(organizersLoaded(organizers)));
         dispatch(scheduleLoaded(evts));
         dispatch(showAlert());
       })
@@ -48,6 +47,9 @@ const Main = () => {
 
   useEffect(() => {
     dispatch(setAlertMessage('Schedule uploaded successfully!'));
+    getOrganizers()
+      .then(organizers => dispatch(organizersLoaded(organizers)))
+      .catch(() => message.error('Organizers list was not loaded'));
     fetchEvents();
     // eslint-disable-next-line
   }, []);

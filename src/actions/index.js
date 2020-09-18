@@ -19,6 +19,7 @@ import {
   SHOW_LOADER,
   SHOW_TASK_OVERVIEW,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
+  REMOVE_HIDDEN_EVENT,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -149,5 +150,12 @@ export const setHiddenEvents = events => {
   return {
     type: SET_HIDDEN_EVENTS,
     payload: events,
+  };
+};
+
+export const removeHiddenEvent = id => {
+  return {
+    type: REMOVE_HIDDEN_EVENT,
+    payload: id,
   };
 };

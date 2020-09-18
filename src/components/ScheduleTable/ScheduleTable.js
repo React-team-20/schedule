@@ -2,9 +2,9 @@ import {EyeOutlined, RightOutlined} from '@ant-design/icons';
 import {Button, Table, Tag, Tooltip} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setHiddenEvents, showTaskOverview} from '../../actions';
+import {setHiddenEvents, removeHiddenEvent, showTaskOverview} from '../../actions';
 import {isLinkRegExp, setTagColor} from '../../utils';
-import EventHideButton from '../EventHideButton';
+import EventHideButton from './EventHideButton';
 import GithubUserLink from '../GithubUserLink';
 import EditEventButton from './EditEventButton';
 import RemoveEventButton from './RemoveEventButton';
@@ -48,16 +48,12 @@ const ScheduleTable = ({events}) => {
   };
 
   const handlerEventHide = () => {
-    const newHiddenEvents = Array.from(new Set([...hiddenEvents, ...selectedRows]));
-    localStorage.setItem('hiddenEvents', JSON.stringify(newHiddenEvents));
-    dispatch(setHiddenEvents(newHiddenEvents));
+    dispatch(setHiddenEvents(selectedRows));
     setSelectedRows([]);
   };
 
   const handlerEventShow = id => {
-    const newHiddenEvents = hiddenEvents.filter(evt => evt !== id);
-    localStorage.setItem('hiddenEvents', JSON.stringify(newHiddenEvents));
-    dispatch(setHiddenEvents(newHiddenEvents));
+    dispatch(removeHiddenEvent(id));
   };
 
   const showTaskInfo = id => {
