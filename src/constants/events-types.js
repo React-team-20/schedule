@@ -1,67 +1,83 @@
-export default [
+const Event_Type_Styles = [
   {
     value: 'youtube-live',
     title: 'Youtube live',
-    color: 'green',
+    background: 'green',
+    color: '#ffffff'
+
   },
   {
     value: 'offline-lecture',
     title: 'Offline lecture',
-    color: 'green',
+    background: 'green',
+    color: '#ffffff'
   },
   {
     value: 'task',
     title: 'Task',
-    color: '#87D068',
+    background: '#87D068',
+    color: 'black'
   },
   {
     value: 'optional-task',
     title: 'Optional task',
-    color: 'magenta',
+    background: 'magenta',
+    color: '#ffffff'
   },
   {
     value: 'interview',
     title: 'Interview',
-    color: '#854eca',
+    background: '#854eca',
+    color: '#ffffff'
   },
   {
     value: 'deadline',
     title: 'Deadline',
-    color: '#FF4D4F',
+    background: '#FF4D4F',
+    color: '#ffffff'
   },
   {
     value: 'self-education',
     title: 'Self-education',
-    color: 'blue',
+    background: 'blue',
+    color: '#ffffff'
   },
   {
     value: 'codewars',
     title: 'Codewars',
-    color: '#2db7f5',
+    background: '#2db7f5',
+    color: '#ffffff'
   },
   {
     value: 'test',
     title: 'Test',
-    color: '#854eca',
+    background: '#854eca',
+    color: '#ffffff'
   },
   {
     value: 'meetup',
     title: 'Meetup',
-    color: 'geekblue',
+    background: 'purple',
+    color:'#ffffff'
   },
   {
     value: 'live-coding',
     title: 'Live coding',
-    color: 'orange',
+    background: 'orange',
+    color:'#ffffff'
   },
   {
     value: 'twitch',
     title: 'Twitch',
-    color: 'purple',
+    background: 'purple',
+    color:'#ffffff'
   },
   {
     value: 'cross-check',
     title: 'Cross-check',
-    color: '#f50',
+    background: '#f50',
+    color:'#ffffff'
   },
 ];
+
+export default Event_Type_Styles

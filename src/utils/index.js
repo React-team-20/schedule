@@ -8,7 +8,7 @@ export const dateTimeParse = (dateTime, timezone) => {
   };
 };
 
-export const setTagColor = tag => eventsTypes.find(item => item.value === tag).color;
+export const setTagColor = tag => eventsTypes.find(item => item.value === tag).background;
 
 export const filterDateByMonthAndYear = data => {
   const newData = {};

@@ -1,11 +1,19 @@
 import React, {useState} from 'react';
 import moment from 'moment';
-import {Calendar, Tag, Badge, Drawer} from 'antd';
+import {connect} from 'react-redux';
+import {Calendar, Badge, Drawer} from 'antd';
 import {setTagColor} from '../../utils';
 import ScheduleСalendarDrawer from './ScheduleCalendarDrawer';
 import './schedule-calendar.css';
 
-const ScheduleСalendar = ({events}) => {
+const connector = connect(
+  state => ({
+    style: state.styles
+  })
+)
+
+const ScheduleСalendar = ({events, style}) => {
+  console.log(style)
   const [drawer, setDrawer] = useState({visible: false});
   const [dayEvents, setDayEvents] = useState(0);
 
@@ -48,10 +56,8 @@ const ScheduleСalendar = ({events}) => {
             count={listData.length}
           />
           {listData.map(item => (
-            <div className="event-box" key={item.id}>
-              <Tag className="tag-type-calendar" color={setTagColor(item.type)}>
+            <div className="event-box" key={item.id} style={{background: setTagColor(item.type)}}>
                 {item.type}
-              </Tag>
             </div>
           ))}
         </div>
@@ -75,4 +81,4 @@ const ScheduleСalendar = ({events}) => {
   );
 };
 
-export default ScheduleСalendar;
+export default connector(ScheduleСalendar);
