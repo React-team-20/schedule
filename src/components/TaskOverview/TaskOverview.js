@@ -59,7 +59,7 @@ const TaskOverview = () => {
         <h2 className="topic">
           {event.topic}
         </h2>
-        <div className="organizer">
+        {event.organizer && <div className="organizer">
           <span>Organizer:</span>
           <a href={event.organizer.htmlUrl} target="_blank">
             <Avatar
@@ -68,11 +68,11 @@ const TaskOverview = () => {
             />
             {event.organizer.name}
           </a>
-        </div>
+        </div>}
         <div>
           <span>Description:</span> {event.description}
         </div>
-        {event.taskObj.demoUrl && <p><span>Demo:</span> {event.taskObj.demoUrl}</p>}
+        {event.taskObj.demoUrl && <div><span>Demo:</span> {event.taskObj.demoUrl}</div>}
         <div>
           <span>Materials:</span>{event.taskObj.materials}
         </div>
@@ -81,11 +81,11 @@ const TaskOverview = () => {
           <Form layout="vertical" id="feedback-form" form={form} onFinish={handleSubmit}>
             <Form.Item
               name="feedback"
-              label="Feedback"
+              label="Feedback:"
             >
               <Input.TextArea
                 rows={5}
-                placeholder="Please add your feedback"
+                placeholder="Please leave your feedback"
                 onChange={handleType}
                 value={feedback} 
               />
