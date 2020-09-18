@@ -1,9 +1,10 @@
-import {RightOutlined} from '@ant-design/icons';
-import {Button, Table, Tag} from 'antd';
+import {EyeOutlined, RightOutlined} from '@ant-design/icons';
+import {Button, Table, Tag, Tooltip} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {showTaskOverview} from '../../actions';
+import {setHiddenEvents, showTaskOverview} from '../../actions';
 import {isLinkRegExp, setTagColor} from '../../utils';
+import EventHideButton from '../EventHideButton';
 import GithubUserLink from '../GithubUserLink';
 import EditEventButton from './EditEventButton';
 import RemoveEventButton from './RemoveEventButton';
@@ -12,6 +13,7 @@ import './schedule-table.css';
 const ScheduleTable = ({events}) => {
   const dispatch = useDispatch();
   const {userRole} = useSelector(state => state.app);
+  const {hiddenEvents} = useSelector(state => state.events);
   const [selectedRows, setSelectedRows] = useState([]);
 
   useEffect(() => {
@@ -45,6 +47,19 @@ const ScheduleTable = ({events}) => {
     }
   };
 
+  const handlerEventHide = () => {
+    const newHiddenEvents = Array.from(new Set([...hiddenEvents, ...selectedRows]));
+    localStorage.setItem('hiddenEvents', JSON.stringify(newHiddenEvents));
+    dispatch(setHiddenEvents(newHiddenEvents));
+    setSelectedRows([]);
+  };
+
+  const handlerEventShow = id => {
+    const newHiddenEvents = hiddenEvents.filter(evt => evt !== id);
+    localStorage.setItem('hiddenEvents', JSON.stringify(newHiddenEvents));
+    dispatch(setHiddenEvents(newHiddenEvents));
+  };
+
   const showTaskInfo = id => {
     dispatch(showTaskOverview(id));
   };
@@ -54,7 +69,6 @@ const ScheduleTable = ({events}) => {
       title: 'Date',
       dataIndex: 'date',
       width: 90,
-      render: text => <span>{text}</span>,
     },
     {
       title: 'Time',
@@ -65,12 +79,12 @@ const ScheduleTable = ({events}) => {
       title: 'Type',
       dataIndex: 'type',
       width: 120,
-      render: (text, record) => (
+      render: (_, record) => (
         <Tag className="list-item-tag" color={setTagColor(record.type)}>
           {record.type
             .toUpperCase()
             .split('')
-            .map(item => (item === '-' ? ' ' : item))
+            .map(i => (i === '-' ? ' ' : i))
             .join('')}
         </Tag>
       ),
@@ -134,8 +148,12 @@ const ScheduleTable = ({events}) => {
     width: 80,
     render: (_, record) => (
       <div className="table-action-buttons">
-        <EditEventButton id={record.id} />
-        <RemoveEventButton id={record.id} />
+        <Tooltip title="edit event">
+          <EditEventButton id={record.id} />
+        </Tooltip>
+        <Tooltip title="delete event">
+          <RemoveEventButton id={record.id} />
+        </Tooltip>
       </div>
     ),
   };
@@ -149,15 +167,44 @@ const ScheduleTable = ({events}) => {
       pagination={false}
       dataSource={events}
       rowKey={record => record.id}
+      rowClassName={record => {
+        if (hiddenEvents.includes(record.id)) {
+          return 'hidden-event';
+        }
+        if (record.dateTime < Date.now()) {
+          return 'past-event';
+        }
+      }}
       sticky
       rowSelection={{
+        fixed: true,
+        columnTitle: selectedRows.length ? (
+          <EventHideButton handlerEventHide={handlerEventHide} />
+        ) : (
+          ''
+        ),
+        hideSelectAll: true,
         selectedRowKeys: selectedRows,
+        renderCell: (_, record) => {
+          if (hiddenEvents.includes(record.id)) {
+            return (
+              <Button
+                type="text"
+                className="show-event-button"
+                onClick={() => handlerEventShow(record.id)}
+              >
+                <EyeOutlined />
+              </Button>
+            );
+          }
+        },
       }}
       onRow={record => {
         return {
           onClick: event => {
             if (
               event.target.closest('.info-event-button') ||
+              event.target.closest('.show-event-button') ||
               event.target.closest('.events-link') ||
               event.target.closest('.item-organizer a') ||
               event.target.closest('.table-action-buttons') ||
