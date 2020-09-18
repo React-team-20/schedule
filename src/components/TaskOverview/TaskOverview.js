@@ -1,4 +1,4 @@
-import {Modal} from 'antd';
+import {Modal, Checkbox, Avatar} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {hideTaskOverview} from '../../actions';
@@ -33,7 +33,27 @@ const TaskOverview = () => {
       onOk={handleOk}
       onCancel={handleCancel}
     >
-      <p>{JSON.stringify(event)}</p>
+    {event &&
+      <>
+      <h2 className = 'topic'>
+        {event.topic}
+      </h2>
+      <p className = 'organizer'>
+        <span>Organizer:</span>
+        <a href = {event.organizer.htmlUrl} target = '_blank'>
+          <Avatar size = 'small' src = {event.organizer.avatar} />
+          {event.organizer.name}
+        </a>
+      </p>
+      <p><span>Description:</span> {event.description}</p>
+      {event.taskObj.demoUrl && <p><span>Demo:</span> {event.taskObj.demoUrl}</p>}
+      <p><span>Materials:</span>{event.taskObj.materials}</p>
+      {event.place && <p><span>Materials:</span>{event.taskObj.materials}</p>}
+      <p>
+        Allow feedback <Checkbox />
+      </p>
+      </>
+    }
     </Modal>
   );
 };

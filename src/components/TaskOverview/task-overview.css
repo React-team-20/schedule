@@ -1,0 +1,21 @@
+.topic {
+    margin-bottom: 20px;
+}
+
+.organizer {
+    display: flex;
+    align-items: center;
+}
+
+.organizer > a {
+    display: flex;
+    align-items: center;
+}
+
+.organizer > a > span {
+    margin: 0 5px;
+}
+
+p > span {
+    font-weight: 600;
+}
