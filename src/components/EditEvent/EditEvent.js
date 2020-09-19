@@ -1,4 +1,16 @@
-import {Button, Col, DatePicker, Drawer, Form, Input, message, Row, Select, Divider} from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Drawer,
+  Form,
+  Input,
+  message,
+  Row,
+  Select,
+  Divider,
+  Checkbox,
+} from 'antd';
 import React, {useContext, useState, useEffect} from 'react';
 import moment from 'moment-timezone';
 import {connect} from 'react-redux';
@@ -13,6 +25,7 @@ import eventsTypes from '../../constants/events-types';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import './edit-event.css';
 import {PlusOutlined} from '@ant-design/icons';
+import DeleteOrganizerButton from '../CreateEvent/DeleteOrganizerButton';
 
 const {Option} = Select;
 
@@ -30,11 +43,12 @@ const EditEvent = ({
   organizersLoaded,
 }) => {
   const [form] = Form.useForm();
-  const [event, setEvent] = useState({});
+  const [event, setEvent] = useState({organizer: '', feedback: false});
   const {editEvent, getGithubData, addOrganizer, getOrganizers} = useContext(
     ScheduleServiceContext
   );
-  const [hideSubFieldsFlag, setHideSubFieldsFlag] = useState(true);
+  const [hideSubFieldsForTaskFlag, setHideSubFieldsForTaskFlag] = useState(true);
+  const [hideSubFieldsForOfflineFlag, setHideSubFieldsForOfflineFlag] = useState(true);
 
   useEffect(() => {
     if (currentEventId !== null) {
@@ -48,10 +62,17 @@ const EditEvent = ({
 
   const initialFormValue = () => {
     if (event.type === 'task' || event.type === 'optional-task') {
-      setHideSubFieldsFlag(false);
+      setHideSubFieldsForTaskFlag(false);
     } else {
-      setHideSubFieldsFlag(true);
+      setHideSubFieldsForTaskFlag(true);
     }
+
+    if (event.type === 'offline-lecture' || event.type === 'meetup') {
+      setHideSubFieldsForOfflineFlag(false);
+    } else {
+      setHideSubFieldsForOfflineFlag(true);
+    }
+
     form.setFieldsValue({
       topic: event.topic,
       'description-url': event.descriptionUrl,
@@ -62,6 +83,7 @@ const EditEvent = ({
       description: event.description,
       materials: event.materials,
       comment: event.comment,
+      place: event.place,
     });
   };
 
@@ -107,9 +129,9 @@ const EditEvent = ({
 
   const onSelectType = e => {
     if (e === 'task' || e === 'optional-task') {
-      setHideSubFieldsFlag(false);
+      setHideSubFieldsForTaskFlag(false);
     } else {
-      setHideSubFieldsFlag(true);
+      setHideSubFieldsForTaskFlag(true);
     }
     setEvent({...event, type: e});
   };
@@ -152,6 +174,9 @@ const EditEvent = ({
         break;
       case 'comment':
         setEvent({...event, comment: e.target.value});
+        break;
+      case 'place':
+        setEvent({...event, place: e.target.value});
         break;
       default:
         return null;
@@ -202,12 +227,7 @@ const EditEvent = ({
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                onChange={onChangeInputs}
-                name="description-url"
-                label="Broadcast Url"
-                rules={[{required: true, message: 'Please enter broadcast url'}]}
-              >
+              <Form.Item onChange={onChangeInputs} name="description-url" label="Link">
                 <Input
                   name="description-url"
                   style={{width: '100%'}}
@@ -218,12 +238,7 @@ const EditEvent = ({
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                onChange={onChangeInputs}
-                name="organizer"
-                label="Organizer"
-                rules={[{required: true, message: 'Please enter event organizer'}]}
-              >
+              <Form.Item onChange={onChangeInputs} name="organizer" label="Organizer">
                 <Select
                   onSelect={onSelectOrganizer}
                   placeholder={'Please enter event organizer'}
@@ -255,7 +270,12 @@ const EditEvent = ({
                 >
                   {organizers.map(organizer => (
                     <Option value={organizer.name} key={organizer.id}>
-                      {organizer.name}
+                      <div className="option-wrapper">
+                        {organizer.name}
+                        {organizer.name !== event.organizer.name && (
+                          <DeleteOrganizerButton id={organizer.id} />
+                        )}
+                      </div>
                     </Option>
                   ))}
                 </Select>
@@ -267,7 +287,30 @@ const EditEvent = ({
                 label="Type"
                 rules={[{required: true, message: 'Please choose the type'}]}
               >
-                <Select name="type" onSelect={onSelectType} placeholder="Please choose the type">
+                <Select
+                  name="type"
+                  onSelect={onSelectType}
+                  placeholder="Please choose the type"
+                  dropdownRender={menu => (
+                    <div>
+                      {menu}
+                      <Divider style={{margin: '4px 0'}} />
+                      <div style={{display: 'flex', flexWrap: 'nowrap', padding: 8}}>
+                        <a
+                          style={{
+                            flex: 'none',
+                            padding: '8px',
+                            display: 'block',
+                            cursor: 'pointer',
+                          }}
+                          /* onClick={addNewType} */
+                        >
+                          <PlusOutlined /> Create a new type
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                >
                   {eventsTypes.map(item => (
                     <Option value={item.value} key={item.value}>
                       {item.title}
@@ -298,12 +341,15 @@ const EditEvent = ({
             <Col span={24}>
               <Form.Item
                 onChange={onChangeInputs}
-                name="demo-url"
-                label="Demo Url"
-                hidden={hideSubFieldsFlag}
-                rules={[{required: false, message: 'Please enter broadcast url'}]}
+                name="place"
+                label="Place"
+                hidden={hideSubFieldsForOfflineFlag}
               >
-                <Input name="demo-url" style={{width: '100%'}} placeholder="Please enter url" />
+                <Input
+                  name="description-url"
+                  style={{width: '100%'}}
+                  placeholder="Please enter place"
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -311,15 +357,17 @@ const EditEvent = ({
             <Col span={24}>
               <Form.Item
                 onChange={onChangeInputs}
-                name="description"
-                label="Description"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please add Description',
-                  },
-                ]}
+                name="demo-url"
+                label="Demo Url"
+                hidden={hideSubFieldsForTaskFlag}
               >
+                <Input name="demo-url" style={{width: '100%'}} placeholder="Please enter url" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item onChange={onChangeInputs} name="description" label="Description">
                 <Input.TextArea name="description" rows={2} placeholder="Please add description" />
               </Form.Item>
             </Col>
@@ -330,13 +378,7 @@ const EditEvent = ({
                 onChange={onChangeInputs}
                 name="materials"
                 label="Materials"
-                hidden={hideSubFieldsFlag}
-                rules={[
-                  {
-                    required: false,
-                    message: 'please add materials',
-                  },
-                ]}
+                hidden={hideSubFieldsForTaskFlag}
               >
                 <Input.TextArea name="materials" rows={2} placeholder="Please add materials" />
               </Form.Item>
@@ -344,21 +386,17 @@ const EditEvent = ({
           </Row>
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item
-                onChange={onChangeInputs}
-                name="comment"
-                label="Comment"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please add comment',
-                  },
-                ]}
-              >
+              <Form.Item onChange={onChangeInputs} name="comment" label="Comment">
                 <Input.TextArea name="comment" rows={2} placeholder="Please add comment" />
               </Form.Item>
             </Col>
           </Row>
+          <Checkbox
+            onChange={e => setEvent({...event, feedback: e.target.checked})}
+            checked={event.feedback}
+          >
+            Allow feedback
+          </Checkbox>
         </Form>
       </Drawer>
     </>

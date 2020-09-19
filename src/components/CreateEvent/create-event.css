@@ -1,0 +1,9 @@
+.option-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.width {
+  width: 100%;
+}
