@@ -14,6 +14,7 @@ import {
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
   SHOW_TASK_OVERVIEW,
+  SWITCH_VISIBILITY_HIDDEN_EVENTS,
 } from '../constants/actions-types';
 import {DEFAULT_TIMEZONE} from '../constants/timezones';
 import {DEFAULT_USER_ROLE} from '../constants/user-role';
@@ -25,6 +26,7 @@ const initialState = {
   isShowFormСreationEvent: false,
   isShowFormEditEvent: false,
   isShowTaskOverview: false,
+  visibilityHiddenEvents: localStorage.getItem('visibilityHiddenEvents') || false,
   currentEvent: null,
   loading: true,
   alert: false,
@@ -56,6 +58,8 @@ const appReducer = (state = initialState, action) => {
       return {...state, isShowTaskOverview: true, currentEvent: action.payload};
     case HIDE_TASK_OVERVIEW:
       return {...state, isShowTaskOverview: false, currentEvent: null};
+    case SWITCH_VISIBILITY_HIDDEN_EVENTS:
+      return {...state, visibilityHiddenEvents: !state.visibilityHiddenEvents};
     case CHANGE_SCHEDULE_VIEW:
       return {...state, scheduleView: action.payload};
     case CHANGE_TIMEZONE:

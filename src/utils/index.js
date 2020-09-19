@@ -13,8 +13,8 @@ export const setTagColor = tag => eventsTypes.find(item => item.value === tag).c
 export const filterDateByMonthAndYear = data => {
   const newData = {};
 
-  data.map((item) => {
-    const dataTime = moment(item.dateTime).format("MMMM YYYY");
+  data.forEach(item => {
+    const dataTime = moment(item.dateTime).format('MMMM YYYY');
 
     if (newData[dataTime]) {
       newData[dataTime].push(item);
@@ -22,7 +22,9 @@ export const filterDateByMonthAndYear = data => {
       newData[dataTime] = [];
       newData[dataTime].push(item);
     }
-  })
+  });
 
   return newData;
-}
+};
+
+export const isLinkRegExp = /^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-/])*)?/;
