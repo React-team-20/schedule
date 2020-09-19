@@ -19,6 +19,7 @@ import {
   FileImageOutlined,
   FolderViewOutlined,
 } from "@ant-design/icons";
+import Map from '../Map';
 import {hideTaskOverview} from '../../actions';
 import './task-overview.css';
 
@@ -79,6 +80,7 @@ const TaskOverview = () => {
         <h2 className="topic">
           {event.topic}
         </h2>
+        {event.organizer &&
         <List.Item>
           <List.Item.Meta
             avatar={<UserOutlined />}
@@ -93,7 +95,7 @@ const TaskOverview = () => {
             </a>
             }
           />
-        </List.Item>
+        </List.Item>}
         <List.Item>
           <List.Item.Meta
             avatar={<FlagOutlined />}
@@ -132,18 +134,17 @@ const TaskOverview = () => {
             }
           />
         </List.Item>}
-        {event.place &&
-        <List.Item>
-          <List.Item.Meta
-            avatar={<EnvironmentOutlined />}
-            title="Place:"
-            description={
-              event.place
-            }
-          />
-        </List.Item>}
         {event.taskObj.materials &&
-          <Menu className="materials-menu" mode="inline">
+          <Menu className="dropdown-menu" mode="inline">
+            <SubMenu title="Place" icon={<EnvironmentOutlined />}>
+              <p className="location">Test location</p>
+              {event.place}
+              <Map />
+            </SubMenu>
+          </Menu>
+        }
+        {event.taskObj.materials &&
+          <Menu className="dropdown-menu" mode="inline">
             <SubMenu title="Materials" icon={<CopyOutlined />}>
               {event.taskObj.materials.split('\n').map((item, i) => (<Menu.Item key = {i}>{item}</Menu.Item>))}
             </SubMenu>
