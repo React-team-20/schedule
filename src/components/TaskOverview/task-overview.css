@@ -6,6 +6,10 @@
     resize: none;
 }
 
+.overview form {
+    width: 100%;
+}
+
 .overview button {
     max-width: 122px;
     position: relative;
