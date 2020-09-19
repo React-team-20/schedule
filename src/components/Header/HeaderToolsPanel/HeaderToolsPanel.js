@@ -10,6 +10,7 @@ import React from 'react';
 import NewEventButton from '../../NewEventButton';
 import TimeZoneSelect from '../../TimeZoneSelect';
 import ScheduleViewSelect from '../ScheduleViewSelect';
+import ExportToGoogle from '../ExportToGoogle';
 import './headerToolsPanel.css';
 
 const HeaderToolsPanel = () => {
@@ -69,6 +70,7 @@ const HeaderToolsPanel = () => {
             />
           </Button>
         </Tooltip>
+        <ExportToGoogle />
         <DropdownMenu />
       </Space>
     </div>
