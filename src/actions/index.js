@@ -17,6 +17,7 @@ import {
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
   SHOW_TASK_OVERVIEW,
+  EXPORT_TO_GOOGLE
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -134,5 +135,11 @@ export const organizersLoaded = organizers => {
   return {
     type: LOADED_ORGANIZERS,
     payload: organizers,
+  };
+};
+
+export const exportToGoogle = () => {
+  return {
+    type: EXPORT_TO_GOOGLE,
   };
 };
