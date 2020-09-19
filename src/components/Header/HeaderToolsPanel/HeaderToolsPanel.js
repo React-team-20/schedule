@@ -1,18 +1,28 @@
 import {
   ExportOutlined,
+  EyeInvisibleOutlined,
   EyeOutlined,
   MoreOutlined,
   QuestionCircleOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import {Button, Dropdown, Menu, Space, Tooltip, Typography} from 'antd';
+import {Button, Dropdown, Menu, Space, Tooltip} from 'antd';
 import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {switchVisibilityHiddenEvents} from '../../../actions';
 import NewEventButton from '../../NewEventButton';
 import TimeZoneSelect from '../../TimeZoneSelect';
 import ScheduleViewSelect from '../ScheduleViewSelect';
 import './headerToolsPanel.css';
 
 const HeaderToolsPanel = () => {
+  const dispatch = useDispatch();
+  const {visibilityHiddenEvents} = useSelector(state => state.app);
+  const handlerVisibilityOfHiddenEvents = () => {
+    dispatch(switchVisibilityHiddenEvents());
+    localStorage.setItem('visibilityHiddenEvents', visibilityHiddenEvents);
+  };
+
   const moreMenu = (
     <Menu className="moreMenu">
       <Menu.Item icon={<ExportOutlined />}>
@@ -59,14 +69,12 @@ const HeaderToolsPanel = () => {
 
       <Space>
         <ScheduleViewSelect />
-        <Tooltip title="for the visually impaired">
-          <Button className="button-center-icon button-no-border">
-            <EyeOutlined
-              style={{
-                fontSize: 20,
-                verticalAlign: 'top',
-              }}
-            />
+        <Tooltip title="visibility control of hidden events">
+          <Button
+            className="button-center-icon button-no-border"
+            onClick={handlerVisibilityOfHiddenEvents}
+          >
+            {visibilityHiddenEvents ? <EyeInvisibleOutlined /> : <EyeOutlined />}
           </Button>
         </Tooltip>
         <DropdownMenu />

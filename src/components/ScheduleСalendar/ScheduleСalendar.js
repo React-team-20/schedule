@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import {Calendar, Tag, Badge, Drawer} from 'antd';
 import {setTagColor} from '../../utils';
 import ScheduleСalendarDrawer from './ScheduleCalendarDrawer';
