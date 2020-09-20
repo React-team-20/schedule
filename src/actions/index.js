@@ -10,13 +10,17 @@ import {
   LOADED_ORGANIZERS,
   LOADED_SCHEDULE,
   REMOVE_EVENT,
+  REMOVE_HIDDEN_EVENT,
   SET_ALERT_MESSAGE,
   SET_EVENT_TYPE_FILTER,
+  SET_HIDDEN_EVENTS,
+  SET_TABLE_COLUMNS,
   SHOW_ALERT,
   SHOW_FORM_CREATION_EVENT,
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
   SHOW_TASK_OVERVIEW,
+  SWITCH_VISIBILITY_HIDDEN_EVENTS,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -109,6 +113,12 @@ export const hideTaskOverview = () => {
   };
 };
 
+export const switchVisibilityHiddenEvents = () => {
+  return {
+    type: SWITCH_VISIBILITY_HIDDEN_EVENTS,
+  };
+};
+
 export const removeEvent = id => {
   return {
     type: REMOVE_EVENT,
@@ -134,5 +144,26 @@ export const organizersLoaded = organizers => {
   return {
     type: LOADED_ORGANIZERS,
     payload: organizers,
+  };
+};
+
+export const setHiddenEvents = events => {
+  return {
+    type: SET_HIDDEN_EVENTS,
+    payload: events,
+  };
+};
+
+export const removeHiddenEvent = id => {
+  return {
+    type: REMOVE_HIDDEN_EVENT,
+    payload: id,
+  };
+};
+
+export const setTableColumns = title => {
+  return {
+    type: SET_TABLE_COLUMNS,
+    payload: title,
   };
 };

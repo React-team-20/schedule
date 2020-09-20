@@ -1,10 +1,9 @@
-import React from 'react';
 import {List, Tag} from 'antd';
+import React from 'react';
 import {setTagColor} from '../../../utils';
 import GithubUserLink from '../../GithubUserLink';
 
-const ScheduleListItem = (data) => {
-
+const ScheduleListItem = data => {
   return (
     <List
       itemLayout="horizontal"
@@ -24,16 +23,18 @@ const ScheduleListItem = (data) => {
             title={<a href="https://ant.design">{item.topic}</a>}
             description={`${item.date}, ${item.time}`}
           />
-          {item.organizer 
-            ? <div className="item-organizer">
-                <span className="item-organizer-label">organizer:</span> 
-                {GithubUserLink(item.organizer)}
-              </div>
-            : ''}               
+          {item.organizer ? (
+            <div className="item-organizer">
+              <span className="item-organizer-label">organizer:</span>
+              {GithubUserLink(item.organizer)}
+            </div>
+          ) : (
+            ''
+          )}
         </List.Item>
       )}
     />
-  )
-}
+  );
+};
 
 export default ScheduleListItem;

@@ -1,0 +1,73 @@
+.overview div > span {
+    font-weight: 600;
+}
+
+.overview textarea {
+    resize: none;
+}
+
+.overview form {
+    width: 100%;
+}
+
+.overview button {
+    max-width: 122px;
+    position: relative;
+    left: calc(100% - 122px);
+}
+
+.overview .ant-list-item-meta-description {
+    color: #000;
+    margin-left: 5px !important;
+}
+
+.overview .ant-menu-submenu-title,
+.overview .ant-menu-item.ant-menu-item-only-child {
+    margin: 0 !important;
+}
+
+.overview .ant-list-item-meta-description > a > span {
+    margin: 0 5px !important;
+}
+
+.overview .place-container .ant-list-item-meta-description {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    margin: 0 !important;
+}
+
+.overview .ant-list-item {
+    line-height: 40px !important;
+    padding: 0 !important;
+    position: relative !important;
+}
+
+.overview .ant-list-item-meta-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.overview .ant-list-item-meta-avatar {
+    margin-right: 10px !important;
+}
+
+.overview .ant-list-item-meta-title {
+    margin: 0 !important;
+    line-height: 40px !important;
+}
+
+.overview .ant-menu-item.ant-menu-item-only-child {
+    padding: 0 24px !important;
+}
+
+.overview .dropdown-menu > li > div {
+    padding: 0 !important;
+}
+
+.overview p.location {
+    color: #000;
+    margin-left: 24px;
+    line-height: 20px;
+}

@@ -1,7 +1,12 @@
 import React, {useState} from 'react';
+<<<<<<< HEAD
 import moment from 'moment';
 import {connect} from 'react-redux';
 import {Calendar, Badge, Drawer} from 'antd';
+=======
+import moment from 'moment-timezone';
+import {Calendar, Tag, Badge, Drawer} from 'antd';
+>>>>>>> develop
 import {setTagColor} from '../../utils';
 import ScheduleСalendarDrawer from './ScheduleCalendarDrawer';
 import './schedule-calendar.css';

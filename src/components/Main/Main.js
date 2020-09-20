@@ -10,7 +10,7 @@ import {
   showAlert,
   showLoader,
 } from '../../actions';
-import {getFilteredEvents} from '../../selectors';
+import {getFilteredTypesAndHideEvents, getFilteredTypesEvents} from '../../selectors';
 import CreateEvent from '../CreateEvent';
 import EditEvent from '../EditEvent/EditEvent';
 import EventTypeFilter from '../EventTypeFilter';
@@ -22,14 +22,17 @@ import TaskOverview from '../TaskOverview';
 
 const Main = () => {
   const dispatch = useDispatch();
+  const {getEvents, transformEventData, getOrganizers} = useContext(ScheduleServiceContext);
+  const [filteredEvents, setFilteredEvents] = useState([]);
+  const {
+    alert: isAlert,
+    alertMessage,
+    timezone: tz,
+    scheduleView,
+    visibilityHiddenEvents,
+  } = useSelector(state => state.app);
   const data = useSelector(state => state.events);
   const {events} = data;
-  const [filteredEvents, setFilteredEvents] = useState([]);
-
-  const {alert: isAlert, alertMessage, timezone: tz, scheduleView} = useSelector(
-    state => state.app
-  );
-  const {getEvents, transformEventData, getOrganizers} = useContext(ScheduleServiceContext);
 
   const fetchEvents = () => {
     dispatch(showLoader());
@@ -40,11 +43,13 @@ const Main = () => {
       })
       .catch(() => message.error('Something went wrong'))
       .finally(() => dispatch(hideLoader()));
-    getOrganizers().then(organizers => dispatch(organizersLoaded(organizers)));
   };
 
   useEffect(() => {
     dispatch(setAlertMessage('Schedule uploaded successfully!'));
+    getOrganizers()
+      .then(organizers => dispatch(organizersLoaded(organizers)))
+      .catch(() => message.error('Organizers list was not loaded'));
     fetchEvents();
     // eslint-disable-next-line
   }, []);
@@ -65,9 +70,12 @@ const Main = () => {
   }, [tz]);
 
   useEffect(() => {
-    const {eventTypeFilter} = data;
-    setFilteredEvents(eventTypeFilter.length ? getFilteredEvents(data) : events);
-  }, [data, events]);
+    if (!visibilityHiddenEvents) {
+      setFilteredEvents(getFilteredTypesAndHideEvents(data));
+    } else {
+      setFilteredEvents(getFilteredTypesEvents(data));
+    }
+  }, [data, visibilityHiddenEvents]);
 
   return (
     <>
