@@ -1,0 +1,53 @@
+.tag-example {
+  margin-bottom: 5px;
+}
+.color-type-container {
+  display: flex;
+  justify-content: space-between;
+}
+.background-color-type-container,
+.text-color-type-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+.background-color-type {
+  width: 40px;
+  height: 20px;
+  margin-right: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.text-color-type {
+  width: 40px;
+  height: 20px;
+  margin-right: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.background-color-type-picker {
+  top: 30px;
+  left: -66px;
+}
+
+.background-color-type-picker.hidden {
+  display: none;
+}
+
+.text-color-type-picker {
+  z-index: 2;
+  top: 30px;
+  left: -66px;
+}
+.text-color-type-picker.hidden {
+  display: none;
+}
+
+.background-color-type-container span, .text-color-type-container span {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+}

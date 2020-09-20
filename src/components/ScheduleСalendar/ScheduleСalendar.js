@@ -5,15 +5,13 @@ import {Calendar, Badge, Drawer} from 'antd';
 import {setTagColor} from '../../utils';
 import ScheduleСalendarDrawer from './ScheduleCalendarDrawer';
 import './schedule-calendar.css';
+import NewTypeModal from '../NewTypeModal';
 
-const connector = connect(
-  state => ({
-    style: state.styles
-  })
-)
+const connector = connect(state => ({
+  style: state.styles,
+}));
 
 const ScheduleСalendar = ({events, style}) => {
-  console.log(style)
   const [drawer, setDrawer] = useState({visible: false});
   const [dayEvents, setDayEvents] = useState(0);
 
@@ -57,7 +55,7 @@ const ScheduleСalendar = ({events, style}) => {
           />
           {listData.map(item => (
             <div className="event-box" key={item.id} style={{background: setTagColor(item.type)}}>
-                {item.type}
+              {item.type}
             </div>
           ))}
         </div>
@@ -67,6 +65,7 @@ const ScheduleСalendar = ({events, style}) => {
   const drawerDate = dayEvents ? moment(dayEvents[0].dateTime).format('MMMM Do') : 0;
   return (
     <div className="calendar-container">
+      <NewTypeModal />
       <Calendar dateCellRender={dateCellRender} />
       <Drawer
         title={drawerDate}
