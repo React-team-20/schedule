@@ -32,4 +32,4 @@ const mapDispatchToProps = {
   setAlertMessage,
 };
 
-export default connect(/* mapStateToProps */ null, mapDispatchToProps)(DeleteOrganizerButton);
+export default connect(null, mapDispatchToProps)(DeleteOrganizerButton);

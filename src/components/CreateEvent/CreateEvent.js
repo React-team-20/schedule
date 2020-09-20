@@ -10,7 +10,6 @@ import {
   Select,
   Divider,
   Checkbox,
-  Space,
 } from 'antd';
 import React, {useContext, useState} from 'react';
 import {connect} from 'react-redux';
@@ -24,7 +23,7 @@ import {
 import eventsTypes from '../../constants/events-types';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import './create-event.css';
-import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons';
+import {PlusOutlined} from '@ant-design/icons';
 import DeleteOrganizerButton from './DeleteOrganizerButton/';
 
 const emptyEvent = {
@@ -237,7 +236,7 @@ const CreateEvent = ({
                 value="asd"
                 rules={[{required: true, message: 'Please enter event topic'}]}
               >
-                <Input name="topic" placeholder="Please enter event topic" value={event.topic} />
+                <Input name="topic" placeholder="Please enter event topic" />
               </Form.Item>
             </Col>
             <Col span={12}>
