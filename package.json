@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.2.1",
     "antd": "^4.6.3",
     "axios": "^0.20.0",
+    "mapbox-gl": "^1.12.0",
     "moment-timezone": "^0.5.31",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",

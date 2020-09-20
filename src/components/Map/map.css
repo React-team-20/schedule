@@ -1,0 +1,8 @@
+.mapContainer {
+    overflow: hidden;
+    border-radius: 25px;
+}
+
+.mapboxgl-canvas {
+    position: static !important;
+}
