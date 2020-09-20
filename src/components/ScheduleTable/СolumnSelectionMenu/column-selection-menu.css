@@ -1,0 +1,10 @@
+.checkbox-columns-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.checkbox-columns-container label {
+  margin-left: 0 !important;
+  margin-bottom: 5px;
+}
