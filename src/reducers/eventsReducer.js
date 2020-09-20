@@ -11,9 +11,9 @@ const initialState = {
   hiddenEvents: JSON.parse(localStorage.getItem('hiddenEvents')) || [],
   eventTypeFilter: JSON.parse(localStorage.getItem('eventTypeFilter')) || [],
 };
-let newHiddenEvents;
 
 const eventsReducer = (state = initialState, {type, payload}) => {
+  let newHiddenEvents;
   switch (type) {
     case LOADED_SCHEDULE:
       return {...state, events: payload};

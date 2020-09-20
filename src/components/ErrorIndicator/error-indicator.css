@@ -1,0 +1,26 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css");
+
+.main-error {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  font-family: "Segoe UI";
+  color: #FFF;
+  background: #008CFF;
+  margin: 0;
+  padding: 4% 35%;
+}
+
+.emotion {
+  font-size: 8em;
+  margin: 0;
+}
+
+.description-error  {
+  font-size: 1.4em;
+  margin-bottom: 3em;
+}
+
+.footer-error small {
+  font-size: 0.8em;
+}

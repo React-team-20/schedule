@@ -6,18 +6,19 @@ export default class ErrorBoundry extends Component {
     super();
     this.state = {
       hasError: false,
+      errorMessage: '',
     };
   }
 
-  componentDidCatch() {
-    this.setState({hasError: true});
+  componentDidCatch(_, info) {
+    this.setState({hasError: true, errorMessage: info.componentStack});
   }
 
   render() {
-    const {hasError} = this.state;
+    const {hasError, errorMessage} = this.state;
     const {children} = this.props;
     if (hasError) {
-      return <ErrorIndicator />;
+      return <ErrorIndicator error={errorMessage} />;
     }
 
     return children;

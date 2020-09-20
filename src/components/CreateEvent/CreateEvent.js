@@ -1,30 +1,31 @@
+import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
 import {
   Button,
+  Checkbox,
   Col,
   DatePicker,
+  Divider,
   Drawer,
   Form,
   Input,
   message,
   Row,
   Select,
-  Divider,
-  Checkbox,
+  Space,
 } from 'antd';
 import React, {useContext, useState} from 'react';
 import {connect} from 'react-redux';
 import {
   hideFormCreationEvent,
   hideLoader,
+  organizersLoaded,
   setAlertMessage,
   showLoader,
-  organizersLoaded,
 } from '../../actions';
 import eventsTypes from '../../constants/events-types';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import './create-event.css';
-import {PlusOutlined} from '@ant-design/icons';
-import DeleteOrganizerButton from './DeleteOrganizerButton/';
+import DeleteOrganizerButton from './DeleteOrganizerButton';
 
 const emptyEvent = {
   id: '',
@@ -137,6 +138,16 @@ const CreateEvent = ({
     }
   };
 
+  const onValuesChangeMaterials = materials => {
+    setEvent({
+      ...event,
+      taskObj: {
+        ...event.taskObj,
+        materials: materials,
+      },
+    });
+  };
+
   const onChangeTimeAndDate = e => {
     setEvent({
       ...event,
@@ -186,15 +197,6 @@ const CreateEvent = ({
       case 'description':
         setEvent({...event, description: e.target.value});
         break;
-      case 'materials':
-        setEvent({
-          ...event,
-          taskObj: {
-            ...event.taskObj,
-            materials: e.target.value,
-          },
-        });
-        break;
       case 'comment':
         setEvent({...event, comment: e.target.value});
         break;
@@ -226,7 +228,16 @@ const CreateEvent = ({
           </div>
         }
       >
-        <Form layout="vertical" hideRequiredMark id="create-form" onFinish={onSubmit} form={form}>
+        <Form
+          layout="vertical"
+          hideRequiredMark
+          id="create-form"
+          onFinish={onSubmit}
+          form={form}
+          onValuesChange={(changedValues, allValues) => {
+            if (changedValues.materials) onValuesChangeMaterials(allValues.materials);
+          }}
+        >
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
@@ -254,7 +265,8 @@ const CreateEvent = ({
               <Form.Item onChange={onChangeInputs} name="organizer" label="Organizer">
                 <Select
                   onSelect={onSelectOrganizer}
-                  placeholder={'Please enter event organizer'}
+                  placeholder="Please enter event organizer"
+                  allowClear
                   dropdownRender={menu => (
                     <div>
                       {menu}
@@ -266,7 +278,7 @@ const CreateEvent = ({
                           onChange={onChangeInputs}
                           value={event.organizerGitHub}
                         />
-                        <a
+                        <Button
                           style={{
                             flex: 'none',
                             padding: '8px',
@@ -274,9 +286,11 @@ const CreateEvent = ({
                             cursor: 'pointer',
                           }}
                           onClick={addNewOrganizer}
+                          icon={<PlusOutlined />}
+                          type="link"
                         >
-                          <PlusOutlined /> Add github
-                        </a>
+                          Add github
+                        </Button>
                       </div>
                     </div>
                   )}
@@ -304,22 +318,22 @@ const CreateEvent = ({
                   name="type"
                   onSelect={onSelectType}
                   placeholder="Please choose the type"
+                  allowClear
                   dropdownRender={menu => (
                     <div>
                       {menu}
                       <Divider style={{margin: '4px 0'}} />
                       <div style={{display: 'flex', flexWrap: 'nowrap', padding: 8}}>
-                        <a
+                        <Button
                           style={{
-                            flex: 'none',
-                            padding: '8px',
-                            display: 'block',
-                            cursor: 'pointer',
+                            border: 0,
                           }}
                           /* onClick={addNewType} */
+                          icon={<PlusOutlined />}
+                          type="link"
                         >
-                          <PlusOutlined /> Create a new type
-                        </a>
+                          Create a new type
+                        </Button>
                       </div>
                     </div>
                   )}
@@ -429,14 +443,61 @@ const CreateEvent = ({
           </Row>
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item
-                onChange={onChangeInputs}
-                name="materials"
-                label="Materials"
-                hidden={hideSubFieldsForTaskFlag}
-              >
-                <Input.TextArea name="materials" rows={2} placeholder="Please add materials" />
-              </Form.Item>
+              <div className="ant-col ant-form-item-label">
+                <span>Materials</span>
+              </div>
+              <Form.List name="materials" onChange={onChangeInputs}>
+                {(fields, {add, remove}) => {
+                  return (
+                    <div>
+                      {fields.map(field => (
+                        <Space
+                          key={field.key}
+                          style={{display: 'flex', marginBottom: 8}}
+                          align="start"
+                        >
+                          <Form.Item
+                            // eslint-disable-next-line react/jsx-props-no-spreading
+                            {...field}
+                            name={[field.name, 'materialName']}
+                            fieldKey={[field.fieldKey, 'materials-name']}
+                            rules={[{required: true, message: 'Missing materials link name'}]}
+                          >
+                            <Input placeholder="Link name" />
+                          </Form.Item>
+                          <Form.Item
+                            // eslint-disable-next-line react/jsx-props-no-spreading
+                            {...field}
+                            name={[field.name, 'materialLink']}
+                            fieldKey={[field.fieldKey, 'materials-link']}
+                            rules={[{required: true, message: 'Missing materials link'}]}
+                          >
+                            <Input placeholder="Link" />
+                          </Form.Item>
+
+                          <MinusCircleOutlined
+                            onClick={() => {
+                              remove(field.name);
+                            }}
+                          />
+                        </Space>
+                      ))}
+
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          onClick={() => {
+                            add();
+                          }}
+                          block
+                        >
+                          <PlusOutlined /> Add field
+                        </Button>
+                      </Form.Item>
+                    </div>
+                  );
+                }}
+              </Form.List>
             </Col>
           </Row>
           <Row gutter={16}>
