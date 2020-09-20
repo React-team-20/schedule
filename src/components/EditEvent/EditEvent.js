@@ -79,11 +79,12 @@ const EditEvent = ({
       organizer: event.organizer.name,
       type: event.type,
       date: moment(event.dateTime).tz(tz),
-      'demo-url': event.demoUrl,
+      'demo-url': event.taskObj.demoUrl,
       description: event.description,
-      materials: event.materials,
+      materials: event.taskObj.materials,
       comment: event.comment,
       place: event.place,
+      screen: event.taskObj.screen,
     });
   };
 
@@ -157,6 +158,15 @@ const EditEvent = ({
           taskObj: {
             ...event.taskObj,
             demoUrl: e.target.value,
+          },
+        });
+        break;
+      case 'screen':
+        setEvent({
+          ...event,
+          taskObj: {
+            ...event.taskObj,
+            screen: e.target.value,
           },
         });
         break;
@@ -354,7 +364,7 @@ const EditEvent = ({
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={24}>
+            <Col span={12}>
               <Form.Item
                 onChange={onChangeInputs}
                 name="demo-url"
@@ -362,6 +372,20 @@ const EditEvent = ({
                 hidden={hideSubFieldsForTaskFlag}
               >
                 <Input name="demo-url" style={{width: '100%'}} placeholder="Please enter url" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                onChange={onChangeInputs}
+                name="screen"
+                label="Screen"
+                hidden={hideSubFieldsForTaskFlag}
+              >
+                <Input
+                  name="screen"
+                  style={{width: '100%'}}
+                  placeholder="Please enter screen url"
+                />
               </Form.Item>
             </Col>
           </Row>

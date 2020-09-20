@@ -10,6 +10,7 @@ import {
   Select,
   Divider,
   Checkbox,
+  Space,
 } from 'antd';
 import React, {useContext, useState} from 'react';
 import {connect} from 'react-redux';
@@ -23,7 +24,7 @@ import {
 import eventsTypes from '../../constants/events-types';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import './create-event.css';
-import {PlusOutlined} from '@ant-design/icons';
+import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons';
 import DeleteOrganizerButton from './DeleteOrganizerButton/';
 
 const emptyEvent = {
@@ -37,6 +38,7 @@ const emptyEvent = {
   taskObj: {
     demoUrl: '',
     materials: '',
+    screen: '',
   },
   place: '',
   comment: '',
@@ -127,7 +129,6 @@ const CreateEvent = ({
         message.error('Something went wrong');
       });
     if (deadline.flag) {
-      console.log('asd');
       addEvent({...event, type: 'deadline', dateTime: deadline.date}).then(() => {
         fetchEvents();
         setEvent(emptyEvent);
@@ -171,6 +172,15 @@ const CreateEvent = ({
           taskObj: {
             ...event.taskObj,
             demoUrl: e.target.value,
+          },
+        });
+        break;
+      case 'screen':
+        setEvent({
+          ...event,
+          taskObj: {
+            ...event.taskObj,
+            screen: e.target.value,
           },
         });
         break;
@@ -386,7 +396,7 @@ const CreateEvent = ({
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={24}>
+            <Col span={12}>
               <Form.Item
                 onChange={onChangeInputs}
                 name="demo-url"
@@ -394,6 +404,20 @@ const CreateEvent = ({
                 hidden={hideSubFieldsForTaskFlag}
               >
                 <Input name="demo-url" style={{width: '100%'}} placeholder="Please enter url" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                onChange={onChangeInputs}
+                name="screen"
+                label="Screen"
+                hidden={hideSubFieldsForTaskFlag}
+              >
+                <Input
+                  name="screen"
+                  style={{width: '100%'}}
+                  placeholder="Please enter screen url"
+                />
               </Form.Item>
             </Col>
           </Row>
