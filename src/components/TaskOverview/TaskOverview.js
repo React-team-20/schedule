@@ -80,7 +80,8 @@ const TaskOverview = () => {
         <h2 className="topic">
           {event.topic}
         </h2>
-        <List.Item hidden={!event.organizer}>
+        {event.organizer &&
+        <List.Item>
           <List.Item.Meta
             avatar={<UserOutlined />}
             title="Organizer:" 
@@ -94,7 +95,7 @@ const TaskOverview = () => {
             </a>
             }
           />
-        </List.Item>
+        </List.Item>}
         <List.Item>
           <List.Item.Meta
             avatar={<FlagOutlined />}
@@ -104,7 +105,8 @@ const TaskOverview = () => {
             }
           />
         </List.Item>
-        <List.Item hidden={!event.description}>
+        {event.description &&
+        <List.Item>
           <List.Item.Meta
             avatar={<AlignLeftOutlined />}
             title="Description:"
@@ -112,8 +114,9 @@ const TaskOverview = () => {
               event.description
             }
           />
-        </List.Item>
-        <List.Item hidden={event.taskObj.demoUrl}>
+        </List.Item>}
+        {event.taskObj.demoUrl &&
+        <List.Item>
           <List.Item.Meta
             avatar={<FileImageOutlined />}
             title="Photo:"
@@ -121,8 +124,9 @@ const TaskOverview = () => {
               event.taskObj.demoUrl
             }
           />
-        </List.Item>
-        <List.Item hidden={!event.taskObj.demoUrl}>
+        </List.Item>}
+        {event.taskObj.demoUrl &&
+        <List.Item>
           <List.Item.Meta
             avatar={<FolderViewOutlined />}
             title="Demo:"
@@ -130,8 +134,9 @@ const TaskOverview = () => {
               event.taskObj.demoUrl
             }
           />
-        </List.Item>
-        <List.Item hidden={event.place}>
+        </List.Item>}
+        {event.place &&
+        <List.Item>
           <Menu className="dropdown-menu" mode="inline">
             <SubMenu title="Place" icon={<EnvironmentOutlined />}>
               <p className="location">Test location</p>
@@ -139,8 +144,9 @@ const TaskOverview = () => {
               <Map />
             </SubMenu>
           </Menu>
-        </List.Item>
-        <List.Item hidden={!event.taskObj.materials}>
+        </List.Item>}
+        {event.taskObj.materials &&
+        <List.Item>
           <Menu className="dropdown-menu" mode="inline" >
             <SubMenu title="Materials" icon={<CopyOutlined />}>
               {event.taskObj.materials.map((item, i) => {
@@ -150,8 +156,9 @@ const TaskOverview = () => {
               })}
             </SubMenu>
           </Menu>
-        </List.Item>
-        <List.Item hidden={!event.feedback}>
+        </List.Item>}
+        {event.feedback &&
+        <List.Item>
           <Form layout="vertical" id="feedback-form" form={form} onFinish={handleSubmit}>
             <Form.Item>
             <List.Item>
@@ -168,7 +175,7 @@ const TaskOverview = () => {
               Send feedback
             </Button>
           </Form>
-        </List.Item>
+        </List.Item>}
       </List>
     }
     </Modal>
