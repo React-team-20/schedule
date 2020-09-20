@@ -1,3 +1,4 @@
+import { act } from 'react-dom/test-utils';
 import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
@@ -16,6 +17,7 @@ import {
   SHOW_LOADER,
   SHOW_TASK_OVERVIEW,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
+  GEOCODE_PLACE,
 } from '../constants/actions-types';
 import DEFAULT_TABLE_COLUMNS from '../constants/table-columns';
 import {DEFAULT_TIMEZONE} from '../constants/timezones';
@@ -36,6 +38,8 @@ const initialState = {
   alertMessage: null,
   organizers: [],
   hiddenTableColumns: [],
+  lat: null,
+  lng: null,
 };
 
 const appReducer = (state = initialState, action) => {
@@ -74,6 +78,8 @@ const appReducer = (state = initialState, action) => {
       return {...state, organizers: action.payload};
     case SET_TABLE_COLUMNS:
       return {...state, tableColumns: action.payload};
+    case GEOCODE_PLACE:
+      return {...state, lng: action.lng, lat: action.lat};
     default:
       return state;
   }

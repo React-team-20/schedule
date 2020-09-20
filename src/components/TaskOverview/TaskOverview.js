@@ -20,7 +20,7 @@ import {
   FolderViewOutlined,
 } from "@ant-design/icons";
 import Map from '../Map';
-import {hideTaskOverview} from '../../actions';
+import {hideTaskOverview, geocodePlace} from '../../actions';
 import './task-overview.css';
 
 const { SubMenu } = Menu;
@@ -67,6 +67,10 @@ const TaskOverview = () => {
     localStorage.setItem('feedbacks', JSON.stringify(feedbacksArray));
     setFeedback('');
   };
+
+  const showPosition = () => {
+    dispatch(geocodePlace('Минск, Платонова 39'));
+  }
 
   return (
     <Modal
@@ -131,12 +135,14 @@ const TaskOverview = () => {
             avatar={<FolderViewOutlined />}
             title="Demo:"
             description={
-              event.taskObj.demoUrl
+              <a href={event.taskObj.demoUrl}>
+                Deploy
+              </a>
             }
           />
         </List.Item>}
-        {event.place &&
-        <List.Item>
+        {event.taskObj &&
+        <List.Item onClick={showPosition}>
           <Menu className="dropdown-menu" mode="inline">
             <SubMenu title="Place" icon={<EnvironmentOutlined />}>
               <p className="location">Test location</p>
