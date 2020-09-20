@@ -143,7 +143,11 @@ const TaskOverview = () => {
         <List.Item hidden={!event.taskObj.materials}>
           <Menu className="dropdown-menu" mode="inline" >
             <SubMenu title="Materials" icon={<CopyOutlined />}>
-              {event.taskObj.materials.split('\n').map((item, i) => (<Menu.Item key = {i}>{item}</Menu.Item>))}
+              {event.taskObj.materials.map((item, i) => {
+                return (<Menu.Item key = {i}>
+                  <a href={item.materialLink}>{item.materialName}</a>
+                </Menu.Item>)
+              })}
             </SubMenu>
           </Menu>
         </List.Item>
