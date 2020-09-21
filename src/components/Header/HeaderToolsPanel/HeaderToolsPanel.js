@@ -10,6 +10,7 @@ import {Button, Dropdown, Menu, Space, Tooltip} from 'antd';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {switchVisibilityHiddenEvents} from '../../../actions';
+import InputGoogleMap from '../../InputGoogleMap';
 import NewEventButton from '../../NewEventButton';
 import TimeZoneSelect from '../../TimeZoneSelect';
 import ScheduleViewSelect from '../ScheduleViewSelect';
@@ -66,6 +67,8 @@ const HeaderToolsPanel = () => {
           <TimeZoneSelect />
         </Tooltip>
       </Space>
+
+      <InputGoogleMap />
 
       <Space>
         <ScheduleViewSelect />
