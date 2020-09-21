@@ -1,31 +1,32 @@
+import {PlusOutlined} from '@ant-design/icons';
 import {
   Button,
+  Checkbox,
   Col,
   DatePicker,
+  Divider,
   Drawer,
   Form,
   Input,
   message,
   Row,
   Select,
-  Divider,
-  Checkbox,
 } from 'antd';
-import React, {useContext, useState, useEffect} from 'react';
 import moment from 'moment-timezone';
+import React, {useContext, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {
   hideFormEditEvent,
   hideLoader,
+  organizersLoaded,
   setAlertMessage,
   showLoader,
-  organizersLoaded,
 } from '../../actions';
 import eventsTypes from '../../constants/events-types';
+import DeleteOrganizerButton from '../CreateEvent/DeleteOrganizerButton';
+import DynamicField from '../DynamicField';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import './edit-event.css';
-import {PlusOutlined} from '@ant-design/icons';
-import DeleteOrganizerButton from '../CreateEvent/DeleteOrganizerButton';
 
 const {Option} = Select;
 
@@ -193,6 +194,16 @@ const EditEvent = ({
     }
   };
 
+  const onValuesChangeMaterials = materials => {
+    setEvent({
+      ...event,
+      taskObj: {
+        ...event.taskObj,
+        materials: materials,
+      },
+    });
+  };
+
   const onChangeTimeAndDate = e => {
     setEvent({
       ...event,
@@ -224,7 +235,16 @@ const EditEvent = ({
           </div>
         }
       >
-        <Form layout="vertical" hideRequiredMark id="edit-form" onFinish={onSubmit} form={form}>
+        <Form
+          layout="vertical"
+          hideRequiredMark
+          id="edit-form"
+          onFinish={onSubmit}
+          form={form}
+          onValuesChange={(changedValues, allValues) => {
+            if (changedValues.materials) onValuesChangeMaterials(allValues.materials);
+          }}
+        >
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
@@ -251,7 +271,8 @@ const EditEvent = ({
               <Form.Item onChange={onChangeInputs} name="organizer" label="Organizer">
                 <Select
                   onSelect={onSelectOrganizer}
-                  placeholder={'Please enter event organizer'}
+                  placeholder="Please enter event organizer"
+                  allowClear
                   dropdownRender={menu => (
                     <div>
                       {menu}
@@ -263,7 +284,7 @@ const EditEvent = ({
                           onChange={onChangeInputs}
                           value={event.organizerGitHub}
                         />
-                        <a
+                        <Button
                           style={{
                             flex: 'none',
                             padding: '8px',
@@ -271,9 +292,11 @@ const EditEvent = ({
                             cursor: 'pointer',
                           }}
                           onClick={addNewOrganizer}
+                          icon={<PlusOutlined />}
+                          type="link"
                         >
-                          <PlusOutlined /> Add github
-                        </a>
+                          Add github
+                        </Button>
                       </div>
                     </div>
                   )}
@@ -301,22 +324,22 @@ const EditEvent = ({
                   name="type"
                   onSelect={onSelectType}
                   placeholder="Please choose the type"
+                  allowClear
                   dropdownRender={menu => (
                     <div>
                       {menu}
                       <Divider style={{margin: '4px 0'}} />
                       <div style={{display: 'flex', flexWrap: 'nowrap', padding: 8}}>
-                        <a
+                        <Button
                           style={{
-                            flex: 'none',
-                            padding: '8px',
-                            display: 'block',
-                            cursor: 'pointer',
+                            border: 0,
                           }}
                           /* onClick={addNewType} */
+                          icon={<PlusOutlined />}
+                          type="link"
                         >
-                          <PlusOutlined /> Create a new type
-                        </a>
+                          Create a new type
+                        </Button>
                       </div>
                     </div>
                   )}
@@ -398,14 +421,10 @@ const EditEvent = ({
           </Row>
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item
-                onChange={onChangeInputs}
-                name="materials"
-                label="Materials"
-                hidden={hideSubFieldsForTaskFlag}
-              >
-                <Input.TextArea name="materials" rows={2} placeholder="Please add materials" />
-              </Form.Item>
+              <div className="ant-col ant-form-item-label">
+                <span>Materials</span>
+              </div>
+              <DynamicField />
             </Col>
           </Row>
           <Row gutter={16}>

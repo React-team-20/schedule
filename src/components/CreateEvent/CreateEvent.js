@@ -1,4 +1,4 @@
-import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import {PlusOutlined} from '@ant-design/icons';
 import {
   Button,
   Checkbox,
@@ -11,7 +11,6 @@ import {
   message,
   Row,
   Select,
-  Space,
 } from 'antd';
 import React, {useContext, useState} from 'react';
 import {connect} from 'react-redux';
@@ -23,6 +22,7 @@ import {
   showLoader,
 } from '../../actions';
 import eventsTypes from '../../constants/events-types';
+import DynamicField from '../DynamicField';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import './create-event.css';
 import DeleteOrganizerButton from './DeleteOrganizerButton';
@@ -446,58 +446,7 @@ const CreateEvent = ({
               <div className="ant-col ant-form-item-label">
                 <span>Materials</span>
               </div>
-              <Form.List name="materials" onChange={onChangeInputs}>
-                {(fields, {add, remove}) => {
-                  return (
-                    <div>
-                      {fields.map(field => (
-                        <Space
-                          key={field.key}
-                          style={{display: 'flex', marginBottom: 8}}
-                          align="start"
-                        >
-                          <Form.Item
-                            // eslint-disable-next-line react/jsx-props-no-spreading
-                            {...field}
-                            name={[field.name, 'materialName']}
-                            fieldKey={[field.fieldKey, 'materials-name']}
-                            rules={[{required: true, message: 'Missing materials link name'}]}
-                          >
-                            <Input placeholder="Link name" />
-                          </Form.Item>
-                          <Form.Item
-                            // eslint-disable-next-line react/jsx-props-no-spreading
-                            {...field}
-                            name={[field.name, 'materialLink']}
-                            fieldKey={[field.fieldKey, 'materials-link']}
-                            rules={[{required: true, message: 'Missing materials link'}]}
-                          >
-                            <Input placeholder="Link" />
-                          </Form.Item>
-
-                          <MinusCircleOutlined
-                            onClick={() => {
-                              remove(field.name);
-                            }}
-                          />
-                        </Space>
-                      ))}
-
-                      <Form.Item>
-                        <Button
-                          type="dashed"
-                          onClick={() => {
-                            add();
-                          }}
-                          block
-                        >
-                          <PlusOutlined /> Add field
-                        </Button>
-                      </Form.Item>
-                    </div>
-                  );
-                }}
-              </Form.List>
+              <DynamicField />
             </Col>
           </Row>
           <Row gutter={16}>
