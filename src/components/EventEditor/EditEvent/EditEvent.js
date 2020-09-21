@@ -21,11 +21,10 @@ import {
   organizersLoaded,
   setAlertMessage,
   showLoader,
-} from '../../actions';
-import eventsTypes from '../../constants/events-types';
-import DeleteOrganizerButton from '../CreateEvent/DeleteOrganizerButton';
-import DynamicField from '../DynamicField';
-import {ScheduleServiceContext} from '../ScheduleServiceContext';
+} from '../../../actions';
+import eventsTypes from '../../../constants/events-types';
+import {DeleteOrganizerButton, MaterialsDynamicField} from '../FormComponents';
+import {ScheduleServiceContext} from '../../ScheduleServiceContext';
 import './edit-event.css';
 
 const {Option} = Select;
@@ -421,10 +420,7 @@ const EditEvent = ({
           </Row>
           <Row gutter={16}>
             <Col span={24}>
-              <div className="ant-col ant-form-item-label">
-                <span>Materials</span>
-              </div>
-              <DynamicField />
+              <MaterialsDynamicField />
             </Col>
           </Row>
           <Row gutter={16}>
