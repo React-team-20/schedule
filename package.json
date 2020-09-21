@@ -20,7 +20,8 @@
     "react-scripts": "3.4.3",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "use-places-autocomplete": "^1.5.0"
   },
   "scripts": {
     "start": "react-scripts start",
