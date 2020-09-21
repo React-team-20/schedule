@@ -1,45 +1,53 @@
-import React, {useState} from 'react';
-import {Button, Input} from 'antd';
+import React from 'react';
+import {Modal, Button, Input} from 'antd';
 import {EnvironmentOutlined} from '@ant-design/icons';
+import {GoogleMap, useLoadScript} from '@react-google-maps/api';
 
 import './InputGoogleMap.css';
-import Modal from 'antd/lib/modal/Modal';
 
 const GOOGLE_MAPS_API_KEY = '';
+const libraries = ['places'];
 
 const InputGoogleMap = () => {
-  const {visibleModal, setVisibleModal} = useState(false);
+  const {isLoaded, loadError} = useLoadScript({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
 
-  // const handlerShowMap = () => {
-  //   setVisibleModal(({visibleModal}) => !visibleModal);
-  // };
+  const mapContainerStyle = {
+    width: '90%',
+    height: '90%',
+  };
+
+  const center = {
+    lat: 53.904541,
+    lng: 27.561523,
+  };
 
   const AddonAfterButton = () => (
     <Button
       className="button-center-icon button-no-border"
       size="small"
-      // onClick={handlerShowMap}
+      onClick={() =>
+        Modal.info({
+          width: '80%',
+          title: 'Google maps',
+          content: (
+            <>
+              <GoogleMap mapContainerStyle={mapContainerStyle} zoom={8} center={center}></GoogleMap>
+            </>
+          ),
+          centered: true,
+        })
+      }
     >
       <EnvironmentOutlined />
     </Button>
   );
 
-  const MapsModal = () => (
-    <Modal
-      title="Google maps"
-      visible={visibleModal}
-      // onOk={this.handleOk}
-      // confirmLoading={confirmLoading}
-      // onCancel={this.handleCancel}
-    >
-      <p>ModalText</p>
-    </Modal>
-  );
-
   return (
     <div>
       <Input placeholder="input address" addonAfter={<AddonAfterButton />} />
-      <MapsModal />
     </div>
   );
 };
