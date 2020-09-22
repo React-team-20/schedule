@@ -233,12 +233,17 @@
 
   .info-event-button {
     width: 78%;
+    text-align: start;
   }
 }
 
 @media screen and (max-width: 424px) {
   .item-list-content {
     width: 80%;
+  }
+
+  .info-event-button {
+    width: 60%;
   }
 }
 
