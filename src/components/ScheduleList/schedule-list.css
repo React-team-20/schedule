@@ -13,7 +13,6 @@
 
 .tag-wrapper {
   width: 140px;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,13 +20,10 @@
 }
 
 .ant-list-item-meta {
-  height: 100%;
   padding: 12px 0;
-  flex: 1;
 }
 
 .item-organizer {
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,10 +46,18 @@
 
 .list-item {
   display: flex;  
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.item-list-content {  
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   padding: 0; 
-  height: 84px;
+  min-height: 84px;
+  flex-grow: 1;
 }
 
 .selected-list-item {
@@ -87,4 +91,48 @@
 
 .ant-list-items .past-event div:not(.button-wrapper) {
   opacity: 0.5;
+}
+
+@media screen and (max-width: 767px) { 
+  .item-list-content {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .item-organizer {
+    width: 100%;
+    margin-left: 140px;
+    justify-content: flex-start;
+    position: relative;
+    min-height: 40px;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 14px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .item-list-content {
+    flex-direction: column;
+  }
+
+  .tag-wrapper { 
+    justify-content: flex-start;
+    width: 80%;
+    padding-left: 0;
+  }
+
+  .ant-list-item-meta {
+    width: 100%;    
+  }
+
+  .item-organizer {
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 424px) {
+  .item-list-content {
+    width: 80%;
+  }
 }
