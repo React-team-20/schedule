@@ -17,3 +17,9 @@ export const getFilteredTypesAndHideEvents = createSelector(
   state => state.hiddenEvents,
   (events, hidden) => events.filter(item => !hidden.includes(item.id))
 );
+
+export const getFilteredColumns = createSelector(
+  state => state.columns,
+  state => state.hiddenColumns,
+  (columns, hiddenColumns) => columns.filter(i => !hiddenColumns.includes(i.title))
+);

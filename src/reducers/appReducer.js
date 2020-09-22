@@ -9,6 +9,7 @@ import {
   HIDE_TASK_OVERVIEW,
   LOADED_ORGANIZERS,
   SET_ALERT_MESSAGE,
+  SET_TABLE_COLUMNS,
   SHOW_ALERT,
   SHOW_FORM_CREATION_EVENT,
   SHOW_FORM_EDIT_EVENT,
@@ -16,6 +17,7 @@ import {
   SHOW_TASK_OVERVIEW,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
 } from '../constants/actions-types';
+import DEFAULT_TABLE_COLUMNS from '../constants/table-columns';
 import {DEFAULT_TIMEZONE} from '../constants/timezones';
 import {DEFAULT_USER_ROLE} from '../constants/user-role';
 
@@ -23,15 +25,17 @@ const initialState = {
   scheduleView: localStorage.getItem('scheduleView') || 'table',
   timezone: localStorage.getItem('timezone') || DEFAULT_TIMEZONE,
   userRole: localStorage.getItem('userRole') || DEFAULT_USER_ROLE,
+  visibilityHiddenEvents: localStorage.getItem('visibilityHiddenEvents') || false,
+  tableColumns: JSON.parse(localStorage.getItem('tableColumns')) || DEFAULT_TABLE_COLUMNS,
   isShowFormСreationEvent: false,
   isShowFormEditEvent: false,
   isShowTaskOverview: false,
-  visibilityHiddenEvents: localStorage.getItem('visibilityHiddenEvents') || false,
   currentEvent: null,
   loading: true,
   alert: false,
   alertMessage: null,
   organizers: [],
+  hiddenTableColumns: [],
 };
 
 const appReducer = (state = initialState, action) => {
@@ -68,6 +72,8 @@ const appReducer = (state = initialState, action) => {
       return {...state, userRole: action.payload};
     case LOADED_ORGANIZERS:
       return {...state, organizers: action.payload};
+    case SET_TABLE_COLUMNS:
+      return {...state, tableColumns: action.payload};
     default:
       return state;
   }

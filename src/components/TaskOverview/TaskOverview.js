@@ -19,6 +19,7 @@ import {
   FileImageOutlined,
   FolderViewOutlined,
 } from "@ant-design/icons";
+import Map from '../Map';
 import {hideTaskOverview} from '../../actions';
 import './task-overview.css';
 
@@ -79,7 +80,7 @@ const TaskOverview = () => {
         <h2 className="topic">
           {event.topic}
         </h2>
-        <List.Item>
+        <List.Item hidden={!event.organizer}>
           <List.Item.Meta
             avatar={<UserOutlined />}
             title="Organizer:" 
@@ -103,7 +104,7 @@ const TaskOverview = () => {
             }
           />
         </List.Item>
-        <List.Item>
+        <List.Item hidden={!event.description}>
           <List.Item.Meta
             avatar={<AlignLeftOutlined />}
             title="Description:"
@@ -112,8 +113,7 @@ const TaskOverview = () => {
             }
           />
         </List.Item>
-        {event.taskObj.demoUrl &&
-        <List.Item>
+        <List.Item hidden={event.taskObj.demoUrl}>
           <List.Item.Meta
             avatar={<FileImageOutlined />}
             title="Photo:"
@@ -121,9 +121,8 @@ const TaskOverview = () => {
               event.taskObj.demoUrl
             }
           />
-        </List.Item>}
-        {event.taskObj.demoUrl &&
-        <List.Item>
+        </List.Item>
+        <List.Item hidden={!event.taskObj.demoUrl}>
           <List.Item.Meta
             avatar={<FolderViewOutlined />}
             title="Demo:"
@@ -131,40 +130,45 @@ const TaskOverview = () => {
               event.taskObj.demoUrl
             }
           />
-        </List.Item>}
-        {event.place &&
-        <List.Item>
-          <List.Item.Meta
-            avatar={<EnvironmentOutlined />}
-            title="Place:"
-            description={
-              event.place
-            }
-          />
-        </List.Item>}
-        {event.taskObj.materials &&
-          <Menu className="materials-menu" mode="inline">
-            <SubMenu title="Materials" icon={<CopyOutlined />}>
-              {event.taskObj.materials.split('\n').map((item, i) => (<Menu.Item key = {i}>{item}</Menu.Item>))}
+        </List.Item>
+        <List.Item hidden={event.place}>
+          <Menu className="dropdown-menu" mode="inline">
+            <SubMenu title="Place" icon={<EnvironmentOutlined />}>
+              <p className="location">Test location</p>
+              {event.place}
+              <Map />
             </SubMenu>
           </Menu>
-        }
-        <Form layout="vertical" id="feedback-form" form={form} onFinish={handleSubmit}>
-          <Form.Item>
-          <List.Item>
-            <List.Item.Meta avatar={<MessageOutlined />} title="Feedback:" />
-          </List.Item>
-            <Input.TextArea
-              rows={5}
-              placeholder="Please leave your feedback"
-              onChange={handleType}
-              value={feedback} 
-            />
-          </Form.Item>
-          <Button type="primary" form="feedback-form" htmlType="submit">
-            Send feedback
-          </Button>
-        </Form>
+        </List.Item>
+        <List.Item hidden={!event.taskObj.materials}>
+          <Menu className="dropdown-menu" mode="inline" >
+            <SubMenu title="Materials" icon={<CopyOutlined />}>
+              {event.taskObj.materials.map((item, i) => {
+                return (<Menu.Item key = {i}>
+                  <a href={item.materialLink}>{item.materialName}</a>
+                </Menu.Item>)
+              })}
+            </SubMenu>
+          </Menu>
+        </List.Item>
+        <List.Item hidden={!event.feedback}>
+          <Form layout="vertical" id="feedback-form" form={form} onFinish={handleSubmit}>
+            <Form.Item>
+            <List.Item>
+              <List.Item.Meta avatar={<MessageOutlined />} title="Feedback:" />
+            </List.Item>
+              <Input.TextArea
+                rows={5}
+                placeholder="Please leave your feedback"
+                onChange={handleType}
+                value={feedback} 
+              />
+            </Form.Item>
+            <Button type="primary" form="feedback-form" htmlType="submit">
+              Send feedback
+            </Button>
+          </Form>
+        </List.Item>
       </List>
     }
     </Modal>

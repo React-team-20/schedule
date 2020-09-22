@@ -74,4 +74,13 @@ export default class ScheduleService {
       htmlUrl: data.html_url,
     };
   };
+
+  deleteOrganizer = async organizerId => {
+    await fetch(`https://rs-react-schedule.firebaseapp.com/api/team/q20/organizer/${organizerId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+    });
+  }
 }

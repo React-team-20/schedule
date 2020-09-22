@@ -1,20 +1,19 @@
-import {EyeOutlined, RightOutlined} from '@ant-design/icons';
-import {Button, Table, Tag, Tooltip} from 'antd';
+import {EyeOutlined} from '@ant-design/icons';
+import {Button, Table} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setHiddenEvents, removeHiddenEvent, showTaskOverview} from '../../actions';
-import {isLinkRegExp, setTagColor} from '../../utils';
+import {removeHiddenEvent, setHiddenEvents} from '../../actions';
+import {getFilteredColumns} from '../../selectors';
 import EventHideButton from './EventHideButton';
-import GithubUserLink from '../GithubUserLink';
-import EditEventButton from './EditEventButton';
-import RemoveEventButton from './RemoveEventButton';
 import './schedule-table.css';
+import TableColumns from './TableColumns';
 
 const ScheduleTable = ({events}) => {
   const dispatch = useDispatch();
-  const {userRole} = useSelector(state => state.app);
+  const {tableColumns} = useSelector(state => state.app);
   const {hiddenEvents} = useSelector(state => state.events);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [filteredСolumns, setFilteredColumns] = useState([]);
 
   useEffect(() => {
     const enableSelection = evt => {
@@ -34,6 +33,13 @@ const ScheduleTable = ({events}) => {
       document.removeEventListener('keyup', enableSelection);
     };
   }, []);
+
+  useEffect(() => {
+    const hiddenTableColumns = tableColumns.filter(i => !i.checked).map(i => i.title);
+    setFilteredColumns(
+      getFilteredColumns({hiddenColumns: hiddenTableColumns, columns: TableColumns()})
+    );
+  }, [tableColumns]);
 
   const onSelectRow = (id, isShift = false) => {
     if (isShift) {
@@ -56,110 +62,10 @@ const ScheduleTable = ({events}) => {
     dispatch(removeHiddenEvent(id));
   };
 
-  const showTaskInfo = id => {
-    dispatch(showTaskOverview(id));
-  };
-
-  const columns = [
-    {
-      title: 'Date',
-      dataIndex: 'date',
-      width: 90,
-    },
-    {
-      title: 'Time',
-      dataIndex: 'time',
-      width: 60,
-    },
-    {
-      title: 'Type',
-      dataIndex: 'type',
-      width: 120,
-      render: (_, record) => (
-        <Tag className="list-item-tag" color={setTagColor(record.type)}>
-          {record.type
-            .toUpperCase()
-            .split('')
-            .map(i => (i === '-' ? ' ' : i))
-            .join('')}
-        </Tag>
-      ),
-    },
-    {
-      title: 'Topic',
-      dataIndex: 'topic',
-      width: 500,
-      ellipsis: true,
-      render: (text, record) => {
-        return (
-          <Button
-            type="link"
-            className="info-event-button"
-            onClick={() => showTaskInfo(record.id)}
-            style={{padding: '0'}}
-          >
-            {text}
-          </Button>
-        );
-      },
-    },
-    {
-      title: 'Link',
-      width: 200,
-      dataIndex: 'descriptionUrl',
-      ellipsis: true,
-      render: text => {
-        return isLinkRegExp.test(text) ? (
-          <a className="events-link" target="_blank" rel="noopener noreferrer" href={text}>
-            Go to <RightOutlined />
-          </a>
-        ) : (
-          <span>{text}</span>
-        );
-      },
-    },
-    {
-      title: 'Organizer',
-      dataIndex: 'organizer',
-      width: 200,
-      render: (_, record) => {
-        return record.organizer ? (
-          <div className="item-organizer">{GithubUserLink(record.organizer)}</div>
-        ) : (
-          ''
-        );
-      },
-    },
-    {
-      title: 'Comment',
-      dataIndex: 'comment',
-      width: 200,
-    },
-  ];
-
-  const actions = {
-    title: 'Action',
-    key: 'operation',
-    fixed: 'right',
-    width: 80,
-    render: (_, record) => (
-      <div className="table-action-buttons">
-        <Tooltip title="edit event">
-          <EditEventButton id={record.id} />
-        </Tooltip>
-        <Tooltip title="delete event">
-          <RemoveEventButton id={record.id} />
-        </Tooltip>
-      </div>
-    ),
-  };
-
-  if (userRole === 'mentor') columns.push(actions);
-
   return (
     <Table
       size="small"
-      columns={columns}
+      columns={filteredСolumns}
       pagination={false}
       dataSource={events}
       rowKey={record => record.id}
@@ -212,9 +118,6 @@ const ScheduleTable = ({events}) => {
             } else {
               onSelectRow(record.id);
             }
-          },
-          onDoubleClick: () => {
-            showTaskInfo(record.id);
           },
         };
       }}
