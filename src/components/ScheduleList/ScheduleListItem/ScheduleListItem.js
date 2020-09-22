@@ -98,6 +98,7 @@ const ScheduleListItem = (data) => {
           )}
       </div> 
       <List
+        pagination={{defaultCurrent: 1, defaultPageSize: 10,}}
         itemLayout="horizontal"
         dataSource={data}
         renderItem={(item, index) => (
@@ -117,36 +118,41 @@ const ScheduleListItem = (data) => {
                   <EyeOutlined />
                 </Button>
               : ''}  
-            </div>           
-            <div className="tag-wrapper">
-              <Tag className="list-item-tag" color={setTagColor(item.type)}>
-                {item.type
-                  .toUpperCase()
-                  .split('')
-                  .map(i => (i === '-' ? ' ' : i))
-                  .join('')}
-              </Tag>
-            </div>
-            <List.Item.Meta
-              title={
-                <Button
-                  type="link"
-                  className="info-event-button"
-                  onClick={() => showTaskInfo(item.id)}
-                  style={{padding: '0'}}
-                >
-                  {item.topic}
-                </Button>}
-              description={`${dateByMonthAndDayParse(item.dateTime)}, ${item.time}`}
-            />
-            {item.organizer ? (
-              <div className="item-organizer">
-                <span className="item-organizer-label">organizer:</span>
-                {GithubUserLink(item.organizer)}
+            </div>  
+            <div className="item-list-content">
+              <div className="tag-wrapper">
+                <Tag className="list-item-tag" color={setTagColor(item.type)}>
+                  {item.type
+                    .toUpperCase()
+                    .split('')
+                    .map(i => (i === '-' ? ' ' : i))
+                    .join('')}
+                </Tag>
               </div>
-            ) : (
-              ''
-            )}
+              <List.Item.Meta
+                title={
+                  <>
+                    <Button
+                      type="link"
+                      className="info-event-button"
+                      onClick={() => showTaskInfo(item.id)}
+                      style={{padding: '0'}}
+                    >
+                      {item.topic}
+                    </Button>
+                  </>
+                }
+                description={`${dateByMonthAndDayParse(item.dateTime)}, ${item.time}`}
+              />
+              {item.organizer ? (
+                <div className="item-organizer">
+                  <span className="item-organizer-label">organizer:</span>
+                  {GithubUserLink(item.organizer)}
+                </div>
+              ) : (
+                ''
+              )}
+            </div> 
           </List.Item>   
         </>         
         )}
