@@ -13,6 +13,11 @@ const ContentGoogleMap = props => {
   if (loadError) return 'Error loading maps';
   if (!isLoaded) return 'Loading Maps';
 
+  const mapRef = useRef();
+  const onMapLoad = useCallback(map => {
+    mapRef.current = map;
+  }, []);
+
   const mapContainerStyle = {
     width: '100%',
     height: '250px',
@@ -32,7 +37,7 @@ const ContentGoogleMap = props => {
       zoom={15}
       center={centerMap}
       options={optionMap}
-      // onLoad={onMapLoad}
+      onLoad={onMapLoad}
     >
       <Marker position={centerMap} />
     </GoogleMap>
