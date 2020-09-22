@@ -1,11 +1,11 @@
 import {Form, Select} from 'antd';
 import React from 'react';
-import {TIMEZONES} from '../../../../constants/timezones';
+import {DEFAULT_TIMEZONE, TIMEZONES} from '../../../../constants/timezones';
 import './time-zone-select.css';
 
 const {Option} = Select;
 
-const TimeZoneSelect = ({tz}) => {
+const TimeZoneSelect = () => {
   const selectOptions = TIMEZONES.map(timezone => (
     <Option value={timezone} key={timezone}>
       {timezone}
@@ -13,7 +13,7 @@ const TimeZoneSelect = ({tz}) => {
   ));
 
   return (
-    <Form.Item initialValue={tz} name="timezone" label="Timezone">
+    <Form.Item initialValue={DEFAULT_TIMEZONE} name="timezone" label="Timezone">
       <Select bordered style={{width: '100%'}}>
         {selectOptions}
       </Select>

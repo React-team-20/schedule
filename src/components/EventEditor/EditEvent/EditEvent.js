@@ -1,17 +1,4 @@
-import {PlusOutlined} from '@ant-design/icons';
-import {
-  Button,
-  Checkbox,
-  Col,
-  DatePicker,
-  Divider,
-  Drawer,
-  Form,
-  Input,
-  message,
-  Row,
-  Select,
-} from 'antd';
+import {Button, Checkbox, Col, Drawer, Form, message, Row} from 'antd';
 import moment from 'moment-timezone';
 import React, {useContext, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
@@ -22,12 +9,22 @@ import {
   setAlertMessage,
   showLoader,
 } from '../../../actions';
-import eventsTypes from '../../../constants/events-types';
-import {DeleteOrganizerButton, MaterialsDynamicField} from '../FormComponents';
 import {ScheduleServiceContext} from '../../ScheduleServiceContext';
+import {
+  CommentField,
+  DateTimeComponent,
+  DemoUrlField,
+  DescriptionComponent,
+  DescriptionUrlField,
+  MaterialsDynamicField,
+  OrganizerSelect,
+  PlaceComponent,
+  ScreenUrlField,
+  TimeZoneSelect,
+  TopicField,
+  TypeSelect,
+} from '../FormComponents';
 import './edit-event.css';
-
-const {Option} = Select;
 
 const EditEvent = ({
   isShowFormEditEvent,
@@ -38,7 +35,6 @@ const EditEvent = ({
   showLoader,
   hideLoader,
   events,
-  tz,
   organizers,
   organizersLoaded,
 }) => {
@@ -52,7 +48,7 @@ const EditEvent = ({
 
   useEffect(() => {
     if (currentEventId !== null) {
-      setEvent(events.find(event => event.id === currentEventId));
+      setEvent(events.find(i => i.id === currentEventId));
     }
   }, [isShowFormEditEvent]);
 
@@ -78,29 +74,30 @@ const EditEvent = ({
       'description-url': event.descriptionUrl,
       organizer: event.organizer.name,
       type: event.type,
-      date: moment(event.dateTime).tz(tz),
+      date: moment(event.dateTime).tz(event.timezone),
       'demo-url': event.taskObj.demoUrl,
       description: event.description,
       materials: event.taskObj.materials,
       comment: event.comment,
       place: event.place,
       screen: event.taskObj.screen,
+      timezone: event.timezone,
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     hideFormEditEvent();
     showLoader();
-    editEvent(event.id, event)
-      .then(() => {
-        setAlertMessage('Event edited successfully!');
-        fetchEvents();
-        form.resetFields();
-      })
-      .catch(() => {
-        hideLoader();
-        message.error('Something went wrong');
-      });
+    try {
+      debugger;
+      await editEvent(event.id, event);
+      setAlertMessage('Event edit successfully!');
+      fetchEvents();
+      form.resetFields();
+    } catch {
+      hideLoader();
+      message.error('Something went wrong');
+    }
   };
 
   const addNewOrganizer = async () => {
@@ -141,23 +138,31 @@ const EditEvent = ({
     setEvent({...event, organizer: organizers.find(organizer => organizer.name === e)});
   };
 
-  const onChangeInputs = e => {
-    switch (e.target.name) {
+  const onValuesFormChange = (changedValues, allValues) => {
+    const field = Object.keys(changedValues)[0];
+    const tzone = allValues.timezone ? allValues.timezone : event.timezone;
+    const tzDate = (date, timeZone) => {
+      return Date.parse(moment.timeZone(date.format('YYYY-MM-DD HH:mm:ss'), timeZone).format());
+    };
+    switch (field) {
       case 'topic':
-        setEvent({...event, topic: e.target.value});
+        setEvent({...event, topic: allValues[field]});
+        break;
+      case 'place':
+        setEvent({...event, place: allValues[field]});
         break;
       case 'description-url':
-        setEvent({...event, descriptionUrl: e.target.value});
+        setEvent({...event, descriptionUrl: allValues[field]});
         break;
       case 'organizer-github':
-        setEvent({...event, organizerGitHub: e.target.value});
+        setEvent({...event, organizerGitHub: allValues[field]});
         break;
       case 'demo-url':
         setEvent({
           ...event,
           taskObj: {
             ...event.taskObj,
-            demoUrl: e.target.value,
+            demoUrl: allValues[field],
           },
         });
         break;
@@ -166,48 +171,44 @@ const EditEvent = ({
           ...event,
           taskObj: {
             ...event.taskObj,
-            screen: e.target.value,
+            screen: allValues[field],
           },
         });
         break;
       case 'description':
-        setEvent({...event, description: e.target.value});
+        setEvent({...event, description: allValues[field]});
+        break;
+      case 'comment':
+        setEvent({...event, comment: allValues[field]});
         break;
       case 'materials':
         setEvent({
           ...event,
           taskObj: {
             ...event.taskObj,
-            materials: e.target.value,
+            materials: allValues[field],
           },
         });
         break;
-      case 'comment':
-        setEvent({...event, comment: e.target.value});
+      case 'timezone':
+        setEvent({...event, timezone: allValues[field]});
+        if (allValues.date) {
+          setEvent({
+            ...event,
+            dateTime: tzDate(allValues.date, allValues[field]),
+            timezone: allValues[field],
+          });
+        }
         break;
-      case 'place':
-        setEvent({...event, place: e.target.value});
+      case 'date':
+        setEvent({
+          ...event,
+          dateTime: tzDate(allValues[field], tzone),
+        });
         break;
       default:
         return null;
     }
-  };
-
-  const onValuesChangeMaterials = materials => {
-    setEvent({
-      ...event,
-      taskObj: {
-        ...event.taskObj,
-        materials: materials,
-      },
-    });
-  };
-
-  const onChangeTimeAndDate = e => {
-    setEvent({
-      ...event,
-      dateTime: Date.parse(e._d.toString()),
-    });
   };
 
   return (
@@ -240,194 +241,68 @@ const EditEvent = ({
           id="edit-form"
           onFinish={onSubmit}
           form={form}
-          onValuesChange={(changedValues, allValues) => {
-            if (changedValues.materials) onValuesChangeMaterials(allValues.materials);
-          }}
+          onValuesChange={onValuesFormChange}
         >
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                name="topic"
-                label="Topic"
-                onChange={onChangeInputs}
-                rules={[{required: true, message: 'Please enter event topic'}]}
-              >
-                <Input name="topic" placeholder="Please enter event topic" />
-              </Form.Item>
+              <TopicField />
             </Col>
             <Col span={12}>
-              <Form.Item onChange={onChangeInputs} name="description-url" label="Link">
-                <Input
-                  name="description-url"
-                  style={{width: '100%'}}
-                  placeholder="Please enter url"
-                />
-              </Form.Item>
+              <DescriptionUrlField />
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item onChange={onChangeInputs} name="organizer" label="Organizer">
-                <Select
-                  onSelect={onSelectOrganizer}
-                  placeholder="Please enter event organizer"
-                  allowClear
-                  dropdownRender={menu => (
-                    <div>
-                      {menu}
-                      <Divider style={{margin: '4px 0'}} />
-                      <div style={{display: 'flex', flexWrap: 'nowrap', padding: 8}}>
-                        <Input
-                          style={{flex: 'auto'}}
-                          name="organizer-github"
-                          onChange={onChangeInputs}
-                          value={event.organizerGitHub}
-                        />
-                        <Button
-                          style={{
-                            flex: 'none',
-                            padding: '8px',
-                            display: 'block',
-                            cursor: 'pointer',
-                          }}
-                          onClick={addNewOrganizer}
-                          icon={<PlusOutlined />}
-                          type="link"
-                        >
-                          Add github
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                >
-                  {organizers.map(organizer => (
-                    <Option value={organizer.name} key={organizer.id}>
-                      <div className="option-wrapper">
-                        {organizer.name}
-                        {organizer.name !== event.organizer.name && (
-                          <DeleteOrganizerButton id={organizer.id} />
-                        )}
-                      </div>
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
+              <OrganizerSelect
+                addNewOrganizer={addNewOrganizer}
+                event={event}
+                onSelectOrganizer={onSelectOrganizer}
+              />
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="type"
-                label="Type"
-                rules={[{required: true, message: 'Please choose the type'}]}
-              >
-                <Select
-                  name="type"
-                  onSelect={onSelectType}
-                  placeholder="Please choose the type"
-                  allowClear
-                  dropdownRender={menu => (
-                    <div>
-                      {menu}
-                      <Divider style={{margin: '4px 0'}} />
-                      <div style={{display: 'flex', flexWrap: 'nowrap', padding: 8}}>
-                        <Button
-                          style={{
-                            border: 0,
-                          }}
-                          /* onClick={addNewType} */
-                          icon={<PlusOutlined />}
-                          type="link"
-                        >
-                          Create a new type
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                >
-                  {eventsTypes.map(item => (
-                    <Option value={item.value} key={item.value}>
-                      {item.title}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="date"
-                label="Date and time"
-                rules={[{required: true, message: 'Please choose the Date and Time'}]}
-              >
-                <DatePicker
-                  name="date"
-                  style={{width: '100%'}}
-                  showTime={{format: 'HH:mm'}}
-                  format="YYYY-MM-DD HH:mm"
-                  onChange={onChangeTimeAndDate}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                onChange={onChangeInputs}
-                name="place"
-                label="Place"
-                hidden={hideSubFieldsForOfflineFlag}
-              >
-                <Input
-                  name="description-url"
-                  style={{width: '100%'}}
-                  placeholder="Please enter place"
-                />
-              </Form.Item>
+              <TypeSelect onSelectType={onSelectType} />
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                onChange={onChangeInputs}
-                name="demo-url"
-                label="Demo Url"
-                hidden={hideSubFieldsForTaskFlag}
-              >
-                <Input name="demo-url" style={{width: '100%'}} placeholder="Please enter url" />
-              </Form.Item>
+              <DateTimeComponent />
             </Col>
             <Col span={12}>
-              <Form.Item
-                onChange={onChangeInputs}
-                name="screen"
-                label="Screen"
-                hidden={hideSubFieldsForTaskFlag}
-              >
-                <Input
-                  name="screen"
-                  style={{width: '100%'}}
-                  placeholder="Please enter screen url"
-                />
-              </Form.Item>
+              <TimeZoneSelect tz={event.timezone} />
             </Col>
           </Row>
+          {!hideSubFieldsForOfflineFlag && (
+            <Row gutter={16}>
+              <Col span={24}>
+                <PlaceComponent />
+              </Col>
+            </Row>
+          )}
+          {!hideSubFieldsForTaskFlag && (
+            <Row gutter={16}>
+              <Col span={12}>
+                <DemoUrlField />
+              </Col>
+              <Col span={12}>
+                <ScreenUrlField />
+              </Col>
+            </Row>
+          )}
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item onChange={onChangeInputs} name="description" label="Description">
-                <Input.TextArea name="description" rows={2} placeholder="Please add description" />
-              </Form.Item>
+              <DescriptionComponent />
             </Col>
           </Row>
+          {!hideSubFieldsForTaskFlag && (
+            <Row gutter={16}>
+              <Col span={24}>
+                <MaterialsDynamicField />
+              </Col>
+            </Row>
+          )}
           <Row gutter={16}>
             <Col span={24}>
-              <MaterialsDynamicField />
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item onChange={onChangeInputs} name="comment" label="Comment">
-                <Input.TextArea name="comment" rows={2} placeholder="Please add comment" />
-              </Form.Item>
+              <CommentField />
             </Col>
           </Row>
           <Checkbox
@@ -448,7 +323,6 @@ const mapStateToProps = state => {
     isShowFormEditEvent: state.app.isShowFormEditEvent,
     currentEventId: state.app.currentEvent,
     events: state.events.events,
-    tz: state.app.timezone,
     organizers: state.app.organizers,
   };
 };

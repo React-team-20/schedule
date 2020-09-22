@@ -11,7 +11,6 @@ import {
 } from '../../../actions';
 import INITIAL_EVENT_OBJECT from '../../../constants/event-object';
 import {ScheduleServiceContext} from '../../ScheduleServiceContext';
-import {DEFAULT_TIMEZONE} from '../../../constants/timezones';
 import {
   CommentField,
   DateTimeComponent,
@@ -95,27 +94,24 @@ const CreateEvent = ({
     setEvent({...event, type: e});
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     hideFormCreationEvent();
     showLoader();
-    addEvent(event)
-      .then(() => {
-        setAlertMessage('Event added successfully!');
+    try {
+      await addEvent(event);
+      setAlertMessage('Event added successfully!');
+      fetchEvents();
+      if (deadline.flag) {
+        await addEvent({...event, type: 'deadline', dateTime: deadline.date});
+        setAlertMessage('Deadline added successfully!');
         fetchEvents();
-        setEvent(INITIAL_EVENT_OBJECT);
-        form.resetFields();
-      })
-      .catch(() => {
-        hideLoader();
-        message.error('Something went wrong');
-      });
-    if (deadline.flag) {
-      addEvent({...event, type: 'deadline', dateTime: deadline.date}).then(() => {
-        fetchEvents();
-        setEvent(INITIAL_EVENT_OBJECT);
-        form.resetFields();
         setDeadline({...deadline, flag: false});
-      });
+      }
+      setEvent(INITIAL_EVENT_OBJECT);
+      form.resetFields();
+    } catch {
+      hideLoader();
+      message.error('Something went wrong');
     }
   };
 
@@ -177,12 +173,14 @@ const CreateEvent = ({
           setEvent({
             ...event,
             dateTime: tzDate(allValues.date, allValues[field]),
+            timezone: allValues[field],
           });
         }
         if (allValues.dateDeadline) {
           setDeadline({
             ...deadline,
             date: tzDate(allValues.dateDeadline, allValues[field]),
+            timezone: allValues[field],
           });
         }
         break;
@@ -258,7 +256,7 @@ const CreateEvent = ({
             <DateTimeComponent />
           </Col>
           <Col span={12}>
-            <TimeZoneSelect tz={DEFAULT_TIMEZONE} />
+            <TimeZoneSelect />
           </Col>
         </Row>
         {deadline.flag && (
