@@ -5,7 +5,6 @@ import {Calendar, Badge, Drawer} from 'antd';
 import {setTagStyle} from '../../utils';
 import ScheduleСalendarDrawer from './ScheduleCalendarDrawer';
 import './schedule-calendar.css';
-import NewTypeModal from '../NewTypeModal';
 
 const connector = connect(state => ({
   style: state.styles,
@@ -36,12 +35,12 @@ const ScheduleСalendar = ({events, style}) => {
     );
     return listDatabyDay;
   };
-  const setStyle = (item) => {
+  const setStyle = item => {
     return {
       background: setTagStyle(item.type, style).background,
       color: setTagStyle(item.type, style).color,
-    }
-  }
+    };
+  };
   const dateCellRender = value => {
     const listData = getListData(value);
     return (
@@ -59,11 +58,7 @@ const ScheduleСalendar = ({events, style}) => {
             count={listData.length}
           />
           {listData.map(item => (
-            <div
-              className="event-box"
-              key={item.id}
-              style={setStyle(item)}
-            >
+            <div className="event-box" key={item.id} style={setStyle(item)}>
               {item.type}
             </div>
           ))}
