@@ -8,6 +8,22 @@ export const dateTimeParse = (dateTime, timezone) => {
   };
 };
 
+export const shortDateByDayParse = (dateTime) => {
+  return moment(dateTime).format('DD');
+};
+
+export const shortDateByDayOfWeekParse = (dateTime) => {
+  return moment(dateTime).format('ddd');
+};
+
+export const dateByMonthAndDayParse = (dateTime) => {
+  return moment(dateTime).format('MMMM DD');
+};
+
+export const dateByMonthAndYearParse = (dateTime) => {
+  return moment(dateTime).format('MMMM YYYY');
+};
+
 export const setTagColor = tag => eventsTypes.find(item => item.value === tag).background;
 
 export const setTagStyle = (tag, eventTypes) => {
@@ -23,23 +39,6 @@ export const setTagStyle = (tag, eventTypes) => {
   } else {
     return defaultTag;
   }
-};
-
-export const filterDateByMonthAndYear = data => {
-  const newData = {};
-
-  data.forEach(item => {
-    const dataTime = moment(item.dateTime).format('MMMM YYYY');
-
-    if (newData[dataTime]) {
-      newData[dataTime].push(item);
-    } else {
-      newData[dataTime] = [];
-      newData[dataTime].push(item);
-    }
-  });
-
-  return newData;
 };
 
 export const isLinkRegExp = /^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-/])*)?/;
