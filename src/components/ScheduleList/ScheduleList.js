@@ -1,32 +1,19 @@
 import React from 'react';
-import {Divider} from 'antd';
-import {filterDateByMonthAndYear} from '../../utils';
 import ScheduleListItem from './ScheduleListItem';
 
-const getDivider = (data) => {
-  return <Divider className="list-item-divider" orientation="left">{data}</Divider>  
-};
-
-const getListItem = (key, data) => {
+const getListItem = (data) => {
   return ( 
-    <div key={key} className="list-item-wrapper">
-      {getDivider(key)}
+    <div className="list-item-wrapper">
       {ScheduleListItem(data)}
     </div>   
   )    
 };
 
 const ScheduleList = ({events}) => {
-  const filterData = filterDateByMonthAndYear(events);
-  const listItems = [];
-
-  for (let key in filterData) {  
-    const item = getListItem(key, filterData[key]);
-    listItems.push(item)
-  }
+  const listItems = getListItem(events);
 
   return (
-    <div className="list-wrapper"> 
+    <div className="list-wrapper">
       {listItems}
     </div>  
   )
