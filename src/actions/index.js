@@ -21,6 +21,7 @@ import {
   SHOW_LOADER,
   SHOW_TASK_OVERVIEW,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
+  GEOCODE_PLACE,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -167,3 +168,13 @@ export const setTableColumns = title => {
     payload: title,
   };
 };
+
+export const geocodePlace = place => {
+  return async dispatch => {
+    const url = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=3aa805ff-53da-48b8-9c1e-5eee21f8ecde&geocode=${place}`;
+    const response = await fetch(url);
+    const getPlacePos = await response.json();
+    const [lng, lat] = await getPlacePos.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(' ');
+    dispatch({type: GEOCODE_PLACE, lat: +lat, lng: +lng});
+  }
+}
