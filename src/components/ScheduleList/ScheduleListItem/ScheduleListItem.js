@@ -3,11 +3,14 @@ import {EyeOutlined} from '@ant-design/icons';
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setHiddenEvents, removeHiddenEvent, showTaskOverview} from '../../../actions';
-import moment from 'moment-timezone';
-
 import EventHideButton from '../../ScheduleTable/EventHideButton';
 
-import {setTagColor, dateByMonthAndYearParse, dateByMonthAndDayParse} from '../../../utils';
+import {
+  setTagColor,
+  dateByMonthAndYearParse, 
+  dateByMonthAndDayParse, 
+  shortDateByDayOfWeekParse,
+  shortDateByDayParse} from '../../../utils';
 import GithubUserLink from '../../GithubUserLink';
 
 const ScheduleListItem = (data) => {
@@ -132,6 +135,10 @@ const ScheduleListItem = (data) => {
               <List.Item.Meta
                 title={
                   <>
+                    <p className="short-date-wrapper">
+                      <span className="date-week">{shortDateByDayParse(item.dateTime)}</span>
+                      <span className="date-day">{shortDateByDayOfWeekParse(item.dateTime)}</span>
+                    </p>
                     <Button
                       type="link"
                       className="info-event-button"
@@ -143,7 +150,7 @@ const ScheduleListItem = (data) => {
                   </>
                 }
                 description={`${dateByMonthAndDayParse(item.dateTime)}, ${item.time}`}
-              />
+              />              
               {item.organizer ? (
                 <div className="item-organizer">
                   <span className="item-organizer-label">organizer:</span>
