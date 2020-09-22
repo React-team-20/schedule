@@ -17,7 +17,7 @@ export const shortDateByDayOfWeekParse = (dateTime) => {
 };
 
 export const dateByMonthAndDayParse = (dateTime) => {
-  return moment(dateTime).format('dddd MMMM DD');
+  return moment(dateTime).format('MMMM DD');
 };
 
 export const dateByMonthAndYearParse = (dateTime) => {
