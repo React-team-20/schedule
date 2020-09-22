@@ -22,8 +22,8 @@
 }
 .event-counter {
   position: absolute;
-  right: 5px;
-  bottom: 5px;
+  top: 9px;
+  left: 10px;
 }
 .calendar-container .ant-radio-button-wrapper:nth-child(2) {
   display: none;
@@ -31,6 +31,14 @@
 
 .tag-type-calendar {
   cursor: pointer;
+}
+
+.event-box {
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+  margin-bottom: 2px;
+  color: #ffffff;
 }
 
 @media screen and (max-width: 700px) {
