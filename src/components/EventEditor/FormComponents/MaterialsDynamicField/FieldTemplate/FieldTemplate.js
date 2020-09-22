@@ -6,7 +6,7 @@ import './field-template.css';
 const FieldTemplate = ({field, remove}) => {
   return (
     <Row gutter={16}>
-      <Col span={11}>
+      <Col span={24} sm={11}>
         <Form.Item
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...field}
@@ -17,7 +17,7 @@ const FieldTemplate = ({field, remove}) => {
           <Input placeholder="Link name" />
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col span={24} sm={12}>
         <Form.Item
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...field}
@@ -28,16 +28,30 @@ const FieldTemplate = ({field, remove}) => {
           <Input placeholder="Link" />
         </Form.Item>
       </Col>
-      <Col span={1}>
-        <Button
-          onClick={() => {
-            remove(field.name);
-          }}
-          icon={<MinusCircleOutlined />}
-          danger
-          type="text"
-        />
-      </Col>
+      {window.innerWidth > 576 ? (
+        <Col span={1}>
+          <Button
+            onClick={() => {
+              remove(field.name);
+            }}
+            icon={<MinusCircleOutlined />}
+            danger
+            type="text"
+          />
+        </Col>
+      ) : (
+        <Col span={24} style={{display: 'flex', justifyContent: 'center', marginBottom: '20px'}}>
+          <Button
+            onClick={() => {
+              remove(field.name);
+            }}
+            danger
+            type="default"
+          >
+            Delete field
+          </Button>
+        </Col>
+      )}
     </Row>
   );
 };

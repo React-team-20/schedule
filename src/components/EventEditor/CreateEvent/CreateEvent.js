@@ -232,36 +232,36 @@ const CreateEvent = ({
         onValuesChange={onValuesFormChange}
       >
         <Row gutter={16}>
-          <Col span={12}>
+          <Col span={24} sm={12}>
             <TopicField />
           </Col>
-          <Col span={12}>
+          <Col span={24} sm={12}>
             <DescriptionUrlField />
           </Col>
         </Row>
         <Row gutter={16}>
-          <Col span={12}>
+          <Col span={24} sm={12}>
             <OrganizerSelect
               addNewOrganizer={addNewOrganizer}
               event={event}
               onSelectOrganizer={onSelectOrganizer}
             />
           </Col>
-          <Col span={12}>
+          <Col span={24} sm={12}>
             <TypeSelect onSelectType={onSelectType} />
           </Col>
         </Row>
         <Row gutter={16}>
-          <Col span={12}>
+          <Col span={24} sm={12}>
             <DateTimeComponent />
           </Col>
-          <Col span={12}>
+          <Col span={24} sm={12}>
             <TimeZoneSelect />
           </Col>
         </Row>
         {deadline.flag && (
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <DateTimeComponent deadline />
             </Col>
           </Row>
@@ -289,10 +289,10 @@ const CreateEvent = ({
         )}
         {!hideSubFieldsForTaskFlag && (
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24} sm={12}>
               <DemoUrlField />
             </Col>
-            <Col span={12}>
+            <Col span={24} sm={12}>
               <ScreenUrlField />
             </Col>
           </Row>
