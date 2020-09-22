@@ -7,6 +7,7 @@ import {
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
   HIDE_TASK_OVERVIEW,
+  HIDE_TYPE_MODAL,
   LOADED_ORGANIZERS,
   SET_ALERT_MESSAGE,
   SET_TABLE_COLUMNS,
@@ -15,6 +16,7 @@ import {
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
   SHOW_TASK_OVERVIEW,
+  SHOW_TYPE_MODAL,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
 } from '../constants/actions-types';
 import DEFAULT_TABLE_COLUMNS from '../constants/table-columns';
@@ -30,6 +32,7 @@ const initialState = {
   isShowFormСreationEvent: false,
   isShowFormEditEvent: false,
   isShowTaskOverview: false,
+  isShowTypeModal: false,
   currentEvent: null,
   loading: true,
   alert: false,
@@ -74,6 +77,10 @@ const appReducer = (state = initialState, action) => {
       return {...state, organizers: action.payload};
     case SET_TABLE_COLUMNS:
       return {...state, tableColumns: action.payload};
+    case SHOW_TYPE_MODAL:
+      return {...state, isShowTypeModal: action.payload};
+    case HIDE_TYPE_MODAL:
+      return {...state, isShowTypeModal: action.payload};
     default:
       return state;
   }

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import moment from 'moment';
 import {connect} from 'react-redux';
 import {Calendar, Badge, Drawer} from 'antd';
-import {setTagColor} from '../../utils';
+import {setTagStyle} from '../../utils';
 import ScheduleСalendarDrawer from './ScheduleCalendarDrawer';
 import './schedule-calendar.css';
 import NewTypeModal from '../NewTypeModal';
@@ -15,16 +15,16 @@ const ScheduleСalendar = ({events, style}) => {
   const [drawer, setDrawer] = useState({visible: false});
   const [dayEvents, setDayEvents] = useState(0);
 
+  const drawerDate = dayEvents ? moment(dayEvents[0].dateTime).format('MMMM Do') : 0;
+
   const showDrawer = value => {
     setDrawer({visible: true});
     setDayEvents(value);
   };
-
   const hiderDrawer = () => {
     setDrawer({visible: false});
   };
-
-  function getListData(value) {
+  const getListData = value => {
     const listDatabyYear = events.filter(
       el => moment(el.dateTime).format('Y') === value.format('Y')
     );
@@ -35,9 +35,14 @@ const ScheduleСalendar = ({events, style}) => {
       el => moment(el.dateTime).format('M') === value.format('M')
     );
     return listDatabyDay;
+  };
+  const setStyle = (item) => {
+    return {
+      background: setTagStyle(item.type, style).background,
+      color: setTagStyle(item.type, style).color,
+    }
   }
-
-  function dateCellRender(value) {
+  const dateCellRender = value => {
     const listData = getListData(value);
     return (
       <div
@@ -54,18 +59,21 @@ const ScheduleСalendar = ({events, style}) => {
             count={listData.length}
           />
           {listData.map(item => (
-            <div className="event-box" key={item.id} style={{background: setTagColor(item.type)}}>
+            <div
+              className="event-box"
+              key={item.id}
+              style={setStyle(item)}
+            >
               {item.type}
             </div>
           ))}
         </div>
       </div>
     );
-  }
-  const drawerDate = dayEvents ? moment(dayEvents[0].dateTime).format('MMMM Do') : 0;
+  };
+
   return (
     <div className="calendar-container">
-      <NewTypeModal />
       <Calendar dateCellRender={dateCellRender} />
       <Drawer
         title={drawerDate}

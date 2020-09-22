@@ -1,17 +1,28 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {Modal, Input, Tag} from 'antd';
+import {Modal, Input, Tag, message} from 'antd';
 import {BlockPicker} from 'react-color';
 import './new-type-modal.css';
+import {addNewType, hideTypeModalView} from '../../actions';
 
-const connector = connect();
-const NewTypeModal = () => {
-  const [type, setType] = useState({
+const connector = connect(
+  state => ({
+    currentTypes: state.styles,
+    view: state.app.isShowTypeModal,
+  }),
+  dispatch => ({
+    addNewType: value => dispatch(addNewType(value)),
+    hideWindow: value => dispatch(hideTypeModalView(value)),
+  })
+);
+const NewTypeModal = ({currentTypes, addNewType, view, hideWindow}) => {
+  const initialType = {
     title: 'title',
     value: 'title',
-    background: 'green',
-    color: 'black',
-  });
+    background: '#d9e3f0',
+    color: '#555555',
+  };
+  const [type, setType] = useState(initialType);
   const [backPicker, setBackPicker] = useState(false);
   const [textPicker, setTextPicker] = useState(false);
   function updateTitle(x) {
@@ -43,18 +54,24 @@ const NewTypeModal = () => {
     });
   }
 
-  function visibleBackPicker(event) {
-    setBackPicker(prev => !prev);
-  }
-  function visibleTextPicker(event) {
-    setTextPicker(prev => !prev);
+  function saveNewType() {
+    if (!currentTypes.find(item => item.value === type.value)) {
+      addNewType(type);
+      localStorage.setItem('eventTypeStyles', JSON.stringify([...currentTypes, type]));
+      message.success('Success');
+      hideWindow(false);
+    } else {
+      message.error('This type already decleared');
+    }
   }
   return (
     <Modal
       title="Add new type"
-      visible={true}
-      /* onOk={this.handleOk}
-      onCancel={this.handleCancel} */
+      visible={view}
+      onOk={saveNewType}
+      onCancel={() => {
+        hideWindow(false);
+      }}
     >
       <Tag style={{color: type.color, background: type.background}} className="tag-example">
         {type.title}
@@ -64,10 +81,14 @@ const NewTypeModal = () => {
         <div className="background-color-type-container">
           <div
             className="background-color-type"
-            onMouseEnter={visibleBackPicker}
+            onMouseEnter={() => setBackPicker(true)}
+            onMouseLeave={() => setBackPicker(false)}
             style={{background: type.background}}
           >
-            <div onMouseLeave={visibleBackPicker}>
+            <span className="background-color-type-content" style={{color: type.color}}>
+              Background
+            </span>
+            <div onMouseLeave={() => setBackPicker(false)}>
               <BlockPicker
                 onChange={updateBackground}
                 color={type.background}
@@ -75,15 +96,18 @@ const NewTypeModal = () => {
               />
             </div>
           </div>
-          <span>Background</span>
         </div>
         <div className="text-color-type-container">
           <div
             className="text-color-type"
-            onMouseEnter={visibleTextPicker}
-            style={{background: type.color}}
+            onMouseEnter={() => setTextPicker(true)}
+            onMouseLeave={() => setTextPicker(false)}
+            style={{background: type.background}}
           >
-            <div onMouseLeave={visibleTextPicker}>
+            <span className="text-color-type-content" style={{color: type.color}}>
+              Text
+            </span>
+            <div onMouseLeave={() => setTextPicker(false)}>
               <BlockPicker
                 onChange={updateText}
                 color={type.color}
@@ -91,7 +115,6 @@ const NewTypeModal = () => {
               />
             </div>
           </div>
-          <span>Text color</span>
         </div>
       </div>
     </Modal>
