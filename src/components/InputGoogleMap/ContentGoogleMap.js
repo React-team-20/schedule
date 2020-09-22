@@ -4,7 +4,7 @@ import {GoogleMap, Marker, useLoadScript} from '@react-google-maps/api';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyC00kwnr-ibsDwmaOK4PRFv7hhOWzzXFOo';
 const libraries = ['places'];
 
-const ContentGoogleMap = () => {
+const ContentGoogleMap = props => {
   const {isLoaded, loadError} = useLoadScript({
     googleMapsApiKey: GOOGLE_MAPS_API_KEY,
     libraries,
@@ -13,20 +13,12 @@ const ContentGoogleMap = () => {
   if (loadError) return 'Error loading maps';
   if (!isLoaded) return 'Loading Maps';
 
-  // const mapRef = useRef();
-  // const onMapLoad = useCallback(map => {
-  //   mapRef.current = map;
-  // }, []);
-
   const mapContainerStyle = {
     width: '100%',
     height: '250px',
   };
 
-  const centerMap = {
-    lat: 53.904541,
-    lng: 27.561523,
-  };
+  const {centerMap} = props;
 
   const optionMap = {
     disableDefaultUI: true,
@@ -37,7 +29,7 @@ const ContentGoogleMap = () => {
     <GoogleMap
       id="map"
       mapContainerStyle={mapContainerStyle}
-      zoom={14}
+      zoom={15}
       center={centerMap}
       options={optionMap}
       // onLoad={onMapLoad}
