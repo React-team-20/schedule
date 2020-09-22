@@ -2,9 +2,9 @@ import {Form, Input} from 'antd';
 import React from 'react';
 import './description-url-field.css';
 
-const DescriptionUrlField = ({onChangeInputs}) => {
+const DescriptionUrlField = () => {
   return (
-    <Form.Item onChange={onChangeInputs} name="description-url" label="Link">
+    <Form.Item name="description-url" label="Link">
       <Input name="description-url" style={{width: '100%'}} placeholder="Please enter url" />
     </Form.Item>
   );

@@ -7,11 +7,11 @@ import './organizer-select.css';
 
 const {Option} = Select;
 
-const OrganizerSelect = ({event, onChangeInputs, onSelectOrganizer, addNewOrganizer}) => {
+const OrganizerSelect = ({event, onSelectOrganizer, addNewOrganizer}) => {
   const {organizers} = useSelector(state => state.app);
 
   return (
-    <Form.Item onChange={onChangeInputs} name="organizer" label="Organizer">
+    <Form.Item name="organizer" label="Organizer">
       <Select
         onSelect={onSelectOrganizer}
         placeholder="Please enter event organizer"
@@ -21,12 +21,7 @@ const OrganizerSelect = ({event, onChangeInputs, onSelectOrganizer, addNewOrgani
             {menu}
             <Divider style={{margin: '4px 0'}} />
             <div style={{display: 'flex', flexWrap: 'nowrap', padding: 8}}>
-              <Input
-                style={{flex: 'auto'}}
-                name="organizer-github"
-                onChange={onChangeInputs}
-                value={event.organizerGitHub}
-              />
+              <Input style={{flex: 'auto'}} name="organizer-github" value={event.organizerGitHub} />
               <Button
                 style={{
                   flex: 'none',

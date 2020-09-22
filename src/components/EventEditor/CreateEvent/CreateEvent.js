@@ -11,6 +11,7 @@ import {
 } from '../../../actions';
 import INITIAL_EVENT_OBJECT from '../../../constants/event-object';
 import {ScheduleServiceContext} from '../../ScheduleServiceContext';
+import {DEFAULT_TIMEZONE} from '../../../constants/timezones';
 import {
   CommentField,
   DateTimeComponent,
@@ -118,55 +119,31 @@ const CreateEvent = ({
     }
   };
 
-  const onValuesChangeMaterials = materials => {
-    setEvent({
-      ...event,
-      taskObj: {
-        ...event.taskObj,
-        materials: materials,
-      },
-    });
-  };
-
-  const onChangeTimeAndDate = e => {
-    const tzDate = moment.tz(e.format('YYYY-MM-DD HH:mm:ss'), event.timeZone);
-    setEvent({
-      ...event,
-      dateTime: Date.parse(tzDate.format()),
-    });
-  };
-
-  const onChangeTimeAndDateDeadline = e => {
-    setDeadline({
-      ...deadline,
-      date: Date.parse(e._d.toString()),
-    });
-  };
-
-  const onChangeTimezone = value => {
-    setEvent({...event, timeZone: value});
-  };
-
-  const onChangeInputs = e => {
-    switch (e.target.name) {
+  const onValuesFormChange = (changedValues, allValues) => {
+    const field = Object.keys(changedValues)[0];
+    const tzone = allValues.timezone ? allValues.timezone : event.timezone;
+    const tzDate = (date, tz) => {
+      return Date.parse(moment.tz(date.format('YYYY-MM-DD HH:mm:ss'), tz).format());
+    };
+    switch (field) {
       case 'topic':
-        setEvent({...event, topic: e.target.value});
+        setEvent({...event, topic: allValues[field]});
         break;
       case 'place':
-        setEvent({...event, place: e.target.value});
+        setEvent({...event, place: allValues[field]});
         break;
       case 'description-url':
-        setEvent({...event, descriptionUrl: e.target.value});
+        setEvent({...event, descriptionUrl: allValues[field]});
         break;
       case 'organizer-github':
-        setEvent({...event, organizerGitHub: e.target.value});
+        setEvent({...event, organizerGitHub: allValues[field]});
         break;
       case 'demo-url':
         setEvent({
           ...event,
           taskObj: {
             ...event.taskObj,
-            demoUrl: e.target.value,
+            demoUrl: allValues[field],
           },
         });
         break;
@@ -175,15 +152,51 @@ const CreateEvent = ({
           ...event,
           taskObj: {
             ...event.taskObj,
-            screen: e.target.value,
+            screen: allValues[field],
           },
         });
         break;
       case 'description':
-        setEvent({...event, description: e.target.value});
+        setEvent({...event, description: allValues[field]});
         break;
       case 'comment':
-        setEvent({...event, comment: e.target.value});
+        setEvent({...event, comment: allValues[field]});
+        break;
+      case 'materials':
+        setEvent({
+          ...event,
+          taskObj: {
+            ...event.taskObj,
+            materials: allValues[field],
+          },
+        });
+        break;
+      case 'timezone':
+        setEvent({...event, timezone: allValues[field]});
+        if (allValues.date) {
+          setEvent({
+            ...event,
+            dateTime: tzDate(allValues.date, allValues[field]),
+          });
+        }
+        if (allValues.dateDeadline) {
+          setDeadline({
+            ...deadline,
+            date: tzDate(allValues.dateDeadline, allValues[field]),
+          });
+        }
+        break;
+      case 'date':
+        setEvent({
+          ...event,
+          dateTime: tzDate(allValues[field], tzone),
+        });
+        break;
+      case 'dateDeadline':
+        setDeadline({
+          ...deadline,
+          date: tzDate(allValues[field], tzone),
+        });
         break;
       default:
         return null;
@@ -218,16 +231,14 @@ const CreateEvent = ({
         id="create-form"
         onFinish={onSubmit}
         form={form}
-        onValuesChange={(changedValues, allValues) => {
-          if (changedValues.materials) onValuesChangeMaterials(allValues.materials);
-        }}
+        onValuesChange={onValuesFormChange}
       >
         <Row gutter={16}>
           <Col span={12}>
-            <TopicField onChangeInputs={onChangeInputs} />
+            <TopicField />
           </Col>
           <Col span={12}>
-            <DescriptionUrlField onChangeInputs={onChangeInputs} />
+            <DescriptionUrlField />
           </Col>
         </Row>
         <Row gutter={16}>
@@ -236,7 +247,6 @@ const CreateEvent = ({
               addNewOrganizer={addNewOrganizer}
               event={event}
               onSelectOrganizer={onSelectOrganizer}
-              onChangeInputs={onChangeInputs}
             />
           </Col>
           <Col span={12}>
@@ -245,16 +255,16 @@ const CreateEvent = ({
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <DateTimeComponent onChangeTimeAndDate={onChangeTimeAndDate} />
+            <DateTimeComponent />
           </Col>
           <Col span={12}>
-            <TimeZoneSelect onChangeTimezone={onChangeTimezone} />
+            <TimeZoneSelect tz={DEFAULT_TIMEZONE} />
           </Col>
         </Row>
         {deadline.flag && (
           <Row gutter={16}>
             <Col span={12}>
-              <DateTimeComponent onChangeTimeAndDate={onChangeTimeAndDateDeadline} deadline />
+              <DateTimeComponent deadline />
             </Col>
           </Row>
         )}

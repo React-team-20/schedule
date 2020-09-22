@@ -6,7 +6,7 @@ export default {
   description: '',
   descriptionUrl: '',
   type: '',
-  timeZone: DEFAULT_TIMEZONE,
+  timezone: DEFAULT_TIMEZONE,
   dateTime: 0,
   taskObj: {
     demoUrl: '',

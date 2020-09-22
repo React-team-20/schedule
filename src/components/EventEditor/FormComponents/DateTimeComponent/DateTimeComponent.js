@@ -2,10 +2,10 @@ import {DatePicker, Form} from 'antd';
 import React from 'react';
 import './date-time-component.css';
 
-const DateTimeComponent = ({onChangeTimeAndDate, deadline}) => {
+const DateTimeComponent = ({deadline}) => {
   return (
     <Form.Item
-      name={`${deadline ? 'deadline-' : ''}date`}
+      name={`date${deadline ? 'Deadline' : ''}`}
       label={`Date and time${deadline ? ' deadline' : ''}`}
       rules={[
         {
@@ -15,11 +15,10 @@ const DateTimeComponent = ({onChangeTimeAndDate, deadline}) => {
       ]}
     >
       <DatePicker
-        name={`${deadline ? 'deadline-' : ''}date`}
+        name={`date${deadline ? 'Deadline' : ''}`}
         style={{width: '100%'}}
         showTime={{format: 'HH:mm'}}
         format="YYYY-MM-DD HH:mm"
-        onChange={onChangeTimeAndDate}
       />
     </Form.Item>
   );
