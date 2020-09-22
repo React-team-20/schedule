@@ -12,10 +12,25 @@ export const dateByMonthAndDayParse = (dateTime) => {
   return moment(dateTime).format('dddd MMMM DD');
 };
 
+export const setTagColor = tag => eventsTypes.find(item => item.value === tag).background;
+
+export const setTagStyle = (tag, eventTypes) => {
+  const resultOfSearch = eventTypes.find(item => item.value === tag);
+  const defaultTag = {
+    title: tag,
+    value: tag,
+    background: '#d9e3f0',
+    color: '#555555',
+  };
+  if (resultOfSearch) {
+    return resultOfSearch;
+  } else {
+    return defaultTag;
+  }
+};
+
 export const dateByMonthAndYearParse = (dateTime) => {
   return moment(dateTime).format('MMMM YYYY');
 };
-
-export const setTagColor = tag => eventsTypes.find(item => item.value === tag).color;
 
 export const isLinkRegExp = /^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-/])*)?/;
