@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setHiddenEvents, removeHiddenEvent, showTaskOverview} from '../../../actions';
 import EventHideButton from '../../ScheduleTable/EventHideButton';
+import {ClockCircleOutlined} from "@ant-design/icons";
 
 import {
   setTagColor,
@@ -94,6 +95,18 @@ const ScheduleListItem = (data) => {
   const getDivider = (data) => {
     return <Divider className="list-item-divider" orientation="left">{data}</Divider>  
   };
+
+  const getTime = (item) => {
+    return (
+      <>       
+        <span className="event-date">{dateByMonthAndDayParse(item.dateTime)}, </span>
+        <span className="event-time">
+          <ClockCircleOutlined className="event-time-icon" />
+          <span className="time-data">{item.time}</span>
+        </span>
+      </>
+    )
+  }
   
   const getMonthAndYearDivider = (data, index) => {
     const currentDate = dateByMonthAndYearParse(data[index].dateTime);
@@ -164,11 +177,11 @@ const ScheduleListItem = (data) => {
                       onClick={() => showTaskInfo(item.id)}
                       style={{padding: '0'}}
                     >
-                      {item.topic}
+                     <span className="event-topic">{item.topic}</span> 
                     </Button>
                   </>
                 }
-                description={`${dateByMonthAndDayParse(item.dateTime)}, ${item.time}`}
+                description={getTime(item)}
               />              
               {item.organizer ? (
                 <div className="item-organizer">
