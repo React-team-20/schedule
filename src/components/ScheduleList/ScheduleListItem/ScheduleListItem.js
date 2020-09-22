@@ -1,6 +1,6 @@
 import {List, Tag, Button, Divider} from 'antd';
 import {EyeOutlined} from '@ant-design/icons';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setHiddenEvents, removeHiddenEvent, showTaskOverview} from '../../../actions';
 import EventHideButton from '../../ScheduleTable/EventHideButton';
@@ -21,6 +21,25 @@ const ScheduleListItem = (data) => {
   const handlerEventShow = id => {
     dispatch(removeHiddenEvent(id));
   };
+
+  useEffect(() => {
+    const enableSelection = evt => {
+      if (evt.key === 'Shift') {
+        document.onselectstart = '';
+      }
+    };
+    const turnOffSelection = evt => {
+      if (evt.key === 'Shift') {
+        document.onselectstart = event => event.preventDefault();
+      }
+    };
+    document.addEventListener('keydown', turnOffSelection);
+    document.addEventListener('keyup', enableSelection);
+    return () => {
+      document.removeEventListener('keydown', turnOffSelection);
+      document.removeEventListener('keyup', enableSelection);
+    };
+  }, []);
 
   const handleClickCapture = (event, id) => {
     if (event.target.id) return false;
