@@ -8,7 +8,7 @@ const EventHideButton = ({handlerEventHide}) => {
       type="primary"
       ghost
       onClick={handlerEventHide}
-      style={{fontSize: '14px', lineHeight: 1, padding: '3px 5px', height: 'auto'}}
+      className="event-hide-button"
     >
       <span>Hide</span>
     </Button>
