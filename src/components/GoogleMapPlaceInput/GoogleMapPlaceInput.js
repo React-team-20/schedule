@@ -35,7 +35,7 @@ const GoogleMapPlaceInput = () => {
   const sendPlace = () => {
     if (marker) {
       console.log('address - ', address, 'geocode: ', marker);
-      // todo despatch data
+      // todo dispatch data
       // ! the address is gotten only when using search by input, otherwise - ''
     }
   };
