@@ -50,6 +50,7 @@ const EditEvent = ({
     if (currentEventId !== null) {
       setEvent(events.find(i => i.id === currentEventId));
     }
+    // eslint-disable-next-line
   }, [isShowFormEditEvent]);
 
   const onClose = () => {
@@ -89,7 +90,6 @@ const EditEvent = ({
     hideFormEditEvent();
     showLoader();
     try {
-      debugger;
       await editEvent(event.id, event);
       setAlertMessage('Event edit successfully!');
       fetchEvents();
@@ -117,8 +117,8 @@ const EditEvent = ({
       setEvent({...event, organizerGitHub: ''});
       await addOrganizer(data);
       const newOrganizers = await getOrganizers();
-      setAlertMessage('Event edited successfully!');
       organizersLoaded(newOrganizers);
+      message.success('Event edited successfully!');
     } else {
       message.error('Such an organizer exists!');
       setEvent({...event, organizerGitHub: ''});

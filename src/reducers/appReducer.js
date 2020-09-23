@@ -1,4 +1,3 @@
-import { act } from 'react-dom/test-utils';
 import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
@@ -40,7 +39,6 @@ const initialState = {
   alert: false,
   alertMessage: null,
   organizers: [],
-  hiddenTableColumns: [],
   lat: null,
   lng: null,
 };

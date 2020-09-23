@@ -3,6 +3,7 @@ import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
   CHANGE_USER_ROLE,
+  GEOCODE_PLACE,
   HIDE_ALERT,
   HIDE_FORM_CREATION_EVENT,
   HIDE_FORM_EDIT_EVENT,
@@ -24,7 +25,6 @@ import {
   SHOW_TASK_OVERVIEW,
   SHOW_TYPE_MODAL,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
-  GEOCODE_PLACE,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -195,7 +195,12 @@ export const geocodePlace = place => {
     const url = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=3aa805ff-53da-48b8-9c1e-5eee21f8ecde&geocode=${place}`;
     const response = await fetch(url);
     const getPlacePos = await response.json();
-    const [lng, lat] = await getPlacePos.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(' ');
+    const [
+      lng,
+      lat,
+    ] = await getPlacePos.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(
+      ' '
+    );
     dispatch({type: GEOCODE_PLACE, lat: +lat, lng: +lng});
-  }
-}
+  };
+};

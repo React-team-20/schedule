@@ -1,11 +1,11 @@
 import {RightOutlined} from '@ant-design/icons';
-import {Tag} from 'antd';
 import React from 'react';
-import {isLinkRegExp, setTagColor} from '../../../utils';
+import {isLinkRegExp} from '../../../utils';
 import GithubUserLink from '../../GithubUserLink';
 import EditEventButton from '../EditEventButton';
 import RemoveEventButton from '../RemoveEventButton';
 import TopicButton from '../TopicButton';
+import TypeField from '../TypeField';
 import СolumnSelectionMenu from '../СolumnSelectionMenu';
 
 const TableColumns = () => [
@@ -26,15 +26,9 @@ const TableColumns = () => [
     dataIndex: 'type',
     width: 120,
     hidden: false,
-    render: (_, record) => (
-      <Tag className="list-item-tag" color={setTagColor(record.type)}>
-        {record.type
-          .toUpperCase()
-          .split('')
-          .map(i => (i === '-' ? ' ' : i))
-          .join('')}
-      </Tag>
-    ),
+    render: (_, record) => {
+      return <TypeField type={record.type} />;
+    },
   },
   {
     title: 'Topic',
