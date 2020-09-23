@@ -8,20 +8,20 @@ export const dateTimeParse = (dateTime, timezone) => {
   };
 };
 
-export const shortDateByDayParse = (dateTime) => {
-  return moment(dateTime).format('DD');
+export const shortDateByDayParse = (dateTime, timezone) => {
+  return moment(dateTime).tz(timezone).format('DD');
 };
 
-export const shortDateByDayOfWeekParse = (dateTime) => {
-  return moment(dateTime).format('ddd');
+export const shortDateByDayOfWeekParse = (dateTime, timezone) => {
+  return moment(dateTime).tz(timezone).format('ddd');
 };
 
-export const dateByMonthAndDayParse = (dateTime) => {
-  return moment(dateTime).format('MMMM DD');
+export const dateByMonthAndDayParse = (dateTime, timezone) => {
+  return moment(dateTime).tz(timezone).format('MMMM DD');
 };
 
-export const dateByMonthAndYearParse = (dateTime) => {
-  return moment(dateTime).format('MMMM YYYY');
+export const dateByMonthAndYearParse = (dateTime, timezone) => {
+  return moment(dateTime).tz(timezone).format('MMMM YYYY');
 };
 
 export const setTagColor = tag => eventsTypes.find(item => item.value === tag).background;
