@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {GoogleMap, Marker, useLoadScript} from '@react-google-maps/api';
-import {AutoComplete, Input} from 'antd';
+import {AutoComplete, Input, message} from 'antd';
 import usePlacesAutocomplete, {getGeocode, getLatLng} from 'use-places-autocomplete';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyC00kwnr-ibsDwmaOK4PRFv7hhOWzzXFOo';
@@ -33,8 +33,11 @@ const GoogleMapPlaceInput = () => {
   const [address, setAddress] = React.useState('');
 
   const sendPlace = () => {
-    console.log('address - ', address, 'geocode: ', marker);
-    // todo despatch data
+    if (marker) {
+      console.log('address - ', address, 'geocode: ', marker);
+      // todo despatch data
+      // ! the address is gotten only when using search by input, otherwise - ''
+    }
   };
 
   useEffect(() => {
@@ -48,8 +51,11 @@ const GoogleMapPlaceInput = () => {
     setAddress(addressText);
   }, []);
 
-  if (loadError) return 'Error loading maps';
-  if (!isLoaded) return 'Loading Maps';
+  if (loadError) {
+    message.error('Error loading maps');
+    return <span>Error loading maps</span>;
+  }
+  if (!isLoaded) return <span>Loading Maps...</span>;
 
   const optionMap = {
     disableDefaultUI: true,
@@ -105,8 +111,8 @@ const InputMap = ({panTo}) => {
       const {lat, lng} = await getLatLng(results[0]);
       panTo({addressText: address, geocode: {lat, lng}});
     } catch (error) {
-      // todo set massage
-      console.log('error!');
+      message.error('Error getting geocode');
+      console.log('Error getting geocode', error);
     }
   };
 
@@ -127,7 +133,7 @@ const InputMap = ({panTo}) => {
         disabled={!ready}
         // onSearch={handleSearch}
       >
-        <Input value={value} onChange={onChange} placeholder="Enter a address" />
+        <Input value={value} onChange={onChange} placeholder="Search by address" />
       </AutoComplete>
     </>
   );
