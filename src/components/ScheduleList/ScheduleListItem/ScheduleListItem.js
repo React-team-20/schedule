@@ -18,7 +18,19 @@ const ScheduleListItem = (data) => {
   const dispatch = useDispatch();
   const {hiddenEvents} = useSelector(state => state.events);
   const [selectedRows, setSelectedRows] = useState([]);
+  const {timezone} = useSelector(state => state.app);  
 
+  let listData = data.slice();
+
+  const setTimezone = (data, timezone) => {
+    return data.map((item) => {
+      item.timeZone = timezone;
+      return item;
+    });
+  };
+  
+  listData = setTimezone(listData, timezone);
+ 
   const handlerEventShow = id => {
     dispatch(removeHiddenEvent(id));
   };
@@ -41,7 +53,7 @@ const ScheduleListItem = (data) => {
       document.removeEventListener('keyup', enableSelection);
     };
   }, []);
-
+    
   const handleClickCapture = (event, id) => {
     if (event.target.id) return false;
 
@@ -94,12 +106,12 @@ const ScheduleListItem = (data) => {
   
   const getDivider = (data) => {
     return <Divider className="list-item-divider" orientation="left">{data}</Divider>  
-  };
-
+  };  
+  
   const getTime = (item) => {
     return (
       <>       
-        <span className="event-date">{dateByMonthAndDayParse(item.dateTime)}, </span>
+        <span className="event-date">{dateByMonthAndDayParse(item.dateTime, item.timeZone)}, </span>
         <span className="event-time">
           <ClockCircleOutlined className="event-time-icon" />
           <span className="time-data">{item.time}</span>
@@ -109,11 +121,11 @@ const ScheduleListItem = (data) => {
   }
   
   const getMonthAndYearDivider = (data, index) => {
-    const currentDate = dateByMonthAndYearParse(data[index].dateTime);
+    const currentDate = dateByMonthAndYearParse(data[index].dateTime, data[index].timeZone);
     const prevIdx = data[index - 1];
 
     if (prevIdx) {      
-      const previousDate = dateByMonthAndYearParse(data[index - 1].dateTime);
+      const previousDate = dateByMonthAndYearParse(data[index - 1].dateTime, data[index].timeZone);
 
       if (previousDate !== currentDate) {
         return getDivider(currentDate);
@@ -135,7 +147,7 @@ const ScheduleListItem = (data) => {
       <List
         pagination={{defaultCurrent: 1, defaultPageSize: 10,}}
         itemLayout="horizontal"
-        dataSource={data}
+        dataSource={listData}
         renderItem={(item, index) => (
          <> 
           {getMonthAndYearDivider(data, index)}
@@ -168,8 +180,8 @@ const ScheduleListItem = (data) => {
                 title={
                   <>
                     <p className="short-date-wrapper">
-                      <span className="date-week">{shortDateByDayParse(item.dateTime)}</span>
-                      <span className="date-day">{shortDateByDayOfWeekParse(item.dateTime)}</span>
+                      <span className="date-week">{shortDateByDayParse(item.dateTime, item.timeZone)}</span>
+                      <span className="date-day">{shortDateByDayOfWeekParse(item.dateTime, item.timeZone)}</span>
                     </p>
                     <Button
                       type="link"
