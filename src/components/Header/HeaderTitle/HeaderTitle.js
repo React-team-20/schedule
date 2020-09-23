@@ -28,7 +28,7 @@ const HeaderTitle = () => {
   return (
     <div className="header-title">
       <a href="/" className="logo">
-        <img src={logoImage} alt="Rolling Scopes School Logo" />
+        {/* <img src={logoImage} alt="Rolling Scopes School Logo" /> */}
       </a>
       <div className="container-title">
         <h2 className="title">Schedule</h2>

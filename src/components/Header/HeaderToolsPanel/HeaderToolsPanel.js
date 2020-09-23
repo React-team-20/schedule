@@ -60,14 +60,14 @@ const HeaderToolsPanel = () => {
 
   return (
     <div className="header-tools_panel">
-      <Space>
+      <Space className="header-tools_panel-left">
         <NewEventButton />
         <Tooltip title="time zone">
           <TimeZoneSelect />
         </Tooltip>
       </Space>
 
-      <Space>
+      <Space className="header-tools_panel-right">
         <ScheduleViewSelect />
         <Tooltip title="visibility control of hidden events">
           <Button
