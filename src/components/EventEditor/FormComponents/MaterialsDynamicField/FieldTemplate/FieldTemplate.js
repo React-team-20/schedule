@@ -1,9 +1,21 @@
 import {MinusCircleOutlined} from '@ant-design/icons';
 import {Button, Col, Form, Input, Row} from 'antd';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './field-template.css';
 
 const FieldTemplate = ({field, remove}) => {
+  const [IsRowView, setIsRowView] = useState('');
+
+  useEffect(() => {
+    if (window.innerWidth < 576) setIsRowView(false);
+    else setIsRowView(true);
+  }, []);
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth < 576) setIsRowView(false);
+    else setIsRowView(true);
+  });
+
   return (
     <Row gutter={16}>
       <Col span={24} sm={11}>
@@ -28,7 +40,7 @@ const FieldTemplate = ({field, remove}) => {
           <Input placeholder="Link" />
         </Form.Item>
       </Col>
-      {window.innerWidth > 576 ? (
+      {IsRowView ? (
         <Col span={1}>
           <Button
             onClick={() => {

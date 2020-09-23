@@ -1,6 +1,6 @@
 import {Button, Checkbox, Col, Drawer, Form, message, Row} from 'antd';
 import moment from 'moment-timezone';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {
   hideFormCreationEvent,
@@ -47,9 +47,24 @@ const CreateEvent = ({
   const [event, setEvent] = useState(INITIAL_EVENT_OBJECT);
   const [hideSubFieldsForOfflineFlag, setHideSubFieldsForOfflineFlag] = useState(true);
   const [deadline, setDeadline] = useState({flag: false, date: ''});
+  const [width, setWidth] = useState();
+
+  useEffect(() => {
+    if (window.innerWidth < 1000) setWidth('100%');
+    else setWidth('50%');
+  }, []);
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth < 1000) setWidth('100%');
+    else setWidth('50%');
+  });
 
   const onSelectOrganizer = e => {
     setEvent({...event, organizer: organizers.find(organizer => organizer.name === e)});
+  };
+
+  const setPlace = placeObj => {
+    setEvent({...event, place: placeObj});
   };
 
   const addNewOrganizer = async () => {
@@ -203,8 +218,9 @@ const CreateEvent = ({
 
   return (
     <Drawer
+      style={{zIndex: '1'}}
       title="Create a new event"
-      width={window.innerWidth > 1000 ? '50%' : '100%'}
+      width={width}
       onClose={onClose}
       visible={isShowFormСreationEvent}
       bodyStyle={{paddingBottom: 80}}
@@ -283,7 +299,7 @@ const CreateEvent = ({
         {!hideSubFieldsForOfflineFlag && (
           <Row gutter={16}>
             <Col span={24}>
-              <PlaceComponent />
+              <PlaceComponent setPlace={setPlace} />
             </Col>
           </Row>
         )}

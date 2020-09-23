@@ -18,6 +18,7 @@ import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import ScheduleTable from '../ScheduleTable';
 import ScheduleСalendar from '../ScheduleСalendar';
 import TaskOverview from '../TaskOverview';
+import NewTypeModal from '../NewTypeModal';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -93,6 +94,7 @@ const Main = () => {
       }
       <CreateEvent fetchEvents={fetchEvents} />
       <TaskOverview />
+      <NewTypeModal />
     </>
   );
 };

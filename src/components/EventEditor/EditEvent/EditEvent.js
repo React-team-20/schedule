@@ -46,6 +46,18 @@ const EditEvent = ({
   const [hideSubFieldsForTaskFlag, setHideSubFieldsForTaskFlag] = useState(true);
   const [hideSubFieldsForOfflineFlag, setHideSubFieldsForOfflineFlag] = useState(true);
 
+  const [width, setWidth] = useState();
+
+  useEffect(() => {
+    if (window.innerWidth < 1000) setWidth('100%');
+    else setWidth('50%');
+  }, []);
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth < 1000) setWidth('100%');
+    else setWidth('50%');
+  });
+
   useEffect(() => {
     if (currentEventId !== null) {
       setEvent(events.find(i => i.id === currentEventId));
@@ -56,6 +68,10 @@ const EditEvent = ({
   const onClose = () => {
     hideFormEditEvent();
   };
+
+  const setPlace = (placeObj) => {
+    setEvent({...event, place: placeObj});
+  }
 
   const initialFormValue = () => {
     if (event.type === 'task' || event.type === 'optional-task') {
@@ -80,7 +96,7 @@ const EditEvent = ({
       description: event.description,
       materials: event.taskObj.materials,
       comment: event.comment,
-      place: event.place,
+      place: event.place.address,
       screen: event.taskObj.screen,
       timezone: event.timezone,
     });
@@ -213,9 +229,9 @@ const EditEvent = ({
 
   return (
     <>
-      <Drawer
+      <Drawer style={{zIndex: '1'}}
         title="Edit event"
-        width="50%"
+        width={width}
         onClose={onClose}
         afterVisibleChange={initialFormValue}
         visible={isShowFormEditEvent}
@@ -244,46 +260,46 @@ const EditEvent = ({
           onValuesChange={onValuesFormChange}
         >
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24} sm={12}>
               <TopicField />
             </Col>
-            <Col span={12}>
+            <Col span={24} sm={12}>
               <DescriptionUrlField />
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24} sm={12}>
               <OrganizerSelect
                 addNewOrganizer={addNewOrganizer}
                 event={event}
                 onSelectOrganizer={onSelectOrganizer}
               />
             </Col>
-            <Col span={12}>
+            <Col span={24} sm={12}>
               <TypeSelect onSelectType={onSelectType} />
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24} sm={12}>
               <DateTimeComponent />
             </Col>
-            <Col span={12}>
+            <Col span={24} sm={12}>
               <TimeZoneSelect tz={event.timezone} />
             </Col>
           </Row>
           {!hideSubFieldsForOfflineFlag && (
             <Row gutter={16}>
               <Col span={24}>
-                <PlaceComponent />
+                <PlaceComponent setPlace={setPlace} />
               </Col>
             </Row>
           )}
           {!hideSubFieldsForTaskFlag && (
             <Row gutter={16}>
-              <Col span={12}>
+              <Col span={24} sm={12}>
                 <DemoUrlField />
               </Col>
-              <Col span={12}>
+              <Col span={24} sm={12}>
                 <ScreenUrlField />
               </Col>
             </Row>

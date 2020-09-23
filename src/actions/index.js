@@ -181,13 +181,11 @@ export const addNewType = value => {
 export const showTypeModalView = value => {
   return {
     type: SHOW_TYPE_MODAL,
-    payload: value,
   };
 };
 export const hideTypeModalView = value => {
   return {
     type: HIDE_TYPE_MODAL,
-    payload: value,
   };
 };
 export const geocodePlace = place => {
