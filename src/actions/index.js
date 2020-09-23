@@ -1,4 +1,5 @@
 import {
+  ADD_NEW_TYPE,
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
   CHANGE_USER_ROLE,
@@ -7,6 +8,7 @@ import {
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
   HIDE_TASK_OVERVIEW,
+  HIDE_TYPE_MODAL,
   LOADED_ORGANIZERS,
   LOADED_SCHEDULE,
   REMOVE_EVENT,
@@ -20,7 +22,9 @@ import {
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
   SHOW_TASK_OVERVIEW,
+  SHOW_TYPE_MODAL,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
+  GEOCODE_PLACE,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -167,3 +171,31 @@ export const setTableColumns = title => {
     payload: title,
   };
 };
+
+export const addNewType = value => {
+  return {
+    type: ADD_NEW_TYPE,
+    payload: value,
+  };
+};
+export const showTypeModalView = value => {
+  return {
+    type: SHOW_TYPE_MODAL,
+    payload: value,
+  };
+};
+export const hideTypeModalView = value => {
+  return {
+    type: HIDE_TYPE_MODAL,
+    payload: value,
+  };
+};
+export const geocodePlace = place => {
+  return async dispatch => {
+    const url = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=3aa805ff-53da-48b8-9c1e-5eee21f8ecde&geocode=${place}`;
+    const response = await fetch(url);
+    const getPlacePos = await response.json();
+    const [lng, lat] = await getPlacePos.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(' ');
+    dispatch({type: GEOCODE_PLACE, lat: +lat, lng: +lng});
+  }
+}

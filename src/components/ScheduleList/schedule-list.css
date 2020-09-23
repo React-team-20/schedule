@@ -1,5 +1,10 @@
 .list-wrapper {
   margin: 0 30px;
+  overflow-x: hidden;
+}
+
+.list-item-wrapper {
+  position: relative;
 }
 
 .list-item-tag {
@@ -7,18 +12,248 @@
 }
 
 .tag-wrapper {
-  min-width: 140px;
+  width: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 20px;
+}
+
+.ant-list-item-meta {
+  padding: 12px 0;
+}
+
+.item-organizer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .item-organizer-label {
   margin-right: 10px;
+  display: inline-block;
 }
 
 .list-item-divider {
-  /* color: #1890ff !important; */
   margin-bottom: 20px !important;
+  margin-left: 60px !important;
+  padding-top: 40px;
 }
 
 .list-item-wrapper {
   margin-bottom: 40px;
+}
+
+.list-item {
+  display: flex;  
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0; 
+}
+
+.item-list-content {  
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0; 
+  min-height: 74px;
+  flex-grow: 1;
+}
+
+.selected-list-item {
+  background: #1890ff16 !important;
+  opacity: 1 !important;
+}
+
+.button-wrapper {
+  width: 50px;
+}
+
+.hide-button-wrapper {
+  position: absolute;
+  top: 41px;
+  z-index: 15;  
+}
+
+.short-date-wrapper {
+  display: none;
+}
+
+.event-time-icon {
+  display: none;
+}
+
+.ant-list-item-meta-title {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.event-date {
+  width: 100%;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+  line-height: 1;
+  margin-top: 6px;
+  margin-bottom: 0;
+}
+
+.ant-list-item-meta-content .ant-btn {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.event-topic {
+  display: inline-block;
+  /* word-wrap: break-word; */
+  white-space: normal;
+  word-break: break-word;
+}
+
+.ant-list-items .hidden-event div:not(.button-wrapper) {
+  opacity: 0.3;
+  background-color: #f5f5f5;
+}
+
+.ant-list-items .hidden-event:hover div:not(.button-wrapper) {
+  opacity: 0.3;
+  background-color: #f5f5f5;
+}
+
+.ant-list-items .past-event div:not(.button-wrapper) {
+  opacity: 0.5;
+}
+
+.ant-list-items .past-event div:not(.button-wrapper) {
+  opacity: 0.5;
+}
+
+@media screen and (max-width: 767px) { 
+  .list-item {
+    padding: 12px 0;    
+  }
+
+  .item-list-content {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .item-organizer {
+    width: 100%;
+    margin-left: 140px;
+    justify-content: flex-start;
+    position: relative;
+    min-height: 40px;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 14px;
+  }
+
+  .tag-wrapper { 
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .item-list-content {
+    flex-direction: column;
+  }
+
+  .tag-wrapper { 
+    justify-content: flex-start;
+    width: 80%;
+    padding-left: 0;
+    margin-top: 0;
+  }
+
+  .ant-list-item-meta {
+    width: 100%;    
+  }
+
+  .item-organizer {
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .tag-wrapper {
+    padding-left: 0;
+    justify-content: flex-start;
+  }
+
+  .list-item {
+    padding: 20px 0;
+  }
+
+  .ant-list-item-meta {
+    padding-top: 16px;
+  }
+
+  .ant-list-item-meta-title {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .short-date-wrapper { 
+    display: flex;
+    flex-direction: column;
+    width: 60px;
+  }
+
+  .date-week {
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 18px;
+  }
+
+  .date-day {
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 14px;
+    line-height: 1.5715;
+  }
+
+  .tag-wrapper {
+    margin-left: 60px;
+  }
+
+  .event-time {
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: -40px;
+    left: 60px;
+  }
+
+  .event-time-icon {
+    display: block;
+    margin-right: 6px;
+  }
+
+  .event-date {
+    display: none;
+  }
+
+  .info-event-button {
+    width: 78%;
+    text-align: start;
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .item-list-content {
+    width: 80%;
+  }
+
+  .info-event-button {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .short-date-wrapper {
+    width: 44px;
+  }
+
+  .event-time {
+    top: -10px;
+    left: 0;
+  }
 }

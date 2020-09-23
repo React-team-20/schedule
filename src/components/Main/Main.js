@@ -11,8 +11,7 @@ import {
   showLoader,
 } from '../../actions';
 import {getFilteredTypesAndHideEvents, getFilteredTypesEvents} from '../../selectors';
-import CreateEvent from '../CreateEvent';
-import EditEvent from '../EditEvent/EditEvent';
+import {CreateEvent, EditEvent} from '../EventEditor';
 import EventTypeFilter from '../EventTypeFilter';
 import ScheduleList from '../ScheduleList';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
