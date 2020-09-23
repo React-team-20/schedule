@@ -18,7 +18,7 @@ const ScheduleListItem = (data) => {
   const dispatch = useDispatch();
   const {hiddenEvents} = useSelector(state => state.events);
   const [selectedRows, setSelectedRows] = useState([]);
-  const {timezone} = useSelector(state => state.app);  
+  const {timezone} = useSelector(state => state.app); 
 
   let listData = data.slice();
 
@@ -28,7 +28,7 @@ const ScheduleListItem = (data) => {
       return item;
     });
   };
-  
+
   listData = setTimezone(listData, timezone);
  
   const handlerEventShow = id => {
@@ -121,9 +121,9 @@ const ScheduleListItem = (data) => {
   }
   
   const getMonthAndYearDivider = (data, index) => {
-    const currentDate = dateByMonthAndYearParse(data[index].dateTime, data[index].timeZone);
     const prevIdx = data[index - 1];
-
+    const currentDate = dateByMonthAndYearParse(data[index].dateTime, data[index].timeZone);
+  
     if (prevIdx) {      
       const previousDate = dateByMonthAndYearParse(data[index - 1].dateTime, data[index].timeZone);
 
@@ -132,7 +132,7 @@ const ScheduleListItem = (data) => {
       }
     } else {
       return getDivider(currentDate);
-    }
+    }   
   }
   
   return (
@@ -145,7 +145,6 @@ const ScheduleListItem = (data) => {
           )}
       </div> 
       <List
-        pagination={{defaultCurrent: 1, defaultPageSize: 10,}}
         itemLayout="horizontal"
         dataSource={listData}
         renderItem={(item, index) => (
