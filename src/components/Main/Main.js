@@ -11,7 +11,7 @@ import {
   showLoader,
 } from '../../actions';
 import {getFilteredTypesAndHideEvents, getFilteredTypesEvents} from '../../selectors';
-import {CreateEvent, EditEvent} from '../EventEditor';
+import EventEditor from '../EventEditor';
 import EventTypeFilter from '../EventTypeFilter';
 import ScheduleList from '../ScheduleList';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
@@ -82,17 +82,12 @@ const Main = () => {
       <EventTypeFilter />
       {
         {
-          table: (
-            <>
-              <ScheduleTable events={filteredEvents} />
-              <EditEvent fetchEvents={fetchEvents} />
-            </>
-          ),
+          table: <ScheduleTable events={filteredEvents} />,
           list: <ScheduleList events={filteredEvents} />,
           calendar: <ScheduleСalendar events={filteredEvents} />,
         }[scheduleView]
       }
-      <CreateEvent fetchEvents={fetchEvents} />
+      <EventEditor fetchEvents={fetchEvents} />
       <TaskOverview />
       <NewTypeModal />
     </>

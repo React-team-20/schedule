@@ -4,13 +4,14 @@ import React, {useContext, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {
   hideFormCreationEvent,
+  hideFormEditEvent,
   hideLoader,
   organizersLoaded,
   setAlertMessage,
   showLoader,
-} from '../../../actions';
-import INITIAL_EVENT_OBJECT from '../../../constants/event-object';
-import {ScheduleServiceContext} from '../../ScheduleServiceContext';
+} from '../../actions';
+import INITIAL_EVENT_OBJECT from '../../constants/event-object'; //create
+import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import {
   CommentField,
   DateTimeComponent,
@@ -24,8 +25,8 @@ import {
   TimeZoneSelect,
   TopicField,
   TypeSelect,
-} from '../FormComponents';
-import './create-event.css';
+} from './FormComponents';
+import './event-editor.css';
 
 const CreateEvent = ({
   isShowFormСreationEvent,
@@ -36,18 +37,67 @@ const CreateEvent = ({
   fetchEvents,
   organizers,
   organizersLoaded,
+  isShowFormEditEvent,
+  hideFormEditEvent,
+  currentEventId,
+  events,
 }) => {
-  const {addEvent, getGithubData, addOrganizer, getOrganizers} = useContext(ScheduleServiceContext);
-  const onClose = () => {
-    hideFormCreationEvent();
-  };
-
+  const {addEvent, editEvent, getGithubData, addOrganizer, getOrganizers} = useContext(
+    ScheduleServiceContext
+  );
+  const initialObject = isShowFormEditEvent
+    ? {organizer: '', feedback: false}
+    : INITIAL_EVENT_OBJECT;
   const [form] = Form.useForm();
-  const [hideSubFieldsForTaskFlag, setHideSubFieldsFlag] = useState(true);
-  const [event, setEvent] = useState(INITIAL_EVENT_OBJECT);
+  const [hideSubFieldsForTaskFlag, setHideSubFieldsForTaskFlag] = useState(true);
+  const [event, setEvent] = useState(initialObject);
   const [hideSubFieldsForOfflineFlag, setHideSubFieldsForOfflineFlag] = useState(true);
   const [deadline, setDeadline] = useState({flag: false, date: ''});
   const [width, setWidth] = useState();
+
+  const onClose = () => {
+    hideFormCreationEvent();
+    hideFormEditEvent();
+    form.resetFields();
+  };
+
+  //Editing block------------------------------------------------------
+  useEffect(() => {
+    if (currentEventId !== null) {
+      setEvent(events.find(i => i.id === currentEventId));
+    }
+    // eslint-disable-next-line
+  }, [isShowFormEditEvent]);
+
+  const initialFormValue = () => {
+    if (event.type === 'task' || event.type === 'optional-task') {
+      setHideSubFieldsForTaskFlag(false);
+    } else {
+      setHideSubFieldsForTaskFlag(true);
+    }
+
+    if (event.type === 'offline-lecture' || event.type === 'meetup') {
+      setHideSubFieldsForOfflineFlag(false);
+    } else {
+      setHideSubFieldsForOfflineFlag(true);
+    }
+
+    form.setFieldsValue({
+      topic: event.topic,
+      'description-url': event.descriptionUrl,
+      organizer: event.organizer.name,
+      type: event.type,
+      date: moment(event.dateTime).tz(event.timezone),
+      'demo-url': event.taskObj.demoUrl,
+      description: event.description,
+      materials: event.taskObj.materials,
+      comment: event.comment,
+      place: event.place.address,
+      screen: event.taskObj.screen,
+      timezone: event.timezone,
+    });
+  };
+  //-------------------------------------------------------------------------
 
   useEffect(() => {
     if (window.innerWidth < 1000) setWidth('100%');
@@ -94,35 +144,42 @@ const CreateEvent = ({
 
   const onSelectType = e => {
     if (e === 'task' || e === 'optional-task') {
-      setHideSubFieldsFlag(false);
+      setHideSubFieldsForTaskFlag(false);
     } else {
-      setHideSubFieldsFlag(true);
-      setDeadline({...deadline, flag: false});
+      setHideSubFieldsForTaskFlag(true);
+      if (!isShowFormEditEvent) setDeadline({...deadline, flag: false}); //create
     }
 
-    if (e === 'offline-lecture' || e === 'meetup') {
-      setHideSubFieldsForOfflineFlag(false);
-    } else {
-      setHideSubFieldsForOfflineFlag(true);
+    if (!isShowFormEditEvent) { //create
+      if (e === 'offline-lecture' || e === 'meetup') {
+        setHideSubFieldsForOfflineFlag(false);
+      } else {
+        setHideSubFieldsForOfflineFlag(true);
+      }
     }
 
     setEvent({...event, type: e});
   };
 
   const onSubmit = async () => {
-    hideFormCreationEvent();
+    onClose();
     showLoader();
     try {
-      await addEvent(event);
-      setAlertMessage('Event added successfully!');
+      if (isShowFormEditEvent) { //edit
+        await editEvent(event.id, event);
+        setAlertMessage('Event edit successfully!');
+      } else { //create
+        await addEvent(event);
+        setAlertMessage('Event added successfully!');
+      }
       fetchEvents();
-      if (deadline.flag) {
+      if (deadline.flag && !isShowFormEditEvent) {
         await addEvent({...event, type: 'deadline', dateTime: deadline.date});
         setAlertMessage('Deadline added successfully!');
         fetchEvents();
         setDeadline({...deadline, flag: false});
       }
-      setEvent(INITIAL_EVENT_OBJECT);
+      if (!isShowFormEditEvent) setEvent(INITIAL_EVENT_OBJECT); //create
       form.resetFields();
     } catch {
       hideLoader();
@@ -191,7 +248,7 @@ const CreateEvent = ({
             timezone: allValues[field],
           });
         }
-        if (allValues.dateDeadline) {
+        if (allValues.dateDeadline && !isShowFormEditEvent) { //create
           setDeadline({
             ...deadline,
             date: tzDate(allValues.dateDeadline, allValues[field]),
@@ -219,10 +276,11 @@ const CreateEvent = ({
   return (
     <Drawer
       style={{zIndex: '1'}}
-      title="Create a new event"
+      title="Event editor"
       width={width}
       onClose={onClose}
-      visible={isShowFormСreationEvent}
+      visible={isShowFormСreationEvent || isShowFormEditEvent}
+      afterVisibleChange={isShowFormEditEvent ? initialFormValue : undefined}
       bodyStyle={{paddingBottom: 80}}
       footer={
         <div
@@ -233,7 +291,7 @@ const CreateEvent = ({
           <Button onClick={onClose} style={{marginRight: 8}}>
             Cancel
           </Button>
-          <Button type="primary" form="create-form" htmlType="submit">
+          <Button type="primary" form="editor" htmlType="submit">
             Submit
           </Button>
         </div>
@@ -242,7 +300,7 @@ const CreateEvent = ({
       <Form
         layout="vertical"
         hideRequiredMark
-        id="create-form"
+        id="editor"
         onFinish={onSubmit}
         form={form}
         onValuesChange={onValuesFormChange}
@@ -275,27 +333,29 @@ const CreateEvent = ({
             <TimeZoneSelect />
           </Col>
         </Row>
-        {deadline.flag && (
-          <Row gutter={16}>
-            <Col span={24}>
-              <DateTimeComponent deadline />
-            </Col>
-          </Row>
-        )}
-        {!hideSubFieldsForTaskFlag && (
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item name="checkbox-deadline">
-                <Checkbox
-                  onChange={e => setDeadline({...deadline, flag: e.target.checked})}
-                  checked={deadline.flag}
-                >
-                  Add deadline
-                </Checkbox>
-              </Form.Item>
-            </Col>
-          </Row>
-        )}
+        {deadline.flag && //create
+          !isShowFormEditEvent && (
+            <Row gutter={16}>
+              <Col span={24}>
+                <DateTimeComponent deadline />
+              </Col>
+            </Row>
+          )}
+        {!hideSubFieldsForTaskFlag && //create
+          !isShowFormEditEvent && (
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item name="checkbox-deadline">
+                  <Checkbox
+                    onChange={e => setDeadline({...deadline, flag: e.target.checked})}
+                    checked={deadline.flag}
+                  >
+                    Add deadline
+                  </Checkbox>
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
         {!hideSubFieldsForOfflineFlag && (
           <Row gutter={16}>
             <Col span={24}>
@@ -345,6 +405,10 @@ const mapStateToProps = state => {
   return {
     isShowFormСreationEvent: state.app.isShowFormСreationEvent,
     organizers: state.app.organizers,
+    event: state.events,
+    isShowFormEditEvent: state.app.isShowFormEditEvent,
+    currentEventId: state.app.currentEvent,
+    events: state.events.events,
   };
 };
 
@@ -354,6 +418,7 @@ const mapDispatchToProps = {
   hideLoader,
   setAlertMessage,
   organizersLoaded,
+  hideFormEditEvent,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateEvent);
