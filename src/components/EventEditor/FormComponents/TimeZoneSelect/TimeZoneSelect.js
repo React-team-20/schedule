@@ -13,7 +13,17 @@ const TimeZoneSelect = () => {
   ));
 
   return (
-    <Form.Item initialValue={DEFAULT_TIMEZONE} name="timezone" label="Timezone">
+    <Form.Item
+      initialValue={DEFAULT_TIMEZONE}
+      name="timezone"
+      label="Timezone"
+      rules={[
+        {
+          required: true,
+          message: 'Please input timezone.',
+        },
+      ]}
+    >
       <Select bordered style={{width: '100%'}}>
         {selectOptions}
       </Select>

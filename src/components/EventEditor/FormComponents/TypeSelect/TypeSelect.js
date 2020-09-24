@@ -18,7 +18,6 @@ const TypeSelect = ({onSelectType, eventsTypes, showTypeModalView}) => {
         name="type"
         onSelect={onSelectType}
         placeholder="Please choose the type"
-        allowClear
         dropdownRender={menu => (
           <div>
             {menu}

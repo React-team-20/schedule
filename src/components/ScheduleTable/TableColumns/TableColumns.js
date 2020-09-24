@@ -13,19 +13,16 @@ const TableColumns = () => [
     title: 'Date',
     dataIndex: 'date',
     width: 90,
-    hidden: false,
   },
   {
     title: 'Time',
     dataIndex: 'time',
     width: 60,
-    hidden: false,
   },
   {
     title: 'Type',
     dataIndex: 'type',
     width: 120,
-    hidden: false,
     render: (_, record) => {
       return <TypeField type={record.type} />;
     },
@@ -34,7 +31,6 @@ const TableColumns = () => [
     title: 'Topic',
     dataIndex: 'topic',
     width: 500,
-    hidden: false,
     ellipsis: true,
     render: (text, record) => {
       return <TopicButton text={text} id={record.id} />;
@@ -42,9 +38,8 @@ const TableColumns = () => [
   },
   {
     title: 'Link',
-    width: 200,
+    width: 100,
     dataIndex: 'descriptionUrl',
-    hidden: false,
     ellipsis: true,
     render: text => {
       return isLinkRegExp.test(text) ? (
@@ -60,7 +55,6 @@ const TableColumns = () => [
     title: 'Organizer',
     dataIndex: 'organizer',
     width: 200,
-    hidden: false,
     render: (_, record) => {
       return record.organizer ? (
         <div className="item-organizer">{GithubUserLink(record.organizer)}</div>
@@ -72,15 +66,13 @@ const TableColumns = () => [
   {
     title: 'Comment',
     dataIndex: 'comment',
-    width: 200,
-    hidden: false,
+    width: 250,
   },
   {
     title: <СolumnSelectionMenu />,
     key: 'operation',
     fixed: 'right',
     width: 80,
-    hidden: true,
     render: (_, record) => (
       <div className="table-action-buttons">
         <EditEventButton id={record.id} />

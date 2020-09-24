@@ -197,9 +197,6 @@ const CreateEvent = ({
       case 'topic':
         setEvent({...event, topic: allValues[field]});
         break;
-      case 'place':
-        setEvent({...event, place: allValues[field]});
-        break;
       case 'description-url':
         setEvent({...event, descriptionUrl: allValues[field]});
         break;
@@ -275,7 +272,7 @@ const CreateEvent = ({
 
   return (
     <Drawer
-      style={{zIndex: '1'}}
+      style={{zIndex: '1001'}}
       title="Event editor"
       width={width}
       onClose={onClose}

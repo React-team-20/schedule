@@ -1,6 +1,6 @@
 import {MinusCircleOutlined} from '@ant-design/icons';
 import {Button, Col, Form, Input, Row} from 'antd';
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './field-template.css';
 
 const FieldTemplate = ({field, remove}) => {
@@ -24,9 +24,19 @@ const FieldTemplate = ({field, remove}) => {
           {...field}
           name={[field.name, 'materialName']}
           fieldKey={[field.fieldKey, 'materials-name']}
-          rules={[{required: true, message: 'Missing materials link name'}]}
+          rules={[
+            {
+              required: true,
+              type: 'string',
+              max: 80,
+              transform(value) {
+                return value.trim();
+              },
+              message: 'Please input link name. Max length of string 80 characters.',
+            },
+          ]}
         >
-          <Input placeholder="Link name" />
+          <Input allowClear placeholder="Link name" />
         </Form.Item>
       </Col>
       <Col span={24} sm={12}>
@@ -35,9 +45,18 @@ const FieldTemplate = ({field, remove}) => {
           {...field}
           name={[field.name, 'materialLink']}
           fieldKey={[field.fieldKey, 'materials-link']}
-          rules={[{required: true, message: 'Missing materials link'}]}
+          rules={[
+            {
+              required: true,
+              type: 'url',
+              message: `It doesn't look like a link! Please input url!`,
+              transform(value) {
+                return value.trim();
+              },
+            },
+          ]}
         >
-          <Input placeholder="Link" />
+          <Input allowClear placeholder="Link" />
         </Form.Item>
       </Col>
       {IsRowView ? (
