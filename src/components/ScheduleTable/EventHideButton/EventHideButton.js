@@ -4,12 +4,7 @@ import './event-hide-button.css';
 
 const EventHideButton = ({handlerEventHide}) => {
   return (
-    <Button
-      type="primary"
-      ghost
-      onClick={handlerEventHide}
-      className="event-hide-button"
-    >
+    <Button type="primary" ghost onClick={handlerEventHide} className="event-hide-button">
       <span>Hide</span>
     </Button>
   );
