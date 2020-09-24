@@ -13,3 +13,8 @@
 .moreMenu .anticon {
   display: inline-flex;
 }
+
+.header-tools_panel .button-export {
+  width: 1em;
+  border: none;
+}
