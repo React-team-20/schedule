@@ -13,6 +13,7 @@ import {switchVisibilityHiddenEvents} from '../../../actions';
 import NewEventButton from '../../NewEventButton';
 import TimeZoneSelect from '../../TimeZoneSelect';
 import ScheduleViewSelect from '../ScheduleViewSelect';
+import ExportToGoogle from '../ExportToGoogle';
 import './headerToolsPanel.css';
 
 const HeaderToolsPanel = () => {
@@ -76,7 +77,8 @@ const HeaderToolsPanel = () => {
           >
             {visibilityHiddenEvents ? <EyeInvisibleOutlined /> : <EyeOutlined />}
           </Button>
-        </Tooltip>
+        </Tooltip>        
+        <ExportToGoogle />
         <DropdownMenu />
       </Space>
     </div>
