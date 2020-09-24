@@ -29,9 +29,6 @@ const FieldTemplate = ({field, remove}) => {
               required: true,
               type: 'string',
               max: 80,
-              transform(value) {
-                return value.trim();
-              },
               message: 'Please input link name. Max length of string 80 characters.',
             },
           ]}
@@ -50,9 +47,6 @@ const FieldTemplate = ({field, remove}) => {
               required: true,
               type: 'url',
               message: `It doesn't look like a link! Please input url!`,
-              transform(value) {
-                return value.trim();
-              },
             },
           ]}
         >
