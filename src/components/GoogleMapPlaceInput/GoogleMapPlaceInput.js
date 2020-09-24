@@ -31,7 +31,7 @@ const GoogleMapPlaceInput = ({setPlace}) => {
   }, []);
 
   const [marker, setMarker] = React.useState(null);
-  const [address, setAddress] = React.useState(null);
+  const [address, setAddress] = React.useState('');
 
   const sendPlace = () => {
     if (marker) {
@@ -75,7 +75,6 @@ const GoogleMapPlaceInput = ({setPlace}) => {
       }
     } catch (error) {
       message.error('Error getting addres by geocode');
-      console.log('error', error);
     }
   };
 
@@ -87,7 +86,13 @@ const GoogleMapPlaceInput = ({setPlace}) => {
 
   return (
     <>
-      <InputMap panTo={panTo} propsAddress={address} />
+      <Input
+        disabled={!marker}
+        value={address}
+        placeholder="Click on the map or search by address"
+      />
+
+      <InputMap panTo={panTo} />
 
       <GoogleMap
         id="map"
@@ -104,7 +109,7 @@ const GoogleMapPlaceInput = ({setPlace}) => {
   );
 };
 
-const InputMap = ({panTo, propsAddress}) => {
+const InputMap = ({panTo}) => {
   const {
     ready,
     value,
@@ -122,16 +127,6 @@ const InputMap = ({panTo, propsAddress}) => {
     },
   });
 
-  // ! Error not rendering
-  // useEffect(() => {
-  //   console.log('useCallback');
-
-  //   if (propsAddress) {
-  //     setValue(propsAddress, false);
-  //     console.log('setValue propsAddress = ', value);
-  //   }
-  // }, [propsAddress]);
-
   const onSelect = async address => {
     setValue(address, false);
     clearSuggestions();
@@ -148,23 +143,21 @@ const InputMap = ({panTo, propsAddress}) => {
     setValue(event.target.value);
   };
 
-  // ! Error not rendering
-  const modValue = propsAddress || value;
-  console.log('propsAddress || value = ', modValue);
-
   return (
-    <AutoComplete
-      style={{
-        width: '100%',
-        marginBottom: '1rem',
-      }}
-      className="input-map"
-      options={status === 'OK' && data.map(({description}) => ({value: description}))}
-      onSelect={onSelect}
-      disabled={!ready}
-    >
-      <Input value={modValue} onChange={onChange} placeholder="Search by address" />
-    </AutoComplete>
+    <>
+      <AutoComplete
+        style={{
+          width: '100%',
+          marginTop: '1rem',
+        }}
+        className="input-map"
+        options={status === 'OK' && data.map(({description}) => ({value: description}))}
+        onSelect={onSelect}
+        disabled={!ready}
+      >
+        <Input value={value} onChange={onChange} placeholder="Search by address" size="small" />
+      </AutoComplete>
+    </>
   );
 };
 
