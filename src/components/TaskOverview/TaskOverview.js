@@ -145,7 +145,7 @@ const TaskOverview = () => {
               />
             </List.Item>
           )}
-          {event.taskObj && (
+          {event.place && (
             <List.Item onClick={showPosition}>
               <Menu className="dropdown-menu" mode="inline">
                 <SubMenu title="Place" icon={<EnvironmentOutlined />}>
