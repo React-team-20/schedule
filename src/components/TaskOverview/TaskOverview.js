@@ -119,12 +119,16 @@ const TaskOverview = () => {
               />
             </List.Item>
           )}
-          {event.taskObj.demoUrl && (
+          {event.taskObj.screen && (
             <List.Item>
               <List.Item.Meta
                 avatar={<FileImageOutlined />}
                 title="Photo:"
-                description={event.taskObj.demoUrl}
+                description={
+                  <a href={event.taskObj.screen} title="Открыть в новой вкладке" target="_blank">
+                    <img src={event.taskObj.screen} />
+                  </a>
+                }
               />
             </List.Item>
           )}

@@ -21,6 +21,10 @@
     margin-left: 5px !important;
 }
 
+.overview .ant-list-item-meta-description img {
+    max-width: 100%;
+}
+
 .overview .ant-menu-submenu-title,
 .overview .ant-menu-item.ant-menu-item-only-child {
     margin: 0 !important;
