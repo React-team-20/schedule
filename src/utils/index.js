@@ -8,19 +8,19 @@ export const dateTimeParse = (dateTime, timezone) => {
   };
 };
 
-export const shortDateByDayParse = (dateTime) => {
+export const shortDateByDayParse = dateTime => {
   return moment(dateTime).format('DD');
 };
 
-export const shortDateByDayOfWeekParse = (dateTime) => {
+export const shortDateByDayOfWeekParse = dateTime => {
   return moment(dateTime).format('ddd');
 };
 
-export const dateByMonthAndDayParse = (dateTime) => {
+export const dateByMonthAndDayParse = dateTime => {
   return moment(dateTime).format('MMMM DD');
 };
 
-export const dateByMonthAndYearParse = (dateTime) => {
+export const dateByMonthAndYearParse = dateTime => {
   return moment(dateTime).format('MMMM YYYY');
 };
 
@@ -34,11 +34,9 @@ export const setTagStyle = (tag, eventTypes) => {
     background: '#d9e3f0',
     color: '#555555',
   };
-  if (resultOfSearch) {
-    return resultOfSearch;
-  } else {
-    return defaultTag;
-  }
+  return resultOfSearch || defaultTag;
 };
 
-export const isLinkRegExp = /^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-/])*)?/;
+export const isLinkRegExp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w\-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\\w]*))?)/;
+
+export const isImageLinkRegExp = /((http|ftp|https):\/\/([\w+?.\w+])+([a-zA-Z0-9\\~\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)_\-\\=\\+\\\\/\\?\\.\\:\\;\\'\\,]*\.(?:jpg|JPG|jpeg|JPEG|gif|GIF|png|PNG|bmp|BMP|tiff|TIFF)))/;

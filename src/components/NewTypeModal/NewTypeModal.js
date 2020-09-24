@@ -12,7 +12,7 @@ const connector = connect(
   }),
   dispatch => ({
     addNewType: value => dispatch(addNewType(value)),
-    hideWindow: value => dispatch(hideTypeModalView(value)),
+    hideWindow: () => dispatch(hideTypeModalView()),
   })
 );
 const NewTypeModal = ({currentTypes, addNewType, view, hideWindow}) => {
@@ -59,18 +59,19 @@ const NewTypeModal = ({currentTypes, addNewType, view, hideWindow}) => {
       addNewType(type);
       localStorage.setItem('eventTypeStyles', JSON.stringify([...currentTypes, type]));
       message.success('Success');
-      hideWindow(false);
+      hideWindow();
     } else {
       message.error('This type already decleared');
     }
   }
   return (
     <Modal
+      style={{zIndex: '2'}}
       title="Add new type"
       visible={view}
       onOk={saveNewType}
       onCancel={() => {
-        hideWindow(false);
+        hideWindow();
       }}
     >
       <Tag style={{color: type.color, background: type.background}} className="tag-example">

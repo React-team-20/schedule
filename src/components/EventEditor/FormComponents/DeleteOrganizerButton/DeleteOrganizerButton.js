@@ -1,9 +1,9 @@
+import {DeleteOutlined} from '@ant-design/icons';
 import {Button, Tooltip} from 'antd';
 import React, {useContext} from 'react';
 import {connect} from 'react-redux';
-import {organizersLoaded, setAlertMessage} from '../../../actions';
-import {DeleteOutlined} from '@ant-design/icons';
-import {ScheduleServiceContext} from '../../ScheduleServiceContext';
+import {organizersLoaded, setAlertMessage} from '../../../../actions';
+import {ScheduleServiceContext} from '../../../ScheduleServiceContext';
 
 const DeleteOrganizerButton = ({id, organizersLoaded, setAlertMessage}) => {
   const {deleteOrganizer, getOrganizers} = useContext(ScheduleServiceContext);
