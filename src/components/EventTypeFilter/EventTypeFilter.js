@@ -2,7 +2,6 @@ import {Select, Tag} from 'antd';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setEventTypeFilter} from '../../actions';
-import eventsTypes from '../../constants/events-types';
 import './event-type-filter.css';
 
 const {Option} = Select;
@@ -10,10 +9,11 @@ const {Option} = Select;
 const EventTypeFilter = () => {
   const dispatch = useDispatch();
   const {eventTypeFilter} = useSelector(state => state.events);
+  const eventsTypes = useSelector(state => state.styles);
 
   const children = eventsTypes.map(i => (
     <Option key={i.value}>
-      <Tag className="list-item-tag" color={i.color}>
+      <Tag className="list-item-tag" style={{border: 0, color: i.color, background: i.background}}>
         {i.title.toUpperCase()}
       </Tag>
     </Option>

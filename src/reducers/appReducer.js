@@ -1,4 +1,3 @@
-import { act } from 'react-dom/test-utils';
 import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
@@ -40,7 +39,6 @@ const initialState = {
   alert: false,
   alertMessage: null,
   organizers: [],
-  hiddenTableColumns: [],
   lat: null,
   lng: null,
 };
@@ -82,9 +80,9 @@ const appReducer = (state = initialState, action) => {
     case SET_TABLE_COLUMNS:
       return {...state, tableColumns: action.payload};
     case SHOW_TYPE_MODAL:
-      return {...state, isShowTypeModal: action.payload};
+      return {...state, isShowTypeModal: true};
     case HIDE_TYPE_MODAL:
-      return {...state, isShowTypeModal: action.payload};
+      return {...state, isShowTypeModal: false};
     case GEOCODE_PLACE:
       return {...state, lng: action.lng, lat: action.lat};
     default:

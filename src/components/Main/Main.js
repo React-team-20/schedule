@@ -11,14 +11,14 @@ import {
   showLoader,
 } from '../../actions';
 import {getFilteredTypesAndHideEvents, getFilteredTypesEvents} from '../../selectors';
-import CreateEvent from '../CreateEvent';
-import EditEvent from '../EditEvent/EditEvent';
+import EventEditor from '../EventEditor';
 import EventTypeFilter from '../EventTypeFilter';
 import ScheduleList from '../ScheduleList';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
 import ScheduleTable from '../ScheduleTable';
 import ScheduleСalendar from '../ScheduleСalendar';
 import TaskOverview from '../TaskOverview';
+import NewTypeModal from '../NewTypeModal';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -82,18 +82,14 @@ const Main = () => {
       <EventTypeFilter />
       {
         {
-          table: (
-            <>
-              <ScheduleTable events={filteredEvents} />
-              <EditEvent fetchEvents={fetchEvents} />
-            </>
-          ),
+          table: <ScheduleTable events={filteredEvents} />,
           list: <ScheduleList events={filteredEvents} />,
           calendar: <ScheduleСalendar events={filteredEvents} />,
         }[scheduleView]
       }
-      <CreateEvent fetchEvents={fetchEvents} />
+      <EventEditor fetchEvents={fetchEvents} />
       <TaskOverview />
+      <NewTypeModal />
     </>
   );
 };
