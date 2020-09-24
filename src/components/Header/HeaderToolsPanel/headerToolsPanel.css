@@ -13,3 +13,8 @@
 .moreMenu .anticon {
   display: inline-flex;
 }
+
+.header-tools_panel-left,
+.header-tools_panel-right {
+  margin-bottom: 0.5rem;
+}

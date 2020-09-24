@@ -18,3 +18,12 @@
 .header-tools_panel {
   margin-top: 0.5rem;
 }
+
+@media (max-width: 500px) {
+  .header-title,
+  .header-tools_panel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+}

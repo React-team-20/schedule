@@ -5,7 +5,6 @@ import Avatar from 'antd/lib/avatar/avatar';
 import RoleSelect from '../RoleSelect';
 
 import './headerTitle.css';
-import logoImage from './logo-rsschool3.png';
 
 const avatarUrl = 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4';
 
@@ -28,7 +27,7 @@ const HeaderTitle = () => {
   return (
     <div className="header-title">
       <a href="/" className="logo">
-        <img src={logoImage} alt="Rolling Scopes School Logo" />
+        {' '}
       </a>
       <div className="container-title">
         <h2 className="title">Schedule</h2>
