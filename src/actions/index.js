@@ -25,6 +25,7 @@ import {
   SHOW_TYPE_MODAL,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
   GEOCODE_PLACE,
+  EXPORT_TO_GOOGLE
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -178,18 +179,21 @@ export const addNewType = value => {
     payload: value,
   };
 };
+
 export const showTypeModalView = value => {
   return {
     type: SHOW_TYPE_MODAL,
     payload: value,
   };
 };
+
 export const hideTypeModalView = value => {
   return {
     type: HIDE_TYPE_MODAL,
     payload: value,
   };
 };
+
 export const geocodePlace = place => {
   return async dispatch => {
     const url = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=3aa805ff-53da-48b8-9c1e-5eee21f8ecde&geocode=${place}`;
@@ -199,3 +203,9 @@ export const geocodePlace = place => {
     dispatch({type: GEOCODE_PLACE, lat: +lat, lng: +lng});
   }
 }
+
+export const exportToGoogle = () => {
+  return {
+    type: EXPORT_TO_GOOGLE,
+  };
+};
