@@ -9,7 +9,7 @@ const ExportToGoogle = () => {
   const dispatch = useDispatch();
   const data = useSelector(state => state.events);
   const {events} = data;
-
+console.log(events)
   const exportData = () => {   
     dispatch(exportToGoogle());
     console.log(events)
