@@ -1,15 +1,10 @@
 import React from 'react';
-import {Form} from 'antd';
 import GoogleMapPlaceInput from '../../../GoogleMapPlaceInput';
 
 import './place-component.css';
 
-const PlaceComponent = () => {
-  return (
-    <Form.Item name="place" label="Place">
-      <GoogleMapPlaceInput />
-    </Form.Item>
-  );
+const PlaceComponent = ({setPlace}) => {
+  return <GoogleMapPlaceInput setPlace={setPlace} />;
 };
 
 export default PlaceComponent;

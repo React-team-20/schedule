@@ -10,8 +10,9 @@ import {
   setAlertMessage,
   showLoader,
 } from '../../actions';
-import INITIAL_EVENT_OBJECT from '../../constants/event-object'; //create
+import INITIAL_EVENT_OBJECT from '../../constants/event-object';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
+import './event-editor.css';
 import {
   CommentField,
   DateTimeComponent,
@@ -26,7 +27,6 @@ import {
   TopicField,
   TypeSelect,
 } from './FormComponents';
-import './event-editor.css';
 
 const CreateEvent = ({
   isShowFormСreationEvent,
@@ -61,7 +61,6 @@ const CreateEvent = ({
     form.resetFields();
   };
 
-  //Editing block------------------------------------------------------
   useEffect(() => {
     if (currentEventId !== null) {
       setEvent(events.find(i => i.id === currentEventId));
@@ -97,7 +96,6 @@ const CreateEvent = ({
       timezone: event.timezone,
     });
   };
-  //-------------------------------------------------------------------------
 
   useEffect(() => {
     if (window.innerWidth < 1000) setWidth('100%');
@@ -114,6 +112,7 @@ const CreateEvent = ({
   };
 
   const setPlace = placeObj => {
+    form.setFieldsValue({place: placeObj.address});
     setEvent({...event, place: placeObj});
   };
 
@@ -147,10 +146,10 @@ const CreateEvent = ({
       setHideSubFieldsForTaskFlag(false);
     } else {
       setHideSubFieldsForTaskFlag(true);
-      if (!isShowFormEditEvent) setDeadline({...deadline, flag: false}); //create
+      if (!isShowFormEditEvent) setDeadline({...deadline, flag: false});
     }
 
-    if (!isShowFormEditEvent) { //create
+    if (!isShowFormEditEvent) {
       if (e === 'offline-lecture' || e === 'meetup') {
         setHideSubFieldsForOfflineFlag(false);
       } else {
@@ -165,10 +164,10 @@ const CreateEvent = ({
     onClose();
     showLoader();
     try {
-      if (isShowFormEditEvent) { //edit
+      if (isShowFormEditEvent) {
         await editEvent(event.id, event);
         setAlertMessage('Event edit successfully!');
-      } else { //create
+      } else {
         await addEvent(event);
         setAlertMessage('Event added successfully!');
       }
@@ -179,7 +178,7 @@ const CreateEvent = ({
         fetchEvents();
         setDeadline({...deadline, flag: false});
       }
-      if (!isShowFormEditEvent) setEvent(INITIAL_EVENT_OBJECT); //create
+      if (!isShowFormEditEvent) setEvent(INITIAL_EVENT_OBJECT);
       form.resetFields();
     } catch {
       hideLoader();
@@ -196,6 +195,15 @@ const CreateEvent = ({
     switch (field) {
       case 'topic':
         setEvent({...event, topic: allValues[field]});
+        break;
+      case 'place':
+        setEvent({
+          ...event,
+          place: {
+            ...event.place,
+            address: allValues[field],
+          },
+        });
         break;
       case 'description-url':
         setEvent({...event, descriptionUrl: allValues[field]});
@@ -245,7 +253,7 @@ const CreateEvent = ({
             timezone: allValues[field],
           });
         }
-        if (allValues.dateDeadline && !isShowFormEditEvent) { //create
+        if (allValues.dateDeadline && !isShowFormEditEvent) {
           setDeadline({
             ...deadline,
             date: tzDate(allValues.dateDeadline, allValues[field]),
@@ -330,29 +338,27 @@ const CreateEvent = ({
             <TimeZoneSelect />
           </Col>
         </Row>
-        {deadline.flag && //create
-          !isShowFormEditEvent && (
-            <Row gutter={16}>
-              <Col span={24}>
-                <DateTimeComponent deadline />
-              </Col>
-            </Row>
-          )}
-        {!hideSubFieldsForTaskFlag && //create
-          !isShowFormEditEvent && (
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item name="checkbox-deadline">
-                  <Checkbox
-                    onChange={e => setDeadline({...deadline, flag: e.target.checked})}
-                    checked={deadline.flag}
-                  >
-                    Add deadline
-                  </Checkbox>
-                </Form.Item>
-              </Col>
-            </Row>
-          )}
+        {deadline.flag && !isShowFormEditEvent && (
+          <Row gutter={16}>
+            <Col span={24}>
+              <DateTimeComponent deadline />
+            </Col>
+          </Row>
+        )}
+        {!hideSubFieldsForTaskFlag && !isShowFormEditEvent && (
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item name="checkbox-deadline">
+                <Checkbox
+                  onChange={e => setDeadline({...deadline, flag: e.target.checked})}
+                  checked={deadline.flag}
+                >
+                  Add deadline
+                </Checkbox>
+              </Form.Item>
+            </Col>
+          </Row>
+        )}
         {!hideSubFieldsForOfflineFlag && (
           <Row gutter={16}>
             <Col span={24}>

@@ -1,8 +1,8 @@
-import React, {useCallback, useEffect, useRef} from 'react';
 import {GoogleMap, Marker, useLoadScript} from '@react-google-maps/api';
-import {AutoComplete, Input, message} from 'antd';
-import usePlacesAutocomplete, {getGeocode, getLatLng} from 'use-places-autocomplete';
+import {AutoComplete, Form, Input, message} from 'antd';
 import Axios from 'axios';
+import React, {useCallback, useEffect, useRef} from 'react';
+import usePlacesAutocomplete, {getGeocode, getLatLng} from 'use-places-autocomplete';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyC00kwnr-ibsDwmaOK4PRFv7hhOWzzXFOo';
 const libraries = ['places'];
@@ -36,11 +36,9 @@ const GoogleMapPlaceInput = ({setPlace}) => {
   useEffect(() => {
     if (marker) {
       const sendObject = {address, geocode: marker};
-      // todo send data
-      console.log('is setPlace ', !!setPlace);
-      console.log('sendObject ', sendObject);
-      // setPlace(sendObject);
+      setPlace(sendObject);
     }
+    // eslint-disable-next-line
   }, [marker, address]);
 
   const panTo = useCallback(({addressText, geocode: {lat, lng}}) => {
@@ -82,12 +80,6 @@ const GoogleMapPlaceInput = ({setPlace}) => {
 
   return (
     <>
-      <Input
-        disabled={!marker}
-        value={address}
-        placeholder="Click on the map or search by address"
-      />
-
       <InputMap panTo={panTo} />
 
       <GoogleMap
@@ -140,7 +132,7 @@ const InputMap = ({panTo}) => {
   };
 
   return (
-    <>
+    <Form.Item name="place" label="Place">
       <AutoComplete
         style={{
           width: '100%',
@@ -153,7 +145,7 @@ const InputMap = ({panTo}) => {
       >
         <Input value={value} onChange={onChange} placeholder="Search by address" size="small" />
       </AutoComplete>
-    </>
+    </Form.Item>
   );
 };
 
