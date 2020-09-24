@@ -33,7 +33,7 @@ const GoogleMapPlaceInput = ({setPlace}) => {
   const [marker, setMarker] = React.useState(null);
   const [address, setAddress] = React.useState('');
 
-  const sendPlace = () => {
+  useEffect(() => {
     if (marker) {
       const sendObject = {address, geocode: marker};
       // todo send data
@@ -41,10 +41,6 @@ const GoogleMapPlaceInput = ({setPlace}) => {
       console.log('sendObject ', sendObject);
       // setPlace(sendObject);
     }
-  };
-
-  useEffect(() => {
-    sendPlace();
   }, [marker, address]);
 
   const panTo = useCallback(({addressText, geocode: {lat, lng}}) => {

@@ -8,7 +8,7 @@ import './role-select.css';
 
 const {Option} = Select;
 
-const TimeZoneSelect = () => {
+const RoleSelect = () => {
   const selectOptions = USER_ROLES_ARRAY.map(role => (
     <Option value={role} key={role}>
       {role}
@@ -28,4 +28,4 @@ const TimeZoneSelect = () => {
   );
 };
 
-export default TimeZoneSelect;
+export default RoleSelect;
