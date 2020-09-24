@@ -21,8 +21,14 @@
     margin-left: 5px !important;
 }
 
+.overview .ant-list-item-meta-description,
 .overview .ant-list-item-meta-description img {
     max-width: 100%;
+}
+
+.overview .ant-menu {
+    padding: 12px 0;
+    border-right: none;
 }
 
 .overview .ant-menu-submenu-title,
