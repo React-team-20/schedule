@@ -11,9 +11,6 @@ const DescriptionUrlField = () => {
         {
           type: 'url',
           message: `It doesn't look like a link! Please input url!`,
-          transform(value) {
-            return value.trim();
-          },
         },
       ]}
     >

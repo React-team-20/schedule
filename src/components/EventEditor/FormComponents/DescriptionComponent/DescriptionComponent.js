@@ -10,9 +10,6 @@ const DescriptionComponent = () => {
       rules={[
         {
           type: 'string',
-          transform(value) {
-            return value.trim();
-          },
         },
       ]}
     >

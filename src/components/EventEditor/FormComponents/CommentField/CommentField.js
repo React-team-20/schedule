@@ -7,14 +7,10 @@ const CommentField = () => {
     <Form.Item
       name="comment"
       label="Comment"
-      allowClear
       rules={[
         {
           type: 'string',
           max: 80,
-          transform(value) {
-            return value.trim();
-          },
           message: 'Max length of string 80 characters.',
         },
       ]}
