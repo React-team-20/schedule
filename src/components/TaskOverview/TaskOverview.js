@@ -10,7 +10,7 @@ import {
 import {Avatar, Button, List, Menu, Modal, Tooltip} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {geocodePlace, hideTaskOverview, showFormEditEvent} from '../../actions';
+import {hideTaskOverview, showFormEditEvent} from '../../actions';
 import Map from '../Map';
 import FeedbackForm from '../FeedbackForm';
 import './task-overview.css';
@@ -42,10 +42,6 @@ const TaskOverview = () => {
   const checkImage = e => {
     e.target.src = 'https://media.moddb.com/images/members/4/3158/3157353/image_error_full.png';
   }
-
-  const showPosition = () => {
-    dispatch(geocodePlace('Минск, Платонова 39'));
-  };
 
   return (
     <Modal
@@ -128,16 +124,19 @@ const TaskOverview = () => {
             </List.Item>
           )}
           {event.place && (
-            <List.Item onClick={showPosition}>
+            <List.Item>
               <Menu className="dropdown-menu" mode="inline">
                 <SubMenu title="Place" icon={<EnvironmentOutlined />}>
                   <p className="location">{event.place.address}</p>
-                  <Map />
+                  <Map
+                    lng={event.place.geocode.lng}
+                    lat={event.place.geocode.lat}
+                  />
                 </SubMenu>
               </Menu>
             </List.Item>
           )}
-          {event.taskObj.materials && (
+          {event.taskObj.materials.length !== 0 && (
             <List.Item>
               <Menu className="dropdown-menu" mode="inline">
                 <SubMenu title="Materials" icon={<CopyOutlined />}>

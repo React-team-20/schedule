@@ -2,7 +2,6 @@ import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
   CHANGE_USER_ROLE,
-  GEOCODE_PLACE,
   HIDE_ALERT,
   HIDE_FORM_CREATION_EVENT,
   HIDE_FORM_EDIT_EVENT,
@@ -83,8 +82,6 @@ const appReducer = (state = initialState, action) => {
       return {...state, isShowTypeModal: true};
     case HIDE_TYPE_MODAL:
       return {...state, isShowTypeModal: false};
-    case GEOCODE_PLACE:
-      return {...state, lng: action.lng, lat: action.lat};
     default:
       return state;
   }
