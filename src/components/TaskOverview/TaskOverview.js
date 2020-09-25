@@ -45,6 +45,10 @@ const TaskOverview = () => {
     setFeedback(e.target.value);
   };
 
+  const checkImage = e => {
+    e.target.src = 'https://media.moddb.com/images/members/4/3158/3157353/image_error_full.png';
+  }
+
   const handleSubmit = () => {
     let feedbacksArray;
     if (localStorage.getItem('feedbacks')) {
@@ -125,9 +129,7 @@ const TaskOverview = () => {
                 avatar={<FileImageOutlined />}
                 title="Photo:"
                 description={
-                  <a href={event.taskObj.screen} title="Открыть в новой вкладке" target="_blank">
-                    <img src={event.taskObj.screen} />
-                  </a>
+                  <img onError={checkImage} src={event.taskObj.screen} />
                 }
               />
             </List.Item>
@@ -160,9 +162,9 @@ const TaskOverview = () => {
             <List.Item>
               <Menu className="dropdown-menu" mode="inline">
                 <SubMenu title="Materials" icon={<CopyOutlined />}>
-                  {event.taskObj.materials.map(item => {
+                  {event.taskObj.materials.map((item, i) => {
                     return (
-                      <Menu.Item key={event.id}>
+                      <Menu.Item key={i}>
                         <a href={item.materialLink} target="_blank" rel="noopener noreferrer">
                           {item.materialName}
                         </a>
