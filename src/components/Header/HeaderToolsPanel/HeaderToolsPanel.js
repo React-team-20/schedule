@@ -11,6 +11,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {switchVisibilityHiddenEvents} from '../../../actions';
 import NewEventButton from '../../NewEventButton';
+import openNotificationPreviewMode from '../../PreviewModeNotification/PreviewModeNotification';
 import TimeZoneSelect from '../../TimeZoneSelect';
 import ScheduleViewSelect from '../ScheduleViewSelect';
 import './headerToolsPanel.css';
@@ -67,6 +68,8 @@ const HeaderToolsPanel = () => {
           <TimeZoneSelect />
         </Tooltip>
       </Space>
+
+      <Button onClick={openNotificationPreviewMode}>show notification</Button>
 
       <Space className="header-tools_panel-right">
         <ScheduleViewSelect />
