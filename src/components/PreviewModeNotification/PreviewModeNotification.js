@@ -27,9 +27,9 @@ const openNotificationPreviewMode = () => {
     key,
     duration: 0,
     btn,
-    onClose: {close},
+    onClose: close,
     placement: 'bottomLeft',
-    style: {backgroundColor: '#e6f7ff'},
+    style: {backgroundColor: '#f6ff9a8a', width: '275px'},
     icon: <FileSearchOutlined style={{color: '#1d39c4'}} />,
   });
 };
