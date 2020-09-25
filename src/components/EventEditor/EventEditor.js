@@ -6,7 +6,6 @@ import {
   hideFormCreationEvent,
   hideFormEditEvent,
   hideLoader,
-  organizersLoaded,
   setAlertMessage,
   showLoader,
 } from '../../actions';
@@ -36,15 +35,12 @@ const CreateEvent = ({
   hideLoader,
   fetchEvents,
   organizers,
-  organizersLoaded,
   isShowFormEditEvent,
   hideFormEditEvent,
   currentEventId,
   events,
 }) => {
-  const {addEvent, editEvent, getGithubData, addOrganizer, getOrganizers} = useContext(
-    ScheduleServiceContext
-  );
+  const {addEvent, editEvent} = useContext(ScheduleServiceContext);
   const initialObject = isShowFormEditEvent
     ? {organizer: '', feedback: false}
     : INITIAL_EVENT_OBJECT;
@@ -107,38 +103,9 @@ const CreateEvent = ({
     else setWidth('50%');
   });
 
-  const onSelectOrganizer = e => {
-    setEvent({...event, organizer: organizers.find(organizer => organizer.name === e)});
-  };
-
   const setPlace = placeObj => {
     form.setFieldsValue({place: placeObj.address});
     setEvent({...event, place: placeObj});
-  };
-
-  const addNewOrganizer = async () => {
-    const data = await getGithubData(event.organizerGitHub);
-
-    if (data.name === undefined) {
-      message.error('GitHub does not exist!');
-      setEvent({...event, organizerGitHub: ''});
-      return null;
-    }
-
-    if (
-      organizers.find(
-        organizer => organizer.name.toLowerCase() === event.organizerGitHub.toLowerCase().trim()
-      ) === undefined
-    ) {
-      setEvent({...event, organizerGitHub: ''});
-      await addOrganizer(data);
-      const newOrganizers = await getOrganizers();
-      organizersLoaded(newOrganizers);
-      message.success('Organizer added successfully!');
-    } else {
-      message.error('Such an organizer exists!');
-      setEvent({...event, organizerGitHub: ''});
-    }
   };
 
   const onSelectType = e => {
@@ -208,9 +175,6 @@ const CreateEvent = ({
       case 'description-url':
         setEvent({...event, descriptionUrl: allValues[field]});
         break;
-      case 'organizer-github':
-        setEvent({...event, organizerGitHub: allValues[field]});
-        break;
       case 'demo-url':
         setEvent({
           ...event,
@@ -273,6 +237,9 @@ const CreateEvent = ({
           date: tzDate(allValues[field], tzone),
         });
         break;
+      case 'organizer':
+        setEvent({...event, organizer: organizers.find(org => org.name === allValues[field])});
+        break;
       default:
         return null;
     }
@@ -320,11 +287,7 @@ const CreateEvent = ({
         </Row>
         <Row gutter={16}>
           <Col span={24} sm={12}>
-            <OrganizerSelect
-              addNewOrganizer={addNewOrganizer}
-              event={event}
-              onSelectOrganizer={onSelectOrganizer}
-            />
+            <OrganizerSelect />
           </Col>
           <Col span={24} sm={12}>
             <TypeSelect onSelectType={onSelectType} />
@@ -420,7 +383,6 @@ const mapDispatchToProps = {
   showLoader,
   hideLoader,
   setAlertMessage,
-  organizersLoaded,
   hideFormEditEvent,
 };
 
