@@ -6,12 +6,12 @@ import {
   hideFormCreationEvent,
   hideFormEditEvent,
   hideLoader,
-  organizersLoaded,
   setAlertMessage,
   showLoader,
 } from '../../actions';
-import INITIAL_EVENT_OBJECT from '../../constants/event-object'; //create
+import INITIAL_EVENT_OBJECT from '../../constants/event-object';
 import {ScheduleServiceContext} from '../ScheduleServiceContext';
+import './event-editor.css';
 import {
   CommentField,
   DateTimeComponent,
@@ -26,7 +26,6 @@ import {
   TopicField,
   TypeSelect,
 } from './FormComponents';
-import './event-editor.css';
 
 const CreateEvent = ({
   isShowFormСreationEvent,
@@ -36,15 +35,12 @@ const CreateEvent = ({
   hideLoader,
   fetchEvents,
   organizers,
-  organizersLoaded,
   isShowFormEditEvent,
   hideFormEditEvent,
   currentEventId,
   events,
 }) => {
-  const {addEvent, editEvent, getGithubData, addOrganizer, getOrganizers} = useContext(
-    ScheduleServiceContext
-  );
+  const {addEvent, editEvent} = useContext(ScheduleServiceContext);
   const initialObject = isShowFormEditEvent
     ? {organizer: '', feedback: false}
     : INITIAL_EVENT_OBJECT;
@@ -61,7 +57,6 @@ const CreateEvent = ({
     form.resetFields();
   };
 
-  //Editing block------------------------------------------------------
   useEffect(() => {
     if (currentEventId !== null) {
       setEvent(events.find(i => i.id === currentEventId));
@@ -97,7 +92,6 @@ const CreateEvent = ({
       timezone: event.timezone,
     });
   };
-  //-------------------------------------------------------------------------
 
   useEffect(() => {
     if (window.innerWidth < 1000) setWidth('100%');
@@ -109,37 +103,9 @@ const CreateEvent = ({
     else setWidth('50%');
   });
 
-  const onSelectOrganizer = e => {
-    setEvent({...event, organizer: organizers.find(organizer => organizer.name === e)});
-  };
-
   const setPlace = placeObj => {
+    form.setFieldsValue({place: placeObj.address});
     setEvent({...event, place: placeObj});
-  };
-
-  const addNewOrganizer = async () => {
-    const data = await getGithubData(event.organizerGitHub);
-
-    if (data.name === undefined) {
-      message.error('GitHub does not exist!');
-      setEvent({...event, organizerGitHub: ''});
-      return null;
-    }
-
-    if (
-      organizers.find(
-        organizer => organizer.name.toLowerCase() === event.organizerGitHub.toLowerCase().trim()
-      ) === undefined
-    ) {
-      setEvent({...event, organizerGitHub: ''});
-      await addOrganizer(data);
-      const newOrganizers = await getOrganizers();
-      organizersLoaded(newOrganizers);
-      message.success('Organizer added successfully!');
-    } else {
-      message.error('Such an organizer exists!');
-      setEvent({...event, organizerGitHub: ''});
-    }
   };
 
   const onSelectType = e => {
@@ -147,10 +113,10 @@ const CreateEvent = ({
       setHideSubFieldsForTaskFlag(false);
     } else {
       setHideSubFieldsForTaskFlag(true);
-      if (!isShowFormEditEvent) setDeadline({...deadline, flag: false}); //create
+      if (!isShowFormEditEvent) setDeadline({...deadline, flag: false});
     }
 
-    if (!isShowFormEditEvent) { //create
+    if (!isShowFormEditEvent) {
       if (e === 'offline-lecture' || e === 'meetup') {
         setHideSubFieldsForOfflineFlag(false);
       } else {
@@ -165,10 +131,10 @@ const CreateEvent = ({
     onClose();
     showLoader();
     try {
-      if (isShowFormEditEvent) { //edit
+      if (isShowFormEditEvent) {
         await editEvent(event.id, event);
         setAlertMessage('Event edit successfully!');
-      } else { //create
+      } else {
         await addEvent(event);
         setAlertMessage('Event added successfully!');
       }
@@ -179,7 +145,7 @@ const CreateEvent = ({
         fetchEvents();
         setDeadline({...deadline, flag: false});
       }
-      if (!isShowFormEditEvent) setEvent(INITIAL_EVENT_OBJECT); //create
+      if (!isShowFormEditEvent) setEvent(INITIAL_EVENT_OBJECT);
       form.resetFields();
     } catch {
       hideLoader();
@@ -197,11 +163,17 @@ const CreateEvent = ({
       case 'topic':
         setEvent({...event, topic: allValues[field]});
         break;
+      case 'place':
+        setEvent({
+          ...event,
+          place: {
+            ...event.place,
+            address: allValues[field],
+          },
+        });
+        break;
       case 'description-url':
         setEvent({...event, descriptionUrl: allValues[field]});
-        break;
-      case 'organizer-github':
-        setEvent({...event, organizerGitHub: allValues[field]});
         break;
       case 'demo-url':
         setEvent({
@@ -245,7 +217,7 @@ const CreateEvent = ({
             timezone: allValues[field],
           });
         }
-        if (allValues.dateDeadline && !isShowFormEditEvent) { //create
+        if (allValues.dateDeadline && !isShowFormEditEvent) {
           setDeadline({
             ...deadline,
             date: tzDate(allValues.dateDeadline, allValues[field]),
@@ -264,6 +236,9 @@ const CreateEvent = ({
           ...deadline,
           date: tzDate(allValues[field], tzone),
         });
+        break;
+      case 'organizer':
+        setEvent({...event, organizer: organizers.find(org => org.name === allValues[field])});
         break;
       default:
         return null;
@@ -312,11 +287,7 @@ const CreateEvent = ({
         </Row>
         <Row gutter={16}>
           <Col span={24} sm={12}>
-            <OrganizerSelect
-              addNewOrganizer={addNewOrganizer}
-              event={event}
-              onSelectOrganizer={onSelectOrganizer}
-            />
+            <OrganizerSelect />
           </Col>
           <Col span={24} sm={12}>
             <TypeSelect onSelectType={onSelectType} />
@@ -330,29 +301,27 @@ const CreateEvent = ({
             <TimeZoneSelect />
           </Col>
         </Row>
-        {deadline.flag && //create
-          !isShowFormEditEvent && (
-            <Row gutter={16}>
-              <Col span={24}>
-                <DateTimeComponent deadline />
-              </Col>
-            </Row>
-          )}
-        {!hideSubFieldsForTaskFlag && //create
-          !isShowFormEditEvent && (
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item name="checkbox-deadline">
-                  <Checkbox
-                    onChange={e => setDeadline({...deadline, flag: e.target.checked})}
-                    checked={deadline.flag}
-                  >
-                    Add deadline
-                  </Checkbox>
-                </Form.Item>
-              </Col>
-            </Row>
-          )}
+        {deadline.flag && !isShowFormEditEvent && (
+          <Row gutter={16}>
+            <Col span={24}>
+              <DateTimeComponent deadline />
+            </Col>
+          </Row>
+        )}
+        {!hideSubFieldsForTaskFlag && !isShowFormEditEvent && (
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item name="checkbox-deadline">
+                <Checkbox
+                  onChange={e => setDeadline({...deadline, flag: e.target.checked})}
+                  checked={deadline.flag}
+                >
+                  Add deadline
+                </Checkbox>
+              </Form.Item>
+            </Col>
+          </Row>
+        )}
         {!hideSubFieldsForOfflineFlag && (
           <Row gutter={16}>
             <Col span={24}>
@@ -414,7 +383,6 @@ const mapDispatchToProps = {
   showLoader,
   hideLoader,
   setAlertMessage,
-  organizersLoaded,
   hideFormEditEvent,
 };
 
