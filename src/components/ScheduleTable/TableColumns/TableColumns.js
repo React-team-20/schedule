@@ -1,11 +1,11 @@
 import {RightOutlined} from '@ant-design/icons';
-import {Tag} from 'antd';
 import React from 'react';
-import {isLinkRegExp, setTagColor} from '../../../utils';
+import {isLinkRegExp} from '../../../utils';
 import GithubUserLink from '../../GithubUserLink';
 import EditEventButton from '../EditEventButton';
 import RemoveEventButton from '../RemoveEventButton';
 import TopicButton from '../TopicButton';
+import TypeField from '../TypeField';
 import СolumnSelectionMenu from '../СolumnSelectionMenu';
 
 const TableColumns = () => [
@@ -13,34 +13,24 @@ const TableColumns = () => [
     title: 'Date',
     dataIndex: 'date',
     width: 90,
-    hidden: false,
   },
   {
     title: 'Time',
     dataIndex: 'time',
     width: 60,
-    hidden: false,
   },
   {
     title: 'Type',
     dataIndex: 'type',
     width: 120,
-    hidden: false,
-    render: (_, record) => (
-      <Tag className="list-item-tag" color={setTagColor(record.type)}>
-        {record.type
-          .toUpperCase()
-          .split('')
-          .map(i => (i === '-' ? ' ' : i))
-          .join('')}
-      </Tag>
-    ),
+    render: (_, record) => {
+      return <TypeField type={record.type} />;
+    },
   },
   {
     title: 'Topic',
     dataIndex: 'topic',
     width: 500,
-    hidden: false,
     ellipsis: true,
     render: (text, record) => {
       return <TopicButton text={text} id={record.id} />;
@@ -48,9 +38,8 @@ const TableColumns = () => [
   },
   {
     title: 'Link',
-    width: 200,
+    width: 100,
     dataIndex: 'descriptionUrl',
-    hidden: false,
     ellipsis: true,
     render: text => {
       return isLinkRegExp.test(text) ? (
@@ -66,7 +55,6 @@ const TableColumns = () => [
     title: 'Organizer',
     dataIndex: 'organizer',
     width: 200,
-    hidden: false,
     render: (_, record) => {
       return record.organizer ? (
         <div className="item-organizer">{GithubUserLink(record.organizer)}</div>
@@ -78,15 +66,13 @@ const TableColumns = () => [
   {
     title: 'Comment',
     dataIndex: 'comment',
-    width: 200,
-    hidden: false,
+    width: 250,
   },
   {
     title: <СolumnSelectionMenu />,
     key: 'operation',
     fixed: 'right',
     width: 80,
-    hidden: true,
     render: (_, record) => (
       <div className="table-action-buttons">
         <EditEventButton id={record.id} />

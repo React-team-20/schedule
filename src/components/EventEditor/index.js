@@ -1,4 +1,3 @@
-import CreateEvent from './CreateEvent';
-import EditEvent from './EditEvent';
+import EventEditor from './EventEditor';
 
-export {CreateEvent, EditEvent};
+export default EventEditor;

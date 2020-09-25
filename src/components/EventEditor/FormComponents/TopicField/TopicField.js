@@ -7,10 +7,19 @@ const TopicField = () => {
     <Form.Item
       name="topic"
       label="Topic"
-      value="asd"
-      rules={[{required: true, message: 'Please enter event topic'}]}
+      rules={[
+        {
+          required: true,
+          type: 'string',
+          max: 80,
+          transform(value) {
+            return value.trim();
+          },
+          message: 'Please enter event topic. Max length of string 80 characters.',
+        },
+      ]}
     >
-      <Input name="topic" placeholder="Please enter event topic" />
+      <Input name="topic" allowClear placeholder="Please enter event topic" />
     </Form.Item>
   );
 };

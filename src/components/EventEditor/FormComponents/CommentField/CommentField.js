@@ -4,7 +4,17 @@ import './comment-field.css';
 
 const CommentField = () => {
   return (
-    <Form.Item name="comment" label="Comment">
+    <Form.Item
+      name="comment"
+      label="Comment"
+      rules={[
+        {
+          type: 'string',
+          max: 80,
+          message: 'Max length of string 80 characters.',
+        },
+      ]}
+    >
       <Input.TextArea name="comment" rows={2} placeholder="Please add comment" />
     </Form.Item>
   );

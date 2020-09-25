@@ -4,7 +4,15 @@ import './description-component.css';
 
 const DescriptionComponent = () => {
   return (
-    <Form.Item name="description" label="Description">
+    <Form.Item
+      name="description"
+      label="Description"
+      rules={[
+        {
+          type: 'string',
+        },
+      ]}
+    >
       <Input.TextArea name="description" rows={4} placeholder="Please add description" />
     </Form.Item>
   );

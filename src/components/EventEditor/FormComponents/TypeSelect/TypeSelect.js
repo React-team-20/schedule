@@ -1,12 +1,13 @@
 import {PlusOutlined} from '@ant-design/icons';
 import {Button, Divider, Form, Select} from 'antd';
 import React from 'react';
-import eventsTypes from '../../../../constants/events-types';
 import './type-select.css';
+import {connect} from 'react-redux';
+import {showTypeModalView} from '../../../../actions';
 
 const {Option} = Select;
 
-const TypeSelect = ({onSelectType}) => {
+const TypeSelect = ({onSelectType, eventsTypes, showTypeModalView}) => {
   return (
     <Form.Item
       name="type"
@@ -17,7 +18,6 @@ const TypeSelect = ({onSelectType}) => {
         name="type"
         onSelect={onSelectType}
         placeholder="Please choose the type"
-        allowClear
         dropdownRender={menu => (
           <div>
             {menu}
@@ -27,7 +27,7 @@ const TypeSelect = ({onSelectType}) => {
                 style={{
                   border: 0,
                 }}
-                /* onClick={addNewType} */
+                onClick={() => showTypeModalView()}
                 icon={<PlusOutlined />}
                 type="link"
               >
@@ -47,4 +47,14 @@ const TypeSelect = ({onSelectType}) => {
   );
 };
 
-export default TypeSelect;
+const mapStateToProps = state => {
+  return {
+    eventsTypes: state.styles,
+  };
+};
+
+const mapDispatchToProps = {
+  showTypeModalView,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TypeSelect);

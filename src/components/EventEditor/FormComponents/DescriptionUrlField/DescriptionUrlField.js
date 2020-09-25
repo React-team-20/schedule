@@ -4,8 +4,22 @@ import './description-url-field.css';
 
 const DescriptionUrlField = () => {
   return (
-    <Form.Item name="description-url" label="Link">
-      <Input name="description-url" style={{width: '100%'}} placeholder="Please enter url" />
+    <Form.Item
+      name="description-url"
+      label="Link"
+      rules={[
+        {
+          type: 'url',
+          message: `It doesn't look like a link! Please input url!`,
+        },
+      ]}
+    >
+      <Input
+        name="description-url"
+        allowClear
+        style={{width: '100%'}}
+        placeholder="Please enter url"
+      />
     </Form.Item>
   );
 };
