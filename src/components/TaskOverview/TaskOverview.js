@@ -5,14 +5,14 @@ import {
   FileImageOutlined,
   FlagOutlined,
   FolderViewOutlined,
-  MessageOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import {Avatar, Button, Form, Input, List, Menu, Modal, Tooltip, message} from 'antd';
+import {Avatar, Button, List, Menu, Modal, Tooltip} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {geocodePlace, hideTaskOverview, showFormEditEvent} from '../../actions';
 import Map from '../Map';
+import FeedbackForm from '../FeedbackForm';
 import './task-overview.css';
 
 const {SubMenu} = Menu;
@@ -22,8 +22,6 @@ const TaskOverview = () => {
   const events = useSelector(state => state.events.events);
   const {isShowTaskOverview, currentEvent, userRole} = useSelector(state => state.app);
   const [event, setEvent] = useState(null);
-  const [feedback, setFeedback] = useState('');
-  const [form] = Form.useForm();
 
   const showFormEdit = () => {
     dispatch(showFormEditEvent(currentEvent));
@@ -41,28 +39,9 @@ const TaskOverview = () => {
     setEvent(null);
   };
 
-  const handleType = e => {
-    setFeedback(e.target.value);
-  };
-
   const checkImage = e => {
     e.target.src = 'https://media.moddb.com/images/members/4/3158/3157353/image_error_full.png';
   }
-
-  const handleSubmit = () => {
-    let feedbacksArray;
-    message.success('Feedback has been sent!');
-    if (localStorage.getItem('feedbacks')) {
-      feedbacksArray = JSON.parse(localStorage.getItem('feedbacks'));
-    } else {
-      feedbacksArray = [];
-    }
-    const feedbackId = new Date().getTime();
-    const newFeedback = {feedbackId, feedback};
-    feedbacksArray.push(newFeedback);
-    localStorage.setItem('feedbacks', JSON.stringify(feedbacksArray));
-    setFeedback('');
-  };
 
   const showPosition = () => {
     dispatch(geocodePlace('Минск, Платонова 39'));
@@ -130,7 +109,7 @@ const TaskOverview = () => {
                 avatar={<FileImageOutlined />}
                 title="Photo:"
                 description={
-                  <img onError={checkImage} src={event.taskObj.screen} />
+                  <img onError={checkImage} src={event.taskObj.screen} alt="скриншот задания"/>
                 }
               />
             </List.Item>
@@ -152,8 +131,7 @@ const TaskOverview = () => {
             <List.Item onClick={showPosition}>
               <Menu className="dropdown-menu" mode="inline">
                 <SubMenu title="Place" icon={<EnvironmentOutlined />}>
-                  <p className="location">Test location</p>
-                  {event.place}
+                  <p className="location">{event.place.address}</p>
                   <Map />
                 </SubMenu>
               </Menu>
@@ -178,22 +156,7 @@ const TaskOverview = () => {
           )}
           {event.feedback && (
             <List.Item>
-              <Form layout="vertical" id="feedback-form" form={form} onFinish={handleSubmit}>
-                <Form.Item>
-                  <List.Item>
-                    <List.Item.Meta avatar={<MessageOutlined />} title="Feedback:" />
-                  </List.Item>
-                  <Input.TextArea
-                    rows={5}
-                    placeholder="Please leave your feedback"
-                    onChange={handleType}
-                    value={feedback}
-                  />
-                </Form.Item>
-                <Button type="primary" form="feedback-form" htmlType="submit">
-                  Send feedback
-                </Button>
-              </Form>
+              <FeedbackForm />
             </List.Item>
           )}
         </List>
