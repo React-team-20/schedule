@@ -155,7 +155,9 @@ const TaskOverview = () => {
           )}
           {event.feedback && (
             <List.Item>
-              <FeedbackForm />
+              <FeedbackForm
+                id={event.id}
+              />
             </List.Item>
           )}
         </List>
