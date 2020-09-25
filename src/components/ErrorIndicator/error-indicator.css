@@ -1,5 +1,3 @@
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css");
-
 .main-error {
   position: fixed;
   width: 100%;
@@ -14,6 +12,7 @@
 .emotion {
   font-size: 8em;
   margin: 0;
+  color: #ffffff;
 }
 
 .description-error  {
