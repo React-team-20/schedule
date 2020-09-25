@@ -8,7 +8,7 @@ import {
   MessageOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import {Avatar, Button, Form, Input, List, Menu, Modal, Tooltip} from 'antd';
+import {Avatar, Button, Form, Input, List, Menu, Modal, Tooltip, message} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {geocodePlace, hideTaskOverview, showFormEditEvent} from '../../actions';
@@ -51,6 +51,7 @@ const TaskOverview = () => {
 
   const handleSubmit = () => {
     let feedbacksArray;
+    message.success('Feedback has been sent!');
     if (localStorage.getItem('feedbacks')) {
       feedbacksArray = JSON.parse(localStorage.getItem('feedbacks'));
     } else {
