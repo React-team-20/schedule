@@ -20,7 +20,7 @@ const {SubMenu} = Menu;
 const TaskOverview = () => {
   const dispatch = useDispatch();
   const events = useSelector(state => state.events.events);
-  const {isShowTaskOverview, currentEvent, userRole} = useSelector(state => state.app);
+  const {isShowTaskOverview, currentEvent, userRole, isNeedUpdate, alert} = useSelector(state => state.app);
   const [event, setEvent] = useState(null);
 
   const showFormEdit = () => {
@@ -28,11 +28,12 @@ const TaskOverview = () => {
   };
 
   useEffect(() => {
-    if (isShowTaskOverview && currentEvent) {
+    if (isShowTaskOverview || (isNeedUpdate && !alert)) {
+      console.log('kek')
       setEvent(events.find(i => i.id === currentEvent));
     }
     // eslint-disable-next-line
-  }, [isShowTaskOverview]);
+  }, [isShowTaskOverview, isNeedUpdate, alert]);
 
   const handleOk = () => {
     dispatch(hideTaskOverview());

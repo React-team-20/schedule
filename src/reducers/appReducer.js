@@ -18,6 +18,8 @@ import {
   SHOW_TASK_OVERVIEW,
   SHOW_TYPE_MODAL,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
+  FORBID_UPDATE,
+  UPDATE_OVERVIEW,
 } from '../constants/actions-types';
 import DEFAULT_TABLE_COLUMNS from '../constants/table-columns';
 import {DEFAULT_TIMEZONE} from '../constants/timezones';
@@ -33,6 +35,7 @@ const initialState = {
   isShowFormEditEvent: false,
   isShowTaskOverview: false,
   isShowTypeModal: false,
+  isNeedUpdate: false,
   currentEvent: null,
   loading: true,
   alert: false,
@@ -61,7 +64,7 @@ const appReducer = (state = initialState, action) => {
     case SHOW_FORM_EDIT_EVENT:
       return {...state, isShowFormEditEvent: true, currentEvent: action.payload};
     case HIDE_FORM_EDIT_EVENT:
-      return {...state, isShowFormEditEvent: false, currentEvent: null};
+      return {...state, isShowFormEditEvent: false};
     case SHOW_TASK_OVERVIEW:
       return {...state, isShowTaskOverview: true, currentEvent: action.payload};
     case HIDE_TASK_OVERVIEW:
@@ -82,6 +85,10 @@ const appReducer = (state = initialState, action) => {
       return {...state, isShowTypeModal: true};
     case HIDE_TYPE_MODAL:
       return {...state, isShowTypeModal: false};
+    case UPDATE_OVERVIEW:
+      return {...state, isNeedUpdate: true};
+    case FORBID_UPDATE:
+      return {...state, isNeedUpdate: false};
     default:
       return state;
   }
