@@ -57,6 +57,9 @@ const CreateEvent = ({
     hideFormEditEvent();
     form.resetFields();
     setEvent(INITIAL_EVENT_OBJECT);
+    setHideSubFieldsForOfflineFlag(true);
+    setHideSubFieldsForTaskFlag(true);
+    setDeadline({flag: false, date: ''});
   };
 
   useEffect(() => {
@@ -249,7 +252,7 @@ const CreateEvent = ({
 
   return (
     <Drawer
-      style={{zIndex: '1001'}}
+      style={{zIndex: '1'}}
       title="Event editor"
       width={width}
       onClose={onClose}
@@ -262,7 +265,9 @@ const CreateEvent = ({
             <PreviewButton
               onClose={onClose}
               currentEvent={event}
+              setEvent={setEvent}
               deadline={deadline}
+              form={form}
             ></PreviewButton>
           </div>
           <div>
@@ -294,7 +299,7 @@ const CreateEvent = ({
         </Row>
         <Row gutter={16}>
           <Col span={24} sm={12}>
-            <OrganizerSelect />
+            <OrganizerSelect form={form} />
           </Col>
           <Col span={24} sm={12}>
             <TypeSelect onSelectType={onSelectType} />

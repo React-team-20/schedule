@@ -7,7 +7,6 @@ import {
   scheduleLoaded,
 } from '../../../../actions';
 import {Button} from 'antd';
-import {dateTimeParse} from '../../../../utils';
 import {ScheduleServiceContext} from '../../../ScheduleServiceContext';
 
 const PreviewButton = ({
@@ -20,28 +19,46 @@ const PreviewButton = ({
   currentEventId,
   isShowFormСreationEvent,
   isShowFormEditEvent,
-  onClose,
   tz,
+  deadline,
+  form,
 }) => {
   const {transformEventData} = useContext(ScheduleServiceContext);
 
   const openPreview = () => {
-    showPreview();
-    if (isShowFormСreationEvent) {
-      const dateAndTime = dateTimeParse(currentEvent.dataTime, tz);
-      const newEvents = transformEventData([...events, {...currentEvent, ...dateAndTime}], tz);
-      scheduleLoaded(newEvents);
-      hideFormCreationEvent();
-    }
-    if (isShowFormEditEvent) {
-      const newEvents = events.slice();
-      const newCurrentEvent = Object.assign({}, currentEvent);
-      newCurrentEvent.previewEdit = true;
-      const editEventIndex = events.findIndex(event => event.id === currentEventId);
-      newEvents[editEventIndex] = newCurrentEvent;
-      scheduleLoaded(newEvents);
-      hideFormEditEvent();
-    }
+    form
+      .validateFields()
+      .then(() => {
+        if (isShowFormСreationEvent) {
+          let newEvents = transformEventData([...events, {...currentEvent}], tz);
+          if (deadline.flag) {
+            const deadlineForCurrentEvent = Object.assign({}, currentEvent);
+            newEvents = transformEventData(
+              [
+                ...newEvents,
+                {
+                  ...deadlineForCurrentEvent,
+                  type: 'deadline',
+                  id: 'id',
+                  dateTime: deadline.date,
+                },
+              ],
+              tz
+            );
+          }
+          scheduleLoaded(newEvents);
+          hideFormCreationEvent();
+        }
+        if (isShowFormEditEvent) {
+          const copyEvents = events.slice();
+          const copyCurrentEvent = Object.assign({}, currentEvent);
+          const editEventIndex = events.findIndex(event => event.id === currentEventId);
+          copyEvents[editEventIndex] = {...copyCurrentEvent, previewEdit: true};
+          scheduleLoaded(transformEventData(copyEvents, tz));
+          hideFormEditEvent();
+        }
+      })
+      .then(() => showPreview());
   };
 
   return (

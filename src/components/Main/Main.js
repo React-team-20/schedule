@@ -9,6 +9,9 @@ import {
   setAlertMessage,
   showAlert,
   showLoader,
+  hidePreview,
+  showFormCreationEvent,
+  showFormEditEvent,
 } from '../../actions';
 import {getFilteredTypesAndHideEvents, getFilteredTypesEvents} from '../../selectors';
 import EventEditor from '../EventEditor';
@@ -19,11 +22,7 @@ import ScheduleTable from '../ScheduleTable';
 import ScheduleСalendar from '../ScheduleСalendar';
 import TaskOverview from '../TaskOverview';
 import NewTypeModal from '../NewTypeModal';
-<<<<<<< HEAD
-import TestClosePreviewButton from '../TestClosePreviewButton';
-=======
 import openNotificationPreviewMode from '../PreviewModeNotification';
->>>>>>> cd47e188f4281c334b294cddc9795ceeefa9836e
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -85,9 +84,18 @@ const Main = () => {
 
   useEffect(() => {
     const close = () => {
-      // todo action
-      //dispatch(hidePreview);
-      console.log('Notification was closed.');
+      getEvents(tz).then(evts => {
+        dispatch(scheduleLoaded(evts));
+      });
+      if (events.findIndex(event => event.id === '') !== -1) {
+        dispatch(showFormCreationEvent());
+      }
+      const editedPreviewEvent = events.find(event => event.previewEdit);
+      if (editedPreviewEvent !== undefined) {
+        dispatch(showFormEditEvent(editedPreviewEvent.id));
+        delete editedPreviewEvent.previewEdit;
+      }
+      dispatch(hidePreview());
     };
     if (isShowPreview) openNotificationPreviewMode(close);
   }, [isShowPreview]);
@@ -105,7 +113,6 @@ const Main = () => {
       <EventEditor fetchEvents={fetchEvents} />
       <TaskOverview />
       <NewTypeModal />
-      <TestClosePreviewButton></TestClosePreviewButton>
     </>
   );
 };
