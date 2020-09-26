@@ -12,13 +12,15 @@ const ScreenUrlField = () => {
         {
           pattern: isImageLinkRegExp,
           message: `It doesn't look like a link! Please input url!`,
-          transform(value) {
-            return value.trim();
-          },
         },
       ]}
     >
-      <Input name="screen" allowClear style={{width: '100%'}} placeholder="Please enter screen url" />
+      <Input
+        name="screen"
+        allowClear
+        style={{width: '100%'}}
+        placeholder="Please enter screen url"
+      />
     </Form.Item>
   );
 };

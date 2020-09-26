@@ -11,9 +11,6 @@ const CommentField = () => {
         {
           type: 'string',
           max: 80,
-          transform(value) {
-            return value;
-          },
           message: 'Max length of string 80 characters.',
         },
       ]}
