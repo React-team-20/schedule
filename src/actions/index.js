@@ -3,11 +3,13 @@ import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
   CHANGE_USER_ROLE,
+  DELETE_TYPE,
   GEOCODE_PLACE,
   HIDE_ALERT,
   HIDE_FORM_CREATION_EVENT,
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
+  HIDE_PREVIEW,
   HIDE_TASK_OVERVIEW,
   HIDE_TYPE_MODAL,
   LOADED_ORGANIZERS,
@@ -22,9 +24,12 @@ import {
   SHOW_FORM_CREATION_EVENT,
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
+  SHOW_PREVIEW,
   SHOW_TASK_OVERVIEW,
   SHOW_TYPE_MODAL,
-  SWITCH_VISIBILITY_HIDDEN_EVENTS
+  SWITCH_VISIBILITY_HIDDEN_EVENTS,
+  UPDATE_OVERVIEW,
+  FORBID_UPDATE,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -46,8 +51,9 @@ export const showAlert = () => {
 };
 
 export const hideAlert = () => {
-  return {
-    type: HIDE_ALERT,
+  return dispatch => {
+    dispatch({type: HIDE_ALERT});
+    dispatch(updateOverview());
   };
 };
 
@@ -172,9 +178,28 @@ export const setTableColumns = title => {
   };
 };
 
+export const updateOverview = () => {
+  return {
+    type: UPDATE_OVERVIEW,
+  };
+};
+
+export const forbidUpdate = () => {
+  return {
+    type: FORBID_UPDATE,
+  };
+};
+
 export const addNewType = value => {
   return {
     type: ADD_NEW_TYPE,
+    payload: value,
+  };
+};
+
+export const deleteType = value => {
+  return {
+    type: DELETE_TYPE,
     payload: value,
   };
 };
@@ -203,6 +228,17 @@ export const geocodePlace = place => {
       ' '
     );
     dispatch({type: GEOCODE_PLACE, lat: +lat, lng: +lng});
-  }
-}
+  };
+};
 
+export const showPreview = () => {
+  return {
+    type: SHOW_PREVIEW,
+  };
+};
+
+export const hidePreview = () => {
+  return {
+    type: HIDE_PREVIEW,
+  };
+};

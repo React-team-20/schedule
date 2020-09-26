@@ -5,14 +5,14 @@ import {
   FileImageOutlined,
   FlagOutlined,
   FolderViewOutlined,
-  MessageOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import {Avatar, Button, Form, Input, List, Menu, Modal, Tooltip} from 'antd';
+import {Avatar, Button, List, Menu, Modal, Tooltip} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {geocodePlace, hideTaskOverview, showFormEditEvent} from '../../actions';
+import {hideTaskOverview, showFormEditEvent} from '../../actions';
 import Map from '../Map';
+import FeedbackForm from '../FeedbackForm';
 import './task-overview.css';
 
 const {SubMenu} = Menu;
@@ -20,47 +20,34 @@ const {SubMenu} = Menu;
 const TaskOverview = () => {
   const dispatch = useDispatch();
   const events = useSelector(state => state.events.events);
-  const {isShowTaskOverview, currentEvent, userRole} = useSelector(state => state.app);
+  const {
+    isShowTaskOverview,
+    currentEvent,
+    userRole,
+    isNeedUpdate,
+    alert,
+    isShowPreview,
+  } = useSelector(state => state.app);
   const [event, setEvent] = useState(null);
-  const [feedback, setFeedback] = useState('');
-  const [form] = Form.useForm();
 
   const showFormEdit = () => {
     dispatch(showFormEditEvent(currentEvent));
   };
 
   useEffect(() => {
-    if (isShowTaskOverview && currentEvent) {
+    if (isShowTaskOverview || (isNeedUpdate && !alert)) {
       setEvent(events.find(i => i.id === currentEvent));
     }
     // eslint-disable-next-line
-  }, [isShowTaskOverview]);
+  }, [isShowTaskOverview, isNeedUpdate, alert]);
 
   const handleOk = () => {
     dispatch(hideTaskOverview());
     setEvent(null);
   };
 
-  const handleType = e => {
-    setFeedback(e.target.value);
-  };
-
-  const handleSubmit = () => {
-    let feedbacksArray;
-    if (localStorage.getItem('feedbacks')) {
-      feedbacksArray = JSON.parse(localStorage.getItem('feedbacks'));
-    } else {
-      feedbacksArray = [];
-    }
-    const feedbackId = new Date().getTime();
-    const newFeedback = {feedbackId, feedback};
-    feedbacksArray.push(newFeedback);
-    localStorage.setItem('feedbacks', JSON.stringify(feedbacksArray));
-    setFeedback('');
-  };
-
-  const showPosition = () => {
-    dispatch(geocodePlace('Минск, Платонова 39'));
+  const checkImage = e => {
+    e.target.src = 'https://media.moddb.com/images/members/4/3158/3157353/image_error_full.png';
   };
 
   return (
@@ -75,7 +62,7 @@ const TaskOverview = () => {
             textAlign: 'right',
           }}
         >
-          {userRole === 'mentor' ? (
+          {userRole === 'mentor' && !isShowPreview ? (
             <Tooltip title="Edit event" placement="top">
               <Button onClick={showFormEdit} style={{marginRight: 8}}>
                 Edit
@@ -119,12 +106,14 @@ const TaskOverview = () => {
               />
             </List.Item>
           )}
-          {event.taskObj.demoUrl && (
+          {event.taskObj.screen && (
             <List.Item>
               <List.Item.Meta
                 avatar={<FileImageOutlined />}
                 title="Photo:"
-                description={event.taskObj.demoUrl}
+                description={
+                  <img onError={checkImage} src={event.taskObj.screen} alt="скриншот задания" />
+                }
               />
             </List.Item>
           )}
@@ -141,24 +130,23 @@ const TaskOverview = () => {
               />
             </List.Item>
           )}
-          {event.taskObj && (
-            <List.Item onClick={showPosition}>
+          {event.place && (
+            <List.Item>
               <Menu className="dropdown-menu" mode="inline">
                 <SubMenu title="Place" icon={<EnvironmentOutlined />}>
-                  <p className="location">Test location</p>
-                  {event.place}
-                  <Map />
+                  <p className="location">{event.place.address}</p>
+                  <Map lng={event.place.geocode.lng} lat={event.place.geocode.lat} />
                 </SubMenu>
               </Menu>
             </List.Item>
           )}
-          {event.taskObj.materials && (
+          {event.taskObj.materials.length !== 0 && (
             <List.Item>
               <Menu className="dropdown-menu" mode="inline">
                 <SubMenu title="Materials" icon={<CopyOutlined />}>
-                  {event.taskObj.materials.map(item => {
+                  {event.taskObj.materials.map((item, i) => {
                     return (
-                      <Menu.Item key={event.id}>
+                      <Menu.Item key={i}>
                         <a href={item.materialLink} target="_blank" rel="noopener noreferrer">
                           {item.materialName}
                         </a>
@@ -171,22 +159,7 @@ const TaskOverview = () => {
           )}
           {event.feedback && (
             <List.Item>
-              <Form layout="vertical" id="feedback-form" form={form} onFinish={handleSubmit}>
-                <Form.Item>
-                  <List.Item>
-                    <List.Item.Meta avatar={<MessageOutlined />} title="Feedback:" />
-                  </List.Item>
-                  <Input.TextArea
-                    rows={5}
-                    placeholder="Please leave your feedback"
-                    onChange={handleType}
-                    value={feedback}
-                  />
-                </Form.Item>
-                <Button type="primary" form="feedback-form" htmlType="submit">
-                  Send feedback
-                </Button>
-              </Form>
+              <FeedbackForm id={event.id} />
             </List.Item>
           )}
         </List>

@@ -1,6 +1,5 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
-import {connect} from 'react-redux';
 import './map.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -41,11 +40,4 @@ class Map extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    lat: state.app.lat,
-    lng: state.app.lng,
-  }
-}
-
-export default connect(mapStateToProps)(Map);
+export default Map;

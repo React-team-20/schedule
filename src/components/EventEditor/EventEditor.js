@@ -25,6 +25,7 @@ import {
   TimeZoneSelect,
   TopicField,
   TypeSelect,
+  PreviewButton,
 } from './FormComponents';
 
 const CreateEvent = ({
@@ -39,6 +40,7 @@ const CreateEvent = ({
   hideFormEditEvent,
   currentEventId,
   events,
+  isShowTaskOverview,
 }) => {
   const {addEvent, editEvent} = useContext(ScheduleServiceContext);
   const initialObject = isShowFormEditEvent
@@ -55,6 +57,10 @@ const CreateEvent = ({
     hideFormCreationEvent();
     hideFormEditEvent();
     form.resetFields();
+    setEvent(INITIAL_EVENT_OBJECT);
+    setHideSubFieldsForOfflineFlag(true);
+    setHideSubFieldsForTaskFlag(true);
+    setDeadline({flag: false, date: ''});
   };
 
   useEffect(() => {
@@ -255,17 +261,26 @@ const CreateEvent = ({
       afterVisibleChange={isShowFormEditEvent ? initialFormValue : undefined}
       bodyStyle={{paddingBottom: 80}}
       footer={
-        <div
-          style={{
-            textAlign: 'right',
-          }}
-        >
-          <Button onClick={onClose} style={{marginRight: 8}}>
-            Cancel
-          </Button>
-          <Button type="primary" form="editor" htmlType="submit">
-            Submit
-          </Button>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div>
+            {!isShowTaskOverview && (
+              <PreviewButton
+                onClose={onClose}
+                currentEvent={event}
+                setEvent={setEvent}
+                deadline={deadline}
+                form={form}
+              ></PreviewButton>
+            )}
+          </div>
+          <div>
+            <Button onClick={onClose} style={{marginRight: 8}}>
+              Cancel
+            </Button>
+            <Button type="primary" form="editor" htmlType="submit">
+              Submit
+            </Button>
+          </div>
         </div>
       }
     >
@@ -287,7 +302,7 @@ const CreateEvent = ({
         </Row>
         <Row gutter={16}>
           <Col span={24} sm={12}>
-            <OrganizerSelect />
+            <OrganizerSelect form={form} />
           </Col>
           <Col span={24} sm={12}>
             <TypeSelect onSelectType={onSelectType} />
@@ -375,6 +390,7 @@ const mapStateToProps = state => {
     isShowFormEditEvent: state.app.isShowFormEditEvent,
     currentEventId: state.app.currentEvent,
     events: state.events.events,
+    isShowTaskOverview: state.app.isShowTaskOverview,
   };
 };
 

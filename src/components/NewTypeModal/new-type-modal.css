@@ -51,6 +51,8 @@
 
 .text-color-type-content,
 .background-color-type-content {
+  position: relative;
+  top: -2px;
   font-weight: 500;
   font-size: 14px;
   line-height: 22px;

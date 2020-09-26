@@ -9,7 +9,7 @@ import './organizer-select.css';
 
 const {Option} = Select;
 
-const OrganizerSelect = () => {
+const OrganizerSelect = ({form}) => {
   const dispatch = useDispatch();
   const {organizers} = useSelector(state => state.app);
   const {getGithubData, addOrganizer, getOrganizers} = useContext(ScheduleServiceContext);
@@ -31,6 +31,7 @@ const OrganizerSelect = () => {
       const newOrganizers = await getOrganizers();
       dispatch(organizersLoaded(newOrganizers));
       dispatch(hideLoader());
+      form.setFieldsValue({'organizer-github': ''});
       message.success('Organizer added successfully!');
     } else {
       message.error('Such an organizer exists!');
