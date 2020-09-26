@@ -77,7 +77,7 @@ const NewTypeModal = ({currentTypes, addNewType, view, hideWindow}) => {
 
   return (
     <Modal
-      style={{zIndex: '2'}}
+      zIndex={1002}
       title="Add new type"
       visible={view}
       onOk={saveNewType}
@@ -87,8 +87,15 @@ const NewTypeModal = ({currentTypes, addNewType, view, hideWindow}) => {
         {type.title}
       </Tag>
       <Form form={form}>
-        <Form.Item name="title">
-          <Input placeholder="title" onChange={updateTitle} />
+        <Form.Item name="title" rules={[
+        {
+          required: true,
+          type: 'string',
+          max: 20,
+          message: 'Max length of string 20 characters.',
+        },
+      ]}>
+          <Input maxLength={20} placeholder="title" onChange={updateTitle} />
         </Form.Item>
       </Form>
 
