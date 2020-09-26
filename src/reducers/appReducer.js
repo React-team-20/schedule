@@ -41,6 +41,7 @@ const initialState = {
   organizers: [],
   lat: null,
   lng: null,
+  isShowPreview: true,
 };
 
 const appReducer = (state = initialState, action) => {

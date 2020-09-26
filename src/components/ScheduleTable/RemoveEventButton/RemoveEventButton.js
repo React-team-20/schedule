@@ -8,7 +8,7 @@ import './remove-event-button.css';
 
 const RemoveEventButton = ({id}) => {
   const dispatch = useDispatch();
-  const {userRole} = useSelector(state => state.app);
+  const {userRole, isShowPreview} = useSelector(state => state.app);
   const {deleteEvent} = useContext(ScheduleServiceContext);
   const onRemoveEvent = () => {
     dispatch(showLoader());
@@ -21,7 +21,7 @@ const RemoveEventButton = ({id}) => {
       .catch(() => message.error('Something went wrong'))
       .finally(() => dispatch(hideLoader()));
   };
-  return userRole === 'mentor' ? (
+  return userRole === 'mentor' && !isShowPreview ? (
     <Popconfirm title="Sure to delete?" onConfirm={onRemoveEvent}>
       <Tooltip title="Delete event" placement="bottom">
         <Button type="dashed" icon={<DeleteOutlined />} />
