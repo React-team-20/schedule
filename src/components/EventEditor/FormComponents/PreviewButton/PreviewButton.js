@@ -30,7 +30,7 @@ const PreviewButton = ({
       .validateFields()
       .then(() => {
         if (isShowFormСreationEvent) {
-          let newEvents = transformEventData([...events, {...currentEvent}], tz);
+          let newEvents = transformEventData([...events, {...currentEvent, id: ''}], tz);
           if (deadline.flag) {
             const deadlineForCurrentEvent = Object.assign({}, currentEvent);
             newEvents = transformEventData(

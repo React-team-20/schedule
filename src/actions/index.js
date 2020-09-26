@@ -28,6 +28,8 @@ import {
   SHOW_TASK_OVERVIEW,
   SHOW_TYPE_MODAL,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
+  UPDATE_OVERVIEW,
+  FORBID_UPDATE,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -49,8 +51,9 @@ export const showAlert = () => {
 };
 
 export const hideAlert = () => {
-  return {
-    type: HIDE_ALERT,
+  return dispatch => {
+    dispatch({type: HIDE_ALERT});
+    dispatch(updateOverview());
   };
 };
 
@@ -175,6 +178,18 @@ export const setTableColumns = title => {
   };
 };
 
+export const updateOverview = () => {
+  return {
+    type: UPDATE_OVERVIEW,
+  };
+};
+
+export const forbidUpdate = () => {
+  return {
+    type: FORBID_UPDATE,
+  };
+};
+
 export const addNewType = value => {
   return {
     type: ADD_NEW_TYPE,
@@ -188,16 +203,19 @@ export const deleteType = value => {
     payload: value,
   };
 };
+
 export const showTypeModalView = value => {
   return {
     type: SHOW_TYPE_MODAL,
   };
 };
+
 export const hideTypeModalView = value => {
   return {
     type: HIDE_TYPE_MODAL,
   };
 };
+
 export const geocodePlace = place => {
   return async dispatch => {
     const url = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=3aa805ff-53da-48b8-9c1e-5eee21f8ecde&geocode=${place}`;

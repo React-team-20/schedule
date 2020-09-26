@@ -40,6 +40,7 @@ const CreateEvent = ({
   hideFormEditEvent,
   currentEventId,
   events,
+  isShowTaskOverview,
 }) => {
   const {addEvent, editEvent} = useContext(ScheduleServiceContext);
   const initialObject = isShowFormEditEvent
@@ -252,7 +253,7 @@ const CreateEvent = ({
 
   return (
     <Drawer
-      style={{zIndex: '100'}}
+      style={{zIndex: '1001'}}
       title="Event editor"
       width={width}
       onClose={onClose}
@@ -262,13 +263,15 @@ const CreateEvent = ({
       footer={
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
           <div>
-            <PreviewButton
-              onClose={onClose}
-              currentEvent={event}
-              setEvent={setEvent}
-              deadline={deadline}
-              form={form}
-            ></PreviewButton>
+            {!isShowTaskOverview && (
+              <PreviewButton
+                onClose={onClose}
+                currentEvent={event}
+                setEvent={setEvent}
+                deadline={deadline}
+                form={form}
+              ></PreviewButton>
+            )}
           </div>
           <div>
             <Button onClick={onClose} style={{marginRight: 8}}>
@@ -387,6 +390,7 @@ const mapStateToProps = state => {
     isShowFormEditEvent: state.app.isShowFormEditEvent,
     currentEventId: state.app.currentEvent,
     events: state.events.events,
+    isShowTaskOverview: state.app.isShowTaskOverview,
   };
 };
 
