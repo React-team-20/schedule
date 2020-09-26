@@ -3,6 +3,7 @@ import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
   CHANGE_USER_ROLE,
+  DELETE_TYPE,
   GEOCODE_PLACE,
   HIDE_ALERT,
   HIDE_FORM_CREATION_EVENT,
@@ -175,6 +176,13 @@ export const setTableColumns = title => {
 export const addNewType = value => {
   return {
     type: ADD_NEW_TYPE,
+    payload: value,
+  };
+};
+
+export const deleteType = value => {
+  return {
+    type: DELETE_TYPE,
     payload: value,
   };
 };

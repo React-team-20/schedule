@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {Modal, Input, Tag, message} from 'antd';
+import {Modal, Input, Tag, message, Form} from 'antd';
 import {BlockPicker} from 'react-color';
 import './new-type-modal.css';
 import {addNewType, hideTypeModalView} from '../../actions';
@@ -16,6 +16,7 @@ const connector = connect(
   })
 );
 const NewTypeModal = ({currentTypes, addNewType, view, hideWindow}) => {
+  const [form] = Form.useForm();
   const initialType = {
     title: 'title',
     value: 'title',
@@ -25,8 +26,9 @@ const NewTypeModal = ({currentTypes, addNewType, view, hideWindow}) => {
   const [type, setType] = useState(initialType);
   const [backPicker, setBackPicker] = useState(false);
   const [textPicker, setTextPicker] = useState(false);
-  function updateTitle(x) {
-    const current = x.target.value;
+
+  const updateTitle = obj => {
+    const current = obj.target.value;
     setType(prev => {
       return {
         ...prev,
@@ -34,50 +36,62 @@ const NewTypeModal = ({currentTypes, addNewType, view, hideWindow}) => {
         value: current.trim().toLowerCase(),
       };
     });
-  }
-  function updateBackground(x) {
-    const current = x.hex;
+  };
+  const updateBackground = obj => {
+    const current = obj.hex;
     setType(prev => {
       return {
         ...prev,
         background: current,
       };
     });
-  }
-  function updateText(x) {
-    const current = x.hex;
+  };
+  const updateText = obj => {
+    const current = obj.hex;
     setType(prev => {
       return {
         ...prev,
         color: current,
       };
     });
-  }
-
-  function saveNewType() {
-    if (!currentTypes.find(item => item.value === type.value)) {
+  };
+  const saveNewType = () => {
+    if (type.value.trim() === '') {
+      message.error('Title must not be empty');
+    } else if (!currentTypes.find(item => item.value === type.value)) {
       addNewType(type);
       localStorage.setItem('eventTypeStyles', JSON.stringify([...currentTypes, type]));
       message.success('Success');
       hideWindow();
+      setType(initialType);
+      form.resetFields();
     } else {
-      message.error('This type already decleared');
+      message.error('This type already been decleared');
     }
-  }
+  };
+  const onCancel = () => {
+    form.resetFields();
+    setType(initialType);
+    hideWindow();
+  };
+
   return (
     <Modal
       style={{zIndex: '2'}}
       title="Add new type"
       visible={view}
       onOk={saveNewType}
-      onCancel={() => {
-        hideWindow();
-      }}
+      onCancel={onCancel}
     >
       <Tag style={{color: type.color, background: type.background}} className="tag-example">
         {type.title}
       </Tag>
-      <Input placeholder="title" onChange={updateTitle} />
+      <Form form={form}>
+        <Form.Item name="title">
+          <Input placeholder="title" onChange={updateTitle} />
+        </Form.Item>
+      </Form>
+
       <div className="color-type-container">
         <div className="background-color-type-container">
           <div
