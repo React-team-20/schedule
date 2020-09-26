@@ -7,18 +7,18 @@ import EventHideButton from '../../ScheduleTable/EventHideButton';
 import {ClockCircleOutlined} from "@ant-design/icons";
 
 import {
-  setTagColor,
   dateByMonthAndYearParse, 
   dateByMonthAndDayParse, 
   shortDateByDayOfWeekParse,
   shortDateByDayParse} from '../../../utils';
 import GithubUserLink from '../../GithubUserLink';
+import TypeField from '../../ScheduleTable/TypeField';
 
 const ScheduleListItem = (data) => {
   const dispatch = useDispatch();
   const {hiddenEvents} = useSelector(state => state.events);
   const [selectedRows, setSelectedRows] = useState([]);
-  const {timezone} = useSelector(state => state.app); 
+  const {timezone, isShowPreview} = useSelector(state => state.app); 
 
   let listData = data.slice();
 
@@ -135,10 +135,12 @@ const ScheduleListItem = (data) => {
     }   
   }
   
+
+
   return (
     <div className="list-item-wrapper">
       <div className="hide-button-wrapper">        
-          {selectedRows.length ? (
+          {selectedRows.length && !isShowPreview ? (
             <EventHideButton handlerEventHide={handlerEventHide} />
           ) : (
             ''
@@ -167,13 +169,7 @@ const ScheduleListItem = (data) => {
             </div>  
             <div className="item-list-content">
               <div className="tag-wrapper">
-                <Tag className="list-item-tag" color={setTagColor(item.type)}>
-                  {item.type
-                    .toUpperCase()
-                    .split('')
-                    .map(i => (i === '-' ? ' ' : i))
-                    .join('')}
-                </Tag>
+                <TypeField type={item.type} />
               </div>
               <List.Item.Meta
                 title={
