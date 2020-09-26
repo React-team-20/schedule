@@ -11,6 +11,7 @@ import DemoUrlField from './DemoUrlField';
 import ScreenUrlField from './ScreenUrlField';
 import DescriptionComponent from './DescriptionComponent';
 import CommentField from './CommentField';
+import PreviewButton from './PreviewButton';
 
 export {
   DeleteOrganizerButton,
@@ -26,4 +27,5 @@ export {
   ScreenUrlField,
   DescriptionComponent,
   CommentField,
+  PreviewButton,
 };

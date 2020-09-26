@@ -9,6 +9,9 @@ import {
   setAlertMessage,
   showAlert,
   showLoader,
+  hidePreview,
+  showFormCreationEvent,
+  showFormEditEvent,
 } from '../../actions';
 import {getFilteredTypesAndHideEvents, getFilteredTypesEvents} from '../../selectors';
 import EventEditor from '../EventEditor';
@@ -19,6 +22,7 @@ import ScheduleTable from '../ScheduleTable';
 import ScheduleСalendar from '../ScheduleСalendar';
 import TaskOverview from '../TaskOverview';
 import NewTypeModal from '../NewTypeModal';
+import openNotificationPreviewMode from '../PreviewModeNotification';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -30,6 +34,7 @@ const Main = () => {
     timezone: tz,
     scheduleView,
     visibilityHiddenEvents,
+    isShowPreview,
   } = useSelector(state => state.app);
   const data = useSelector(state => state.events);
   const {events} = data;
@@ -76,6 +81,24 @@ const Main = () => {
       setFilteredEvents(getFilteredTypesEvents(data));
     }
   }, [data, visibilityHiddenEvents]);
+
+  useEffect(() => {
+    const close = () => {
+      getEvents(tz).then(evts => {
+        dispatch(scheduleLoaded(evts));
+      });
+      if (events.findIndex(event => event.id === '') !== -1) {
+        dispatch(showFormCreationEvent());
+      }
+      const editedPreviewEvent = events.find(event => event.previewEdit);
+      if (editedPreviewEvent !== undefined) {
+        dispatch(showFormEditEvent(editedPreviewEvent.id));
+        delete editedPreviewEvent.previewEdit;
+      }
+      dispatch(hidePreview());
+    };
+    if (isShowPreview) openNotificationPreviewMode(close);
+  }, [isShowPreview]);
 
   return (
     <>
