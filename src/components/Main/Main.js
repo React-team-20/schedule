@@ -19,6 +19,7 @@ import ScheduleTable from '../ScheduleTable';
 import ScheduleСalendar from '../ScheduleСalendar';
 import TaskOverview from '../TaskOverview';
 import NewTypeModal from '../NewTypeModal';
+import TestClosePreviewButton from '../TestClosePreviewButton';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -90,6 +91,7 @@ const Main = () => {
       <EventEditor fetchEvents={fetchEvents} />
       <TaskOverview />
       <NewTypeModal />
+      <TestClosePreviewButton></TestClosePreviewButton>
     </>
   );
 };

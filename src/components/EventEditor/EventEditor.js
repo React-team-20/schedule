@@ -25,6 +25,7 @@ import {
   TimeZoneSelect,
   TopicField,
   TypeSelect,
+  PreviewButton,
 } from './FormComponents';
 import './event-editor.css';
 
@@ -59,6 +60,7 @@ const CreateEvent = ({
     hideFormCreationEvent();
     hideFormEditEvent();
     form.resetFields();
+    setEvent(INITIAL_EVENT_OBJECT);
   };
 
   //Editing block------------------------------------------------------
@@ -150,7 +152,8 @@ const CreateEvent = ({
       if (!isShowFormEditEvent) setDeadline({...deadline, flag: false}); //create
     }
 
-    if (!isShowFormEditEvent) { //create
+    if (!isShowFormEditEvent) {
+      //create
       if (e === 'offline-lecture' || e === 'meetup') {
         setHideSubFieldsForOfflineFlag(false);
       } else {
@@ -165,10 +168,12 @@ const CreateEvent = ({
     onClose();
     showLoader();
     try {
-      if (isShowFormEditEvent) { //edit
+      if (isShowFormEditEvent) {
+        //edit
         await editEvent(event.id, event);
         setAlertMessage('Event edit successfully!');
-      } else { //create
+      } else {
+        //create
         await addEvent(event);
         setAlertMessage('Event added successfully!');
       }
@@ -245,7 +250,8 @@ const CreateEvent = ({
             timezone: allValues[field],
           });
         }
-        if (allValues.dateDeadline && !isShowFormEditEvent) { //create
+        if (allValues.dateDeadline && !isShowFormEditEvent) {
+          //create
           setDeadline({
             ...deadline,
             date: tzDate(allValues.dateDeadline, allValues[field]),
@@ -280,17 +286,22 @@ const CreateEvent = ({
       afterVisibleChange={isShowFormEditEvent ? initialFormValue : undefined}
       bodyStyle={{paddingBottom: 80}}
       footer={
-        <div
-          style={{
-            textAlign: 'right',
-          }}
-        >
-          <Button onClick={onClose} style={{marginRight: 8}}>
-            Cancel
-          </Button>
-          <Button type="primary" form="editor" htmlType="submit">
-            Submit
-          </Button>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div>
+            <PreviewButton
+              onClose={onClose}
+              currentEvent={event}
+              deadline={deadline}
+            ></PreviewButton>
+          </div>
+          <div>
+            <Button onClick={onClose} style={{marginRight: 8}}>
+              Cancel
+            </Button>
+            <Button type="primary" form="editor" htmlType="submit">
+              Submit
+            </Button>
+          </div>
         </div>
       }
     >

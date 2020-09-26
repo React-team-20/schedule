@@ -8,6 +8,7 @@ import {
   HIDE_FORM_CREATION_EVENT,
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
+  HIDE_PREVIEW,
   HIDE_TASK_OVERVIEW,
   HIDE_TYPE_MODAL,
   LOADED_ORGANIZERS,
@@ -22,6 +23,7 @@ import {
   SHOW_FORM_CREATION_EVENT,
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
+  SHOW_PREVIEW,
   SHOW_TASK_OVERVIEW,
   SHOW_TYPE_MODAL,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
@@ -200,5 +202,17 @@ export const geocodePlace = place => {
       ' '
     );
     dispatch({type: GEOCODE_PLACE, lat: +lat, lng: +lng});
+  };
+};
+
+export const showPreview = () => {
+  return {
+    type: SHOW_PREVIEW,
+  };
+};
+
+export const hidePreview = () => {
+  return {
+    type: HIDE_PREVIEW,
   };
 };

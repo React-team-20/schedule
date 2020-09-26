@@ -19,6 +19,8 @@ import {
   SHOW_TYPE_MODAL,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
   GEOCODE_PLACE,
+  SHOW_PREVIEW,
+  HIDE_PREVIEW,
 } from '../constants/actions-types';
 import DEFAULT_TABLE_COLUMNS from '../constants/table-columns';
 import {DEFAULT_TIMEZONE} from '../constants/timezones';
@@ -34,6 +36,7 @@ const initialState = {
   isShowFormEditEvent: false,
   isShowTaskOverview: false,
   isShowTypeModal: false,
+  isShowPreview: false,
   currentEvent: null,
   loading: true,
   alert: false,
@@ -85,6 +88,10 @@ const appReducer = (state = initialState, action) => {
       return {...state, isShowTypeModal: false};
     case GEOCODE_PLACE:
       return {...state, lng: action.lng, lat: action.lat};
+    case SHOW_PREVIEW:
+      return {...state, isShowPreview: true};
+    case HIDE_PREVIEW:
+      return {...state, isShowPreview: false};
     default:
       return state;
   }
