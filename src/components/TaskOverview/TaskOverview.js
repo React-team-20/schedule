@@ -20,7 +20,14 @@ const {SubMenu} = Menu;
 const TaskOverview = () => {
   const dispatch = useDispatch();
   const events = useSelector(state => state.events.events);
-  const {isShowTaskOverview, currentEvent, userRole, isNeedUpdate, alert} = useSelector(state => state.app);
+  const {
+    isShowTaskOverview,
+    currentEvent,
+    userRole,
+    isNeedUpdate,
+    alert,
+    isShowPreview,
+  } = useSelector(state => state.app);
   const [event, setEvent] = useState(null);
 
   const showFormEdit = () => {
@@ -41,7 +48,7 @@ const TaskOverview = () => {
 
   const checkImage = e => {
     e.target.src = 'https://media.moddb.com/images/members/4/3158/3157353/image_error_full.png';
-  }
+  };
 
   return (
     <Modal
@@ -55,7 +62,7 @@ const TaskOverview = () => {
             textAlign: 'right',
           }}
         >
-          {userRole === 'mentor' ? (
+          {userRole === 'mentor' && !isShowPreview ? (
             <Tooltip title="Edit event" placement="top">
               <Button onClick={showFormEdit} style={{marginRight: 8}}>
                 Edit
@@ -105,7 +112,7 @@ const TaskOverview = () => {
                 avatar={<FileImageOutlined />}
                 title="Photo:"
                 description={
-                  <img onError={checkImage} src={event.taskObj.screen} alt="скриншот задания"/>
+                  <img onError={checkImage} src={event.taskObj.screen} alt="скриншот задания" />
                 }
               />
             </List.Item>
@@ -128,10 +135,7 @@ const TaskOverview = () => {
               <Menu className="dropdown-menu" mode="inline">
                 <SubMenu title="Place" icon={<EnvironmentOutlined />}>
                   <p className="location">{event.place.address}</p>
-                  <Map
-                    lng={event.place.geocode.lng}
-                    lat={event.place.geocode.lat}
-                  />
+                  <Map lng={event.place.geocode.lng} lat={event.place.geocode.lat} />
                 </SubMenu>
               </Menu>
             </List.Item>
@@ -155,9 +159,7 @@ const TaskOverview = () => {
           )}
           {event.feedback && (
             <List.Item>
-              <FeedbackForm
-                id={event.id}
-              />
+              <FeedbackForm id={event.id} />
             </List.Item>
           )}
         </List>
