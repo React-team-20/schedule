@@ -98,6 +98,7 @@ const Main = () => {
       dispatch(hidePreview());
     };
     if (isShowPreview) openNotificationPreviewMode(close);
+    // eslint-disable-next-line
   }, [isShowPreview]);
 
   return (
