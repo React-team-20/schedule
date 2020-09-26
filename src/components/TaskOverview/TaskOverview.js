@@ -29,7 +29,6 @@ const TaskOverview = () => {
 
   useEffect(() => {
     if (isShowTaskOverview || (isNeedUpdate && !alert)) {
-      console.log('kek')
       setEvent(events.find(i => i.id === currentEvent));
     }
     // eslint-disable-next-line
