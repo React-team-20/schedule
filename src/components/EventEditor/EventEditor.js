@@ -252,7 +252,7 @@ const CreateEvent = ({
 
   return (
     <Drawer
-      style={{zIndex: '1'}}
+      style={{zIndex: '100'}}
       title="Event editor"
       width={width}
       onClose={onClose}
