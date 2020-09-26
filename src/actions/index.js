@@ -24,8 +24,7 @@ import {
   SHOW_LOADER,
   SHOW_TASK_OVERVIEW,
   SHOW_TYPE_MODAL,
-  SWITCH_VISIBILITY_HIDDEN_EVENTS,
-  EXPORT_TO_GOOGLE
+  SWITCH_VISIBILITY_HIDDEN_EVENTS
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -207,8 +206,3 @@ export const geocodePlace = place => {
   }
 }
 
-export const exportToGoogle = () => {
-  return {
-    type: EXPORT_TO_GOOGLE,
-  };
-};
