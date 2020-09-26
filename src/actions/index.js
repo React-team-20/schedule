@@ -3,10 +3,13 @@ import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
   CHANGE_USER_ROLE,
+  DELETE_TYPE,
+  GEOCODE_PLACE,
   HIDE_ALERT,
   HIDE_FORM_CREATION_EVENT,
   HIDE_FORM_EDIT_EVENT,
   HIDE_LOADER,
+  HIDE_PREVIEW,
   HIDE_TASK_OVERVIEW,
   HIDE_TYPE_MODAL,
   LOADED_ORGANIZERS,
@@ -21,10 +24,12 @@ import {
   SHOW_FORM_CREATION_EVENT,
   SHOW_FORM_EDIT_EVENT,
   SHOW_LOADER,
+  SHOW_PREVIEW,
   SHOW_TASK_OVERVIEW,
   SHOW_TYPE_MODAL,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
-  GEOCODE_PLACE,
+  UPDATE_OVERVIEW,
+  FORBID_UPDATE,
 } from '../constants/actions-types';
 
 export const showLoader = () => {
@@ -46,8 +51,9 @@ export const showAlert = () => {
 };
 
 export const hideAlert = () => {
-  return {
-    type: HIDE_ALERT,
+  return dispatch => {
+    dispatch({type: HIDE_ALERT});
+    dispatch(updateOverview());
   };
 };
 
@@ -172,30 +178,67 @@ export const setTableColumns = title => {
   };
 };
 
+export const updateOverview = () => {
+  return {
+    type: UPDATE_OVERVIEW,
+  };
+};
+
+export const forbidUpdate = () => {
+  return {
+    type: FORBID_UPDATE,
+  };
+};
+
 export const addNewType = value => {
   return {
     type: ADD_NEW_TYPE,
     payload: value,
   };
 };
+
+export const deleteType = value => {
+  return {
+    type: DELETE_TYPE,
+    payload: value,
+  };
+};
+
 export const showTypeModalView = value => {
   return {
     type: SHOW_TYPE_MODAL,
-    payload: value,
   };
 };
+
 export const hideTypeModalView = value => {
   return {
     type: HIDE_TYPE_MODAL,
-    payload: value,
   };
 };
+
 export const geocodePlace = place => {
   return async dispatch => {
     const url = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=3aa805ff-53da-48b8-9c1e-5eee21f8ecde&geocode=${place}`;
     const response = await fetch(url);
     const getPlacePos = await response.json();
-    const [lng, lat] = await getPlacePos.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(' ');
+    const [
+      lng,
+      lat,
+    ] = await getPlacePos.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(
+      ' '
+    );
     dispatch({type: GEOCODE_PLACE, lat: +lat, lng: +lng});
-  }
-}
+  };
+};
+
+export const showPreview = () => {
+  return {
+    type: SHOW_PREVIEW,
+  };
+};
+
+export const hidePreview = () => {
+  return {
+    type: HIDE_PREVIEW,
+  };
+};

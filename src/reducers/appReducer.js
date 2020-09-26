@@ -1,4 +1,3 @@
-import { act } from 'react-dom/test-utils';
 import {
   CHANGE_SCHEDULE_VIEW,
   CHANGE_TIMEZONE,
@@ -19,7 +18,11 @@ import {
   SHOW_TASK_OVERVIEW,
   SHOW_TYPE_MODAL,
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
+  FORBID_UPDATE,
+  UPDATE_OVERVIEW,
   GEOCODE_PLACE,
+  SHOW_PREVIEW,
+  HIDE_PREVIEW,
 } from '../constants/actions-types';
 import DEFAULT_TABLE_COLUMNS from '../constants/table-columns';
 import {DEFAULT_TIMEZONE} from '../constants/timezones';
@@ -35,12 +38,13 @@ const initialState = {
   isShowFormEditEvent: false,
   isShowTaskOverview: false,
   isShowTypeModal: false,
+  isNeedUpdate: false,
+  isShowPreview: false,
   currentEvent: null,
   loading: true,
   alert: false,
   alertMessage: null,
   organizers: [],
-  hiddenTableColumns: [],
   lat: null,
   lng: null,
 };
@@ -64,7 +68,7 @@ const appReducer = (state = initialState, action) => {
     case SHOW_FORM_EDIT_EVENT:
       return {...state, isShowFormEditEvent: true, currentEvent: action.payload};
     case HIDE_FORM_EDIT_EVENT:
-      return {...state, isShowFormEditEvent: false, currentEvent: null};
+      return {...state, isShowFormEditEvent: false};
     case SHOW_TASK_OVERVIEW:
       return {...state, isShowTaskOverview: true, currentEvent: action.payload};
     case HIDE_TASK_OVERVIEW:
@@ -82,11 +86,19 @@ const appReducer = (state = initialState, action) => {
     case SET_TABLE_COLUMNS:
       return {...state, tableColumns: action.payload};
     case SHOW_TYPE_MODAL:
-      return {...state, isShowTypeModal: action.payload};
+      return {...state, isShowTypeModal: true};
     case HIDE_TYPE_MODAL:
-      return {...state, isShowTypeModal: action.payload};
+      return {...state, isShowTypeModal: false};
+    case UPDATE_OVERVIEW:
+      return {...state, isNeedUpdate: true};
+    case FORBID_UPDATE:
+      return {...state, isNeedUpdate: false};
     case GEOCODE_PLACE:
       return {...state, lng: action.lng, lat: action.lat};
+    case SHOW_PREVIEW:
+      return {...state, isShowPreview: true};
+    case HIDE_PREVIEW:
+      return {...state, isShowPreview: false};
     default:
       return state;
   }

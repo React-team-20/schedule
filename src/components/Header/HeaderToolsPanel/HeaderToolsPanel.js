@@ -16,6 +16,7 @@ import ScheduleViewSelect from '../ScheduleViewSelect';
 import './headerToolsPanel.css';
 
 const HeaderToolsPanel = () => {
+  const {userRole, isShowPreview} = useSelector(state => state.app);
   const dispatch = useDispatch();
   const {visibilityHiddenEvents} = useSelector(state => state.app);
   const handlerVisibilityOfHiddenEvents = () => {
@@ -60,14 +61,14 @@ const HeaderToolsPanel = () => {
 
   return (
     <div className="header-tools_panel">
-      <Space>
-        <NewEventButton />
+      <Space className="header-tools_panel-left">
+        {userRole !== 'student' && !isShowPreview && <NewEventButton />}
         <Tooltip title="time zone">
           <TimeZoneSelect />
         </Tooltip>
       </Space>
 
-      <Space>
+      <Space className="header-tools_panel-right">
         <ScheduleViewSelect />
         <Tooltip title="visibility control of hidden events">
           <Button
