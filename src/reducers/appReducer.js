@@ -20,6 +20,9 @@ import {
   SWITCH_VISIBILITY_HIDDEN_EVENTS,
   FORBID_UPDATE,
   UPDATE_OVERVIEW,
+  GEOCODE_PLACE,
+  SHOW_PREVIEW,
+  HIDE_PREVIEW,
 } from '../constants/actions-types';
 import DEFAULT_TABLE_COLUMNS from '../constants/table-columns';
 import {DEFAULT_TIMEZONE} from '../constants/timezones';
@@ -36,6 +39,7 @@ const initialState = {
   isShowTaskOverview: false,
   isShowTypeModal: false,
   isNeedUpdate: false,
+  isShowPreview: false,
   currentEvent: null,
   loading: true,
   alert: false,
@@ -89,6 +93,12 @@ const appReducer = (state = initialState, action) => {
       return {...state, isNeedUpdate: true};
     case FORBID_UPDATE:
       return {...state, isNeedUpdate: false};
+    case GEOCODE_PLACE:
+      return {...state, lng: action.lng, lat: action.lat};
+    case SHOW_PREVIEW:
+      return {...state, isShowPreview: true};
+    case HIDE_PREVIEW:
+      return {...state, isShowPreview: false};
     default:
       return state;
   }

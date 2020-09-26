@@ -1,13 +1,17 @@
 import {PlusOutlined} from '@ant-design/icons';
 import {Button, Divider, Form, Select} from 'antd';
-import React from 'react';
+import React, {useState} from 'react';
 import './type-select.css';
 import {connect} from 'react-redux';
 import {showTypeModalView} from '../../../../actions';
+import requiredEventTypes from '../../../../constants/events-types';
+import DeleteTypeButton from '../DeleteTypeButton';
 
 const {Option} = Select;
 
 const TypeSelect = ({onSelectType, eventsTypes, showTypeModalView}) => {
+  const [selectedType, setSelectedType] = useState('');
+
   return (
     <Form.Item
       name="type"
@@ -16,6 +20,10 @@ const TypeSelect = ({onSelectType, eventsTypes, showTypeModalView}) => {
     >
       <Select
         name="type"
+        onChange={val => {
+          setSelectedType(val);
+        }}
+        allowClear
         onSelect={onSelectType}
         placeholder="Please choose the type"
         dropdownRender={menu => (
@@ -37,9 +45,15 @@ const TypeSelect = ({onSelectType, eventsTypes, showTypeModalView}) => {
           </div>
         )}
       >
-        {eventsTypes.map(item => (
-          <Option value={item.value} key={item.value}>
-            {item.title}
+        {eventsTypes.map(type => (
+          <Option value={type.value} key={type.value}>
+            <div className="option-wrapper">
+              {type.title}
+              {type.value !== selectedType &&
+                !requiredEventTypes.find(item => item.value === type.value) && (
+                  <DeleteTypeButton id={type.value} />
+                )}
+            </div>
           </Option>
         ))}
       </Select>

@@ -1,17 +1,19 @@
 import {DeleteOutlined} from '@ant-design/icons';
-import {Button, Tooltip} from 'antd';
+import {Button, Tooltip, message} from 'antd';
 import React, {useContext} from 'react';
 import {connect} from 'react-redux';
-import {organizersLoaded, setAlertMessage} from '../../../../actions';
+import {organizersLoaded, showLoader, hideLoader} from '../../../../actions';
 import {ScheduleServiceContext} from '../../../ScheduleServiceContext';
 
-const DeleteOrganizerButton = ({id, organizersLoaded, setAlertMessage}) => {
+const DeleteOrganizerButton = ({id, organizersLoaded, showLoader, hideLoader}) => {
   const {deleteOrganizer, getOrganizers} = useContext(ScheduleServiceContext);
   const delOrganizer = async e => {
     e.stopPropagation();
+    showLoader();
     await deleteOrganizer(id);
     const newOrganizers = await getOrganizers();
-    setAlertMessage('Organizer deleted');
+    hideLoader();
+    message.success('Organizer deleted');
     organizersLoaded(newOrganizers);
   };
 
@@ -29,7 +31,8 @@ const DeleteOrganizerButton = ({id, organizersLoaded, setAlertMessage}) => {
 
 const mapDispatchToProps = {
   organizersLoaded,
-  setAlertMessage,
+  showLoader,
+  hideLoader,
 };
 
 export default connect(null, mapDispatchToProps)(DeleteOrganizerButton);
