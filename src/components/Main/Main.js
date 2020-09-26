@@ -19,7 +19,11 @@ import ScheduleTable from '../ScheduleTable';
 import ScheduleСalendar from '../ScheduleСalendar';
 import TaskOverview from '../TaskOverview';
 import NewTypeModal from '../NewTypeModal';
+<<<<<<< HEAD
 import TestClosePreviewButton from '../TestClosePreviewButton';
+=======
+import openNotificationPreviewMode from '../PreviewModeNotification';
+>>>>>>> cd47e188f4281c334b294cddc9795ceeefa9836e
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -31,6 +35,7 @@ const Main = () => {
     timezone: tz,
     scheduleView,
     visibilityHiddenEvents,
+    isShowPreview,
   } = useSelector(state => state.app);
   const data = useSelector(state => state.events);
   const {events} = data;
@@ -77,6 +82,15 @@ const Main = () => {
       setFilteredEvents(getFilteredTypesEvents(data));
     }
   }, [data, visibilityHiddenEvents]);
+
+  useEffect(() => {
+    const close = () => {
+      // todo action
+      //dispatch(hidePreview);
+      console.log('Notification was closed.');
+    };
+    if (isShowPreview) openNotificationPreviewMode(close);
+  }, [isShowPreview]);
 
   return (
     <>

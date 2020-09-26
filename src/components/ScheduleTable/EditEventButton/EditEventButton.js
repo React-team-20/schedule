@@ -7,11 +7,11 @@ import './edit-event-button.css';
 
 const EditEventButton = ({id}) => {
   const dispatch = useDispatch();
-  const {userRole} = useSelector(state => state.app);
+  const {userRole, isShowPreview} = useSelector(state => state.app);
   const showFormEdit = () => {
     dispatch(showFormEditEvent(id));
   };
-  return userRole === 'mentor' ? (
+  return userRole === 'mentor' && !isShowPreview ? (
     <Tooltip title="Edit event" placement="bottom">
       <Button type="dashed" onClick={showFormEdit} icon={<EditOutlined />} />
     </Tooltip>

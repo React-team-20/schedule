@@ -10,7 +10,7 @@ import TableColumns from './TableColumns';
 
 const ScheduleTable = ({events}) => {
   const dispatch = useDispatch();
-  const {tableColumns} = useSelector(state => state.app);
+  const {tableColumns, isShowPreview} = useSelector(state => state.app);
   const {hiddenEvents} = useSelector(state => state.events);
   const [selectedRows, setSelectedRows] = useState([]);
   const [filteredСolumns, setFilteredColumns] = useState([]);
@@ -80,11 +80,12 @@ const ScheduleTable = ({events}) => {
       sticky
       rowSelection={{
         fixed: true,
-        columnTitle: selectedRows.length ? (
-          <EventHideButton handlerEventHide={handlerEventHide} />
-        ) : (
-          ''
-        ),
+        columnTitle:
+          selectedRows.length && !isShowPreview ? (
+            <EventHideButton handlerEventHide={handlerEventHide} />
+          ) : (
+            ''
+          ),
         hideSelectAll: true,
         selectedRowKeys: selectedRows,
         renderCell: (_, record) => {
