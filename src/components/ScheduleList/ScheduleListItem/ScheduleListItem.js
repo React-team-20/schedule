@@ -7,18 +7,30 @@ import EventHideButton from '../../ScheduleTable/EventHideButton';
 import {ClockCircleOutlined} from "@ant-design/icons";
 
 import {
-  setTagColor,
   dateByMonthAndYearParse, 
   dateByMonthAndDayParse, 
   shortDateByDayOfWeekParse,
   shortDateByDayParse} from '../../../utils';
 import GithubUserLink from '../../GithubUserLink';
+import TypeField from '../../ScheduleTable/TypeField';
 
 const ScheduleListItem = (data) => {
   const dispatch = useDispatch();
   const {hiddenEvents} = useSelector(state => state.events);
   const [selectedRows, setSelectedRows] = useState([]);
+  const {timezone, isShowPreview} = useSelector(state => state.app); 
 
+  let listData = data.slice();
+
+  const setTimezone = (data, timezone) => {
+    return data.map((item) => {
+      item.timeZone = timezone;
+      return item;
+    });
+  };
+
+  listData = setTimezone(listData, timezone);
+ 
   const handlerEventShow = id => {
     dispatch(removeHiddenEvent(id));
   };
@@ -41,7 +53,7 @@ const ScheduleListItem = (data) => {
       document.removeEventListener('keyup', enableSelection);
     };
   }, []);
-
+    
   const handleClickCapture = (event, id) => {
     if (event.target.id) return false;
 
@@ -94,12 +106,12 @@ const ScheduleListItem = (data) => {
   
   const getDivider = (data) => {
     return <Divider className="list-item-divider" orientation="left">{data}</Divider>  
-  };
-
+  };  
+  
   const getTime = (item) => {
     return (
       <>       
-        <span className="event-date">{dateByMonthAndDayParse(item.dateTime)}, </span>
+        <span className="event-date">{dateByMonthAndDayParse(item.dateTime, item.timeZone)}, </span>
         <span className="event-time">
           <ClockCircleOutlined className="event-time-icon" />
           <span className="time-data">{item.time}</span>
@@ -109,33 +121,34 @@ const ScheduleListItem = (data) => {
   }
   
   const getMonthAndYearDivider = (data, index) => {
-    const currentDate = dateByMonthAndYearParse(data[index].dateTime);
     const prevIdx = data[index - 1];
-
+    const currentDate = dateByMonthAndYearParse(data[index].dateTime, data[index].timeZone);
+  
     if (prevIdx) {      
-      const previousDate = dateByMonthAndYearParse(data[index - 1].dateTime);
+      const previousDate = dateByMonthAndYearParse(data[index - 1].dateTime, data[index].timeZone);
 
       if (previousDate !== currentDate) {
         return getDivider(currentDate);
       }
     } else {
       return getDivider(currentDate);
-    }
+    }   
   }
   
+
+
   return (
     <div className="list-item-wrapper">
       <div className="hide-button-wrapper">        
-          {selectedRows.length ? (
+          {selectedRows.length && !isShowPreview ? (
             <EventHideButton handlerEventHide={handlerEventHide} />
           ) : (
             ''
           )}
       </div> 
       <List
-        pagination={{defaultCurrent: 1, defaultPageSize: 10,}}
         itemLayout="horizontal"
-        dataSource={data}
+        dataSource={listData}
         renderItem={(item, index) => (
          <> 
           {getMonthAndYearDivider(data, index)}
@@ -156,20 +169,14 @@ const ScheduleListItem = (data) => {
             </div>  
             <div className="item-list-content">
               <div className="tag-wrapper">
-                <Tag className="list-item-tag" color={setTagColor(item.type)}>
-                  {item.type
-                    .toUpperCase()
-                    .split('')
-                    .map(i => (i === '-' ? ' ' : i))
-                    .join('')}
-                </Tag>
+                <TypeField type={item.type} />
               </div>
               <List.Item.Meta
                 title={
                   <>
                     <p className="short-date-wrapper">
-                      <span className="date-week">{shortDateByDayParse(item.dateTime)}</span>
-                      <span className="date-day">{shortDateByDayOfWeekParse(item.dateTime)}</span>
+                      <span className="date-week">{shortDateByDayParse(item.dateTime, item.timeZone)}</span>
+                      <span className="date-day">{shortDateByDayOfWeekParse(item.dateTime, item.timeZone)}</span>
                     </p>
                     <Button
                       type="link"
