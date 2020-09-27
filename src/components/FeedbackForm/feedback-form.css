@@ -1,0 +1,7 @@
+.overview form {
+  width: 100%;
+}
+
+.overview form textarea {
+  resize: none;
+}

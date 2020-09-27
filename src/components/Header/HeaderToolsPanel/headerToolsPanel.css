@@ -1,0 +1,25 @@
+.header-tools_panel .button-center-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-tools_panel .button-no-border {
+  border: none;
+  padding: 0;
+}
+
+.header-tools_panel .anticon,
+.moreMenu .anticon {
+  display: inline-flex;
+}
+
+.header-tools_panel .button-export {
+  width: 1em;
+  border: none;
+}
+
+.header-tools_panel-left,
+.header-tools_panel-right {
+  margin-bottom: 0.5rem;
+}

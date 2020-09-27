@@ -1,0 +1,14 @@
+.hidden-event td:not(.ant-table-selection-column):not(.ant-table-cell-fix-right) {
+  opacity: 0.3;
+  background-color: #f5f5f5;
+}
+.hidden-event td:not(.ant-table-selection-column):not(.ant-table-cell-fix-right):hover {
+  opacity: 0.3;
+  background-color: #f5f5f5;
+}
+.hidden-event:hover {
+  opacity: 1 !important;
+}
+.past-event td:not(.ant-table-cell-fix-right) {
+  opacity: 0.5;
+}

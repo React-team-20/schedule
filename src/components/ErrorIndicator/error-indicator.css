@@ -1,0 +1,25 @@
+.main-error {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  font-family: 'Segoe UI';
+  color: #fff;
+  background: #008cff;
+  margin: 0;
+  padding: 4% 35%;
+}
+
+.emotion {
+  font-size: 8em;
+  margin: 0;
+  color: #ffffff;
+}
+
+.description-error {
+  font-size: 1.4em;
+  margin-bottom: 3em;
+}
+
+.footer-error small {
+  font-size: 0.8em;
+}
