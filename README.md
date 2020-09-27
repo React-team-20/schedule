@@ -34,9 +34,9 @@ $ npm run build
 
 ## Команда
 
-* [![](https://i.imgur.com/K6tfENs.png)akrayushkin](https://github.com/akrayushkin)
-* [![](https://i.imgur.com/FVcIqTU.png)ifoba](https://github.com/ifoba)
-* [![](https://i.imgur.com/jCBeRvi.png)MatusVit](https://github.com/MatusVit)
-* [![](https://i.imgur.com/gn3Y2Dc.png)Yarkin13](https://github.com/Yarkin13)
-* [![](https://i.imgur.com/fXTKYRc.png)jenia-shibkova](https://github.com/jenia-shibkova)
-* [![](https://i.imgur.com/OZU73g8.png)ThatcheRRR](https://github.com/ThatcheRRR)
+[![](https://i.imgur.com/K6tfENs.png)](https://github.com/akrayushkin)
+[![](https://i.imgur.com/FVcIqTU.png)](https://github.com/ifoba)
+[![](https://i.imgur.com/jCBeRvi.png)](https://github.com/MatusVit)
+[![](https://i.imgur.com/gn3Y2Dc.png)](https://github.com/Yarkin13)
+[![](https://i.imgur.com/fXTKYRc.png)](https://github.com/jenia-shibkova)
+[![](https://i.imgur.com/OZU73g8.png)](https://github.com/ThatcheRRR)
