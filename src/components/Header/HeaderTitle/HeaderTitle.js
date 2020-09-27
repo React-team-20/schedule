@@ -9,7 +9,6 @@ const HeaderTitle = () => {
    return (
     <div className="header-title">
       <a href="/" className="logo">
-        {' '}
       </a>
       <div className="container-title">
         <h2 className="title">Schedule</h2>
