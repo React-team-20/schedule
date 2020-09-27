@@ -24,7 +24,7 @@
 
 Изменение вида расписания производится по нажатию на соответсвующую иконку.
 
-[![](https://i.imgur.com/fxgAs4l.gif)](https://i.imgur.com/NwxfRkC.gif)
+[![](https://i.imgur.com/sD6vPbr.gif)](https://i.imgur.com/NwxfRkC.gif)
 
 Реализован экран ошибки приложения с описанием возникшей проблемы.
 
@@ -56,7 +56,7 @@
 
 Отображение или скрытие интересующих столбцов в расписании (*обязательные поля скрыть **невозможно***). Данный функционал доступен только в **табличном** формате расписания.
 
-[![](https://i.imgur.com/GN88Ac9.gif)](https://i.imgur.com/neKoVJI.gif)
+[![](https://i.imgur.com/D3lyCyt.gif)](https://i.imgur.com/neKoVJI.gif)
 
 ## Концепция и макет
 
