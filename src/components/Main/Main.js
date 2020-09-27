@@ -104,13 +104,15 @@ const Main = () => {
   return (
     <>
       <EventTypeFilter />
-      {
+      <div id="export-container">
         {
-          table: <ScheduleTable events={filteredEvents} />,
-          list: <ScheduleList events={filteredEvents} />,
-          calendar: <ScheduleСalendar events={filteredEvents} />,
-        }[scheduleView]
-      }
+          {
+            table: <ScheduleTable events={filteredEvents} />,
+            list: <ScheduleList events={filteredEvents} />,
+            calendar: <ScheduleСalendar events={filteredEvents} />,
+          }[scheduleView]
+        }
+      </div>
       <EventEditor fetchEvents={fetchEvents} />
       <TaskOverview />
       <NewTypeModal />
