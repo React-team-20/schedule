@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import {Badge, Calendar, Drawer, Tooltip} from 'antd';
 import moment from 'moment-timezone';
+import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {Calendar, Badge, Drawer, Tooltip} from 'antd';
 import {setTagStyle} from '../../utils';
-import ScheduleСalendarDrawer from './ScheduleCalendarDrawer';
 import './schedule-calendar.css';
+import ScheduleСalendarDrawer from './ScheduleCalendarDrawer';
 
 const connector = connect(state => ({
   style: state.styles,
@@ -67,9 +67,7 @@ const ScheduleСalendar = ({events, style, timezone}) => {
               style={setStyle(item)}
             >
               <Tooltip placement="topLeft" title={item.topic}>
-                <span className={'event-box-time'}>
-                  {moment(item.dateTime).tz(timezone).format('h:mm')}
-                </span>
+                <span className="event-box-time">{item.time}</span>
                 <span>{item.topic}</span>
               </Tooltip>
             </div>
