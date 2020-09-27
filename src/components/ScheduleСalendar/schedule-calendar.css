@@ -35,10 +35,27 @@
 
 .event-box {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  padding: 2px 0 2px 5px;
   border-radius: 5px;
   margin-bottom: 2px;
   color: #ffffff;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.event-box.expired {
+  opacity:  .5;
+}
+
+.event-box span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.event-box-time {
+  margin-right: 3px;
+  font-size: 12px;
+  padding-right: 3px ;
 }
 
 @media screen and (max-width: 700px) {

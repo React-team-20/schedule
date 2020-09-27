@@ -1,20 +1,21 @@
 import React, {useState} from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import {connect} from 'react-redux';
-import {Calendar, Badge, Drawer} from 'antd';
+import {Calendar, Badge, Drawer, Tooltip} from 'antd';
 import {setTagStyle} from '../../utils';
 import ScheduleСalendarDrawer from './ScheduleCalendarDrawer';
 import './schedule-calendar.css';
 
 const connector = connect(state => ({
   style: state.styles,
+  timezone: state.app.timezone,
 }));
 
-const ScheduleСalendar = ({events, style}) => {
+const ScheduleСalendar = ({events, style, timezone}) => {
   const [drawer, setDrawer] = useState({visible: false});
   const [dayEvents, setDayEvents] = useState(0);
 
-  const drawerDate = dayEvents ? moment(dayEvents[0].dateTime).format('MMMM Do') : 0;
+  const drawerDate = dayEvents ? moment(dayEvents[0].dateTime).tz(timezone).format('MMMM Do') : 0;
 
   const showDrawer = value => {
     setDrawer({visible: true});
@@ -25,13 +26,13 @@ const ScheduleСalendar = ({events, style}) => {
   };
   const getListData = value => {
     const listDatabyYear = events.filter(
-      el => moment(el.dateTime).format('Y') === value.format('Y')
+      el => moment(el.dateTime).tz(timezone).format('Y') === value.format('Y')
     );
     const listDatabyMonth = listDatabyYear.filter(
-      el => moment(el.dateTime).format('D') === value.format('D')
+      el => moment(el.dateTime).tz(timezone).format('D') === value.format('D')
     );
     const listDatabyDay = listDatabyMonth.filter(
-      el => moment(el.dateTime).format('M') === value.format('M')
+      el => moment(el.dateTime).tz(timezone).format('M') === value.format('M')
     );
     return listDatabyDay;
   };
@@ -45,7 +46,7 @@ const ScheduleСalendar = ({events, style}) => {
     const listData = getListData(value);
     return (
       <div
-        className="events"
+        className="events-calendar"
         onClick={() => {
           showDrawer(listData);
         }}
@@ -58,8 +59,19 @@ const ScheduleСalendar = ({events, style}) => {
             count={listData.length}
           />
           {listData.map(item => (
-            <div className="event-box" key={item.id} style={setStyle(item)}>
-              {item.type}
+            <div
+              className={`event-box ${
+                moment().format('x') > moment(item.dateTime).format('x') ? 'expired' : ''
+              }`}
+              key={item.id}
+              style={setStyle(item)}
+            >
+              <Tooltip placement="topLeft" title={item.topic}>
+                <span className={'event-box-time'}>
+                  {moment(item.dateTime).tz(timezone).format('h:mm')}
+                </span>
+                <span>{item.topic}</span>
+              </Tooltip>
             </div>
           ))}
         </div>
@@ -71,6 +83,8 @@ const ScheduleСalendar = ({events, style}) => {
     <div className="calendar-container">
       <Calendar dateCellRender={dateCellRender} />
       <Drawer
+        className="calendar-drawer-overview"
+        zIndex={999}
         title={drawerDate}
         placement="bottom"
         closable={false}
