@@ -96,13 +96,19 @@
 .ant-list-item-meta-content .ant-btn {
   white-space: normal;
   word-break: break-word;
-  margin-bottom: 10px;
   height: auto;
   text-align: start;
 }
 
 .ant-list-item-meta-title {
   box-sizing: border-box;
+  font-size: 16px;
+  line-height: 14px;
+  border-bottom: 0;
+}
+
+.short-date-wrapper {
+  margin-bottom: 0;
 }
 
 .event-topic {
@@ -110,6 +116,7 @@
   white-space: normal;
   word-break: break-word;  
   text-align: start;
+  font-size: 16px;
 }
 
 .ant-list-items .hidden-event div:not(.button-wrapper) {
@@ -132,7 +139,7 @@
 
 @media screen and (max-width: 767px) { 
   .list-item {
-    padding: 12px 0;    
+    padding-bottom: 12px;
   }
 
   .item-list-content {
@@ -183,7 +190,7 @@
   }
 
   .list-item {
-    padding: 20px 0;
+    padding: 14px 0;
   }
 
   .ant-list-item-meta {
