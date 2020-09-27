@@ -40,3 +40,10 @@
 .profile-menu .anticon {
   display: inline-flex;
 }
+
+
+@media (max-width: 380px) {
+  .subtitle {
+    display: none;
+  }
+}
