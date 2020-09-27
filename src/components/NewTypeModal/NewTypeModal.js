@@ -76,25 +76,22 @@ const NewTypeModal = ({currentTypes, addNewType, view, hideWindow}) => {
   };
 
   return (
-    <Modal
-      zIndex={1002}
-      title="Add new type"
-      visible={view}
-      onOk={saveNewType}
-      onCancel={onCancel}
-    >
+    <Modal zIndex={1002} title="Add new type" visible={view} onOk={saveNewType} onCancel={onCancel}>
       <Tag style={{color: type.color, background: type.background}} className="tag-example">
         {type.title}
       </Tag>
       <Form form={form}>
-        <Form.Item name="title" rules={[
-        {
-          required: true,
-          type: 'string',
-          max: 20,
-          message: 'Max length of string 20 characters.',
-        },
-      ]}>
+        <Form.Item
+          name="title"
+          rules={[
+            {
+              required: true,
+              type: 'string',
+              max: 20,
+              message: 'Max length of string 20 characters.',
+            },
+          ]}
+        >
           <Input maxLength={20} placeholder="title" onChange={updateTitle} />
         </Form.Item>
       </Form>
