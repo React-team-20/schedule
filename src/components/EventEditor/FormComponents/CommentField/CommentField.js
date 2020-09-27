@@ -1,6 +1,9 @@
 import {Form, Input} from 'antd';
 import React from 'react';
+import reactComponentDebounce from 'react-component-debounce';
 import './comment-field.css';
+
+const InputDeb = reactComponentDebounce(150, 200)(Input);
 
 const CommentField = () => {
   return (
@@ -15,7 +18,7 @@ const CommentField = () => {
         },
       ]}
     >
-      <Input.TextArea name="comment" rows={2} placeholder="Please add comment" />
+      <InputDeb name="comment" rows={2} placeholder="Please add comment" maxLength={80} />
     </Form.Item>
   );
 };

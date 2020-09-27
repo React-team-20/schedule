@@ -1,0 +1,37 @@
+.ant-notification {
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+
+.preview-notification {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  width: 100vw;
+  background-color: rgba(7, 94, 116, 0.9);
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.preview-notification .ant-notification-notice-content {
+  width: 250px;
+}
+
+.preview-notification .ant-notification-notice-with-icon {
+  padding: 5px 0;
+}
+
+.preview-notification .ant-notification-notice-message {
+  font-size: 24px;
+  margin-bottom: 0;
+  color: #ffffff;
+}
+
+.preview-notification .ant-notification-notice-close {
+  position: static;
+  font-size: 18px;
+  font-weight: 700;
+  color: #12da44;
+}
