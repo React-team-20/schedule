@@ -3,15 +3,15 @@ import {MessageOutlined} from '@ant-design/icons';
 import {Button, Form, Input, List, message} from 'antd';
 import './feedback-form.css';
 
-const FeedbackModal = ({ id }) => {
+const FeedbackModal = ({id}) => {
   const [form] = Form.useForm();
   const [feedback, setFeedback] = useState('');
 
   useEffect(() => {
-    if(localStorage.getItem('feedbacks')) {
+    if (localStorage.getItem('feedbacks')) {
       const storedFeedback = JSON.parse(localStorage.getItem('feedbacks'));
       const currentField = storedFeedback.find(item => item.id === id);
-      if(currentField) {
+      if (currentField) {
         setFeedback(currentField.feedback);
       }
     }
@@ -24,11 +24,11 @@ const FeedbackModal = ({ id }) => {
   const handleSubmit = () => {
     let feedbacksArray = [];
     message.success('Feedback has been sent!');
-    if(localStorage.getItem('feedbacks')) {
+    if (localStorage.getItem('feedbacks')) {
       feedbacksArray = JSON.parse(localStorage.getItem('feedbacks'));
     }
-    let currentField = feedbacksArray.find(item => item.id === id);
-    if(currentField) {
+    const currentField = feedbacksArray.find(item => item.id === id);
+    if (currentField) {
       currentField.feedback = feedback;
     } else {
       const newFeedback = {id, feedback};
@@ -37,7 +37,7 @@ const FeedbackModal = ({ id }) => {
     localStorage.setItem('feedbacks', JSON.stringify(feedbacksArray));
   };
 
-  return(
+  return (
     <Form layout="vertical" id="feedback-form" form={form} onFinish={handleSubmit}>
       <Form.Item>
         <List.Item>

@@ -17,6 +17,7 @@ const radius = 400 * 1000;
 const mapContainerStyle = {
   width: '100%',
   height: '250px',
+  marginBottom: '1rem',
 };
 
 const GoogleMapPlaceInput = ({setPlace}) => {
@@ -136,14 +137,13 @@ const InputMap = ({panTo}) => {
       <AutoComplete
         style={{
           width: '100%',
-          marginTop: '1rem',
         }}
         className="input-map"
         options={status === 'OK' && data.map(({description}) => ({value: description}))}
         onSelect={onSelect}
         disabled={!ready}
       >
-        <Input value={value} onChange={onChange} placeholder="Search by address" size="small" />
+        <Input value={value} onChange={onChange} placeholder="Search by address" />
       </AutoComplete>
     </Form.Item>
   );

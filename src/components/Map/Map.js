@@ -3,7 +3,8 @@ import mapboxgl from 'mapbox-gl';
 import './map.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoidGhhdGNoZXIiLCJhIjoiY2s2NmM1ZmxnMDVlcDNrbTgyZGJ1MHlvcyJ9.8wM1j84kDuFiTNkZIkMlHQ';
+mapboxgl.accessToken =
+  'pk.eyJ1IjoidGhhdGNoZXIiLCJhIjoiY2s2NmM1ZmxnMDVlcDNrbTgyZGJ1MHlvcyJ9.8wM1j84kDuFiTNkZIkMlHQ';
 
 class Map extends React.Component {
   constructor(props) {
@@ -22,11 +23,9 @@ class Map extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps !== this.props) {
+    if (prevProps !== this.props) {
       const {lat, lng} = this.props;
-      new mapboxgl.Marker()
-        .setLngLat([lng, lat])
-        .addTo(this.map);
+      new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map);
       this.map.setCenter([lng, lat]);
     }
   }
@@ -34,9 +33,9 @@ class Map extends React.Component {
   render() {
     return (
       <div className="mapContainer">
-        <div ref={el => this.mapContainer = el} />
+        <div ref={el => (this.mapContainer = el)} />
       </div>
-    )
+    );
   }
 }
 

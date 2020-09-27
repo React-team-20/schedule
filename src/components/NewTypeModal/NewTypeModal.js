@@ -1,9 +1,12 @@
+import {Form, Input, message, Modal, Tag} from 'antd';
 import React, {useState} from 'react';
-import {connect} from 'react-redux';
-import {Modal, Input, Tag, message, Form} from 'antd';
 import {BlockPicker} from 'react-color';
-import './new-type-modal.css';
+import reactComponentDebounce from 'react-component-debounce';
+import {connect} from 'react-redux';
 import {addNewType, hideTypeModalView} from '../../actions';
+import './new-type-modal.css';
+
+const InputDeb = reactComponentDebounce(150, 200)(Input);
 
 const connector = connect(
   state => ({
@@ -27,8 +30,8 @@ const NewTypeModal = ({currentTypes, addNewType, view, hideWindow}) => {
   const [backPicker, setBackPicker] = useState(false);
   const [textPicker, setTextPicker] = useState(false);
 
-  const updateTitle = obj => {
-    const current = obj.target.value;
+  const updateTitle = val => {
+    const current = val;
     setType(prev => {
       return {
         ...prev,
@@ -81,15 +84,18 @@ const NewTypeModal = ({currentTypes, addNewType, view, hideWindow}) => {
         {type.title}
       </Tag>
       <Form form={form}>
-        <Form.Item name="title" rules={[
-        {
-          required: true,
-          type: 'string',
-          max: 20,
-          message: 'Max length of string 20 characters.',
-        },
-      ]}>
-          <Input maxLength={20} placeholder="title" onChange={updateTitle} />
+        <Form.Item
+          name="title"
+          rules={[
+            {
+              required: true,
+              type: 'string',
+              max: 20,
+              message: 'Required field. Max length of string 20 characters.',
+            },
+          ]}
+        >
+          <InputDeb maxLength={20} placeholder="title" onChange={updateTitle} />
         </Form.Item>
       </Form>
 
