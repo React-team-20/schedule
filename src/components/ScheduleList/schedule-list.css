@@ -46,18 +46,18 @@
 }
 
 .list-item {
-  display: flex;  
+  display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 0; 
+  padding: 0;
 }
 
-.item-list-content {  
+.item-list-content {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding: 0; 
+  padding: 0;
   flex-grow: 1;
 }
 
@@ -73,7 +73,7 @@
 .hide-button-wrapper {
   position: absolute;
   top: 41px;
-  z-index: 15;  
+  z-index: 15;
 }
 
 .short-date-wrapper {
@@ -108,7 +108,7 @@
 .event-topic {
   display: inline-block;
   white-space: normal;
-  word-break: break-word;  
+  word-break: break-word;
   text-align: start;
 }
 
@@ -130,9 +130,9 @@
   opacity: 0.5;
 }
 
-@media screen and (max-width: 767px) { 
+@media screen and (max-width: 767px) {
   .list-item {
-    padding: 12px 0;    
+    padding: 12px 0;
   }
 
   .item-list-content {
@@ -150,7 +150,7 @@
     padding-top: 14px;
   }
 
-  .tag-wrapper { 
+  .tag-wrapper {
     margin-top: 20px;
   }
 }
@@ -160,7 +160,7 @@
     flex-direction: column;
   }
 
-  .tag-wrapper { 
+  .tag-wrapper {
     justify-content: flex-start;
     width: 80%;
     padding-left: 0;
@@ -168,7 +168,7 @@
   }
 
   .ant-list-item-meta {
-    width: 100%;    
+    width: 100%;
   }
 
   .item-organizer {
@@ -195,7 +195,7 @@
     flex-wrap: wrap;
   }
 
-  .short-date-wrapper { 
+  .short-date-wrapper {
     display: flex;
     flex-direction: column;
     width: 60px;
