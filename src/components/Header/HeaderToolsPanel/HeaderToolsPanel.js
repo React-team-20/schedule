@@ -86,9 +86,9 @@ const HeaderToolsPanel = () => {
         </Tooltip>
       </Space>
 
-      <Space className="header-tools_panel-right">
+      <Space className="Header-tools_panel-right">
         <ScheduleViewSelect />
-        <Tooltip title="visibility control of hidden events">
+        <Tooltip title="Visibility control of hidden events">
           <Button
             className="button-center-icon button-no-border"
             onClick={handlerVisibilityOfHiddenEvents}
