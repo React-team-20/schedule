@@ -8,19 +8,29 @@
 
 **Ментор** в праве изменять существующие занятия и создавать новые.
 
+Для проведения оффлайн лекции **ментору** требуется указать место проведения, после чего маркер с указанным местоположением отобразится в окне редактиварония, а также в окне описания задания.
+
+[![](https://i.imgur.com/Fx1JIw8.gif)](https://i.imgur.com/MaqwcLV.gif)
+
 **Студенту** же доступна возможность лишь ознакамливаться с заданиями и оставлять фидбэк, если ментор дал эту возможность.
 
-Реализвано **три** вида расписания:
+Реализовано переключение между часовыми поясами с помощью [Moment Timezone](https://github.com/moment/moment-timezone).
+
+Создано **три** вида расписания:
 
 1. Таблица.
-2. Календарь.
-3. Список.
+2. Список.
+3. Календарь.
 
-Присутствует фильтрация расписания по типам задания, а также 
+[![](https://i.imgur.com/fxgAs4l.gif)](https://i.imgur.com/NwxfRkC.gif)
+
+Благодаря [React-Select](https://github.com/JedWatson/react-select) создана фильтрация расписания по типам задания, а также возможность скрывать/отображать задания.
 
 Дизайн приложения сочетается с оформлением [RS App](https://app.rs.school/), что достигнуто благодаря использованию [Ant Design](https://github.com/ant-design/ant-design).
 
 Реализована адаптивность для возможности просмотра расписания на любом устройстве. 
+
+Имеется возможность экспорта расписания в [Google Календарь](https://calendar.google.com/calendar/u/0/r).
 
 ## Установка
 
@@ -56,8 +66,9 @@ $ npm run build
 * [Redux](https://github.com/reduxjs/redux)
 * [React Redux](https://github.com/reduxjs/react-redux)
 * [Ant Design](https://github.com/ant-design/ant-design)
+* [Moment Timezone](https://github.com/moment/moment-timezone)
 * [Mapbox](https://github.com/mapbox/mapbox-gl-js)
-* Google Maps
+* [Google Maps](https://cloud.google.com/maps-platform/)
 * [Webpack](https://github.com/webpack/webpack)
 
 ## Демо
