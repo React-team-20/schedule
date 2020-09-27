@@ -11,6 +11,9 @@ const TopicField = () => {
         {
           required: true,
           type: 'string',
+          transform(value) {
+            return value.trim();
+          },
           max: 80,
           message: 'Please enter event topic. Max length of string 80 characters.',
         },
