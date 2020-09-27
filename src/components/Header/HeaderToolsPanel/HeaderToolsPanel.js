@@ -78,7 +78,7 @@ const HeaderToolsPanel = () => {
           >
             {visibilityHiddenEvents ? <EyeInvisibleOutlined /> : <EyeOutlined />}
           </Button>
-        </Tooltip>        
+        </Tooltip>
         <ExportToGoogle />
         <DropdownMenu />
       </Space>
