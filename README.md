@@ -2,9 +2,9 @@
 
 **Schedule** — приложение, помогающее получать актуальную информацию о занятиях и заданиях курсов [RS School](https://rs.school/).
 
-Данное расписание предназчено для студентов и менторов RS School.
+Данное расписание предназчено для студентов и менторов [RS School](https://rs.school/).
 
-В приложении присутствует разделение на роли — **студенты** и **менторы** — которым доступные свои собственные возможности.
+В приложении присутствует разделение на роли — **студенты** и **менторы** — которым доступны свои собственные возможности.
 
 **Ментор** в праве изменять существующие занятия и создавать новые.
 
@@ -24,13 +24,33 @@
 
 [![](https://i.imgur.com/fxgAs4l.gif)](https://i.imgur.com/NwxfRkC.gif)
 
-Благодаря [React-Select](https://github.com/JedWatson/react-select) создана фильтрация расписания по типам задания, а также возможность скрывать/отображать задания.
+Благодаря [Reselect](https://github.com/reduxjs/reselect) создана фильтрация расписания по типам задания, а также возможность скрывать/отображать задания. Данный функционал доступен как в **табличном**, так и в **списочном** формате расписания.
+
+[![](https://i.imgur.com/HZgwrGk.gif)](https://i.imgur.com/rqVWB4x.gif)
+
+Возможность указывать дату дедлайна, если при создании/редактировании выбран тип **Task**.
+
+[![](https://i.imgur.com/Up5Y9pt.gif)](https://i.imgur.com/pKTrvtU.gif)
 
 Дизайн приложения сочетается с оформлением [RS App](https://app.rs.school/), что достигнуто благодаря использованию [Ant Design](https://github.com/ant-design/ant-design).
 
-Реализована адаптивность для возможности просмотра расписания на любом устройстве. 
+Наличие **Preview mode**, позволяющее ознакомиться с тем, как будет отображаться добавляемое занятие/задание в текущем виде расписания.
+
+[![](https://i.imgur.com/iygvQcb.gif)](https://i.imgur.com/ZnuqsGt.gif)
+
+Отображение/скрытие интересующих столбцов в расписании.
+
+[![](https://i.imgur.com/GN88Ac9.gif)](https://i.imgur.com/neKoVJI.gif)
+
+Реализована адаптивность для возможности просмотра расписания на любом устройстве.
 
 Имеется возможность экспорта расписания в [Google Календарь](https://calendar.google.com/calendar/u/0/r).
+
+## Концепция и макет
+
+[Концепция продукта «Schedule RS School»](https://docs.google.com/document/d/1dcWYdnazG5uqli6HLwAvaHycIRl8_JBDtEqd0ifV4go/edit).
+
+[Макет в Figma](https://www.figma.com/file/nJZ2fTBhgmI0fIlIKOutMI/Scheduler?node-id=0%3A1).
 
 ## Установка
 
@@ -70,6 +90,7 @@ $ npm run build
 * [Mapbox](https://github.com/mapbox/mapbox-gl-js)
 * [Google Maps](https://cloud.google.com/maps-platform/)
 * [Webpack](https://github.com/webpack/webpack)
+* [Reselect](https://github.com/reduxjs/reselect)
 
 ## Демо
 
