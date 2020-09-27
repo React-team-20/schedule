@@ -1,78 +1,120 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Введение и описание
 
-## Available Scripts
+**Schedule** — приложение, помогающее получать актуальную информацию о занятиях и заданиях курсов [RS School](https://rs.school/).
 
-In the project directory, you can run:
+Данное расписание предназчено для студентов и менторов [RS School](https://rs.school/).
 
-### `npm start`
+В приложении присутствует разделение на роли — **студенты** и **менторы** — которым доступны свои собственные возможности.
 
-Runs the app in the development mode.<br /> Open [http://localhost:3000](http://localhost:3000) to
-view it in the browser.
+**Ментор** в праве изменять существующие занятия и создавать новые.
 
-The page will reload if you make edits.<br /> You will also see any lint errors in the console.
+Для проведения оффлайн лекции **ментору** требуется указать место проведения, после чего маркер с указанным местоположением отобразится в окне редактиварония, а также в окне описания задания.
 
-### `npm test`
+##### *Если Вам по каким-то причинам сложно рассмотреть gif-файл, то нажмите на него, чтобы открыть в новом окне в большом разрешении.*
 
-Launches the test runner in the interactive watch mode.<br /> See the section about
-[running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more
-information.
+[![](https://i.imgur.com/1iopMuG.gif)](https://i.imgur.com/wD0DQrY.gif)
 
-### `npm run build`
+**Студенту** же доступна возможность лишь ознакамливаться с заданиями и оставлять фидбэк, если ментор дал эту возможность.
 
-Builds the app for production to the `build` folder.<br /> It correctly bundles React in production
-mode and optimizes the build for the best performance.
+Реализовано переключение между часовыми поясами с помощью [Moment Timezone](https://github.com/moment/moment-timezone).
 
-The build is minified and the filenames include the hashes.<br /> Your app is ready to be deployed!
+Создано **три** вида расписания:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for
-more information.
+1. Таблица.
+2. Список.
+3. Календарь.
 
-### `npm run eject`
+Изменение вида расписания производится по нажатию на соответсвующую иконку.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+[![](https://i.imgur.com/sD6vPbr.gif)](https://i.imgur.com/NwxfRkC.gif)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time.
-This command will remove the single build dependency from your project.
+Реализован экран ошибки приложения с описанием возникшей проблемы.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel,
-ESLint, etc) right into your project so you have full control over them. All of the commands except
-`eject` will still work, but they will point to the copied scripts so you can tweak them. At this
-point you’re on your own.
+Возможность изменять фоновый цвет для разных типов занятий или заданий на кастомный.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle
-deployments, and you shouldn’t feel obligated to use this feature. However we understand that this
-tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+При зажатой клавише **Shift** можно выбрать несколько рядов таблицы и в последующем скрыть.
 
-## Learn More
+Благодаря [Reselect](https://github.com/reduxjs/reselect) создана фильтрация расписания по типам задания, а также возможность скрывать или отображать задания. Данный функционал доступен как в **табличном**, так и в **списочном** формате расписания.
 
-You can learn more in the
-[Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+[![](https://i.imgur.com/VN8qDlT.gif)](https://i.imgur.com/rqVWB4x.gif)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Наличие информативного окна описания задания, содержащее в себе *тип задания*, *скриншот*, *место проведения*, *аватарку и ник гитхаб-аккаунта организатора*, *краткое описание*, *материалы к заданию*, *время проведения*, *дедлайн*. Отображение данных пунктов зависит от того, являются ли заполненными данные поля. 
 
-### Code Splitting
+Возможность указывать дату дедлайна по нажатию на чекбокс, если при создании или редактировании задания выбран тип **Task** или **Optional task**.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+[![](https://i.imgur.com/7WeiRKj.gif)](https://i.imgur.com/pKTrvtU.gif)
 
-### Analyzing the Bundle Size
+Имеется возможность экспорта расписания в [Google Календарь](https://calendar.google.com/calendar/u/0/r).
 
-This section has moved here:
-https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+Присутствуют всплывающие окна с оповещением при *загрузке* расписания, *создании* и *редактировании* задания, а также при *отправлении* фидбэка.
 
-### Making a Progressive Web App
+Наличие **Preview mode**, позволяющий ознакомиться с тем, как будет располагаться добавляемое занятие или задание в текущем формате отображения расписания.
 
-This section has moved here:
-https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+[![](https://i.imgur.com/QzQGXzV.gif)](https://i.imgur.com/ZnuqsGt.gif)
 
-### Advanced Configuration
+Реализована адаптивность для возможности просмотра расписания на любом устройстве (*320px+*).
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+Дизайн приложения сочетается с оформлением [RS App](https://app.rs.school/), что достигнуто благодаря использованию [Ant Design](https://github.com/ant-design/ant-design).
 
-### Deployment
+Отображение или скрытие интересующих столбцов в расписании (*обязательные поля скрыть **невозможно***). Данный функционал доступен только в **табличном** формате расписания.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+[![](https://i.imgur.com/v0UYP5U.gif)](https://i.imgur.com/neKoVJI.gif)
 
-### `npm run build` fails to minify
+## Концепция и макет
 
-This section has moved here:
-https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+[Концепция продукта «Schedule RS School»](https://docs.google.com/document/d/1dcWYdnazG5uqli6HLwAvaHycIRl8_JBDtEqd0ifV4go/edit).
+
+[Макет в Figma](https://www.figma.com/file/nJZ2fTBhgmI0fIlIKOutMI/Scheduler?node-id=0%3A1).
+
+## Установка
+
+Для того, чтобы установить все необходимые зависимости для успешного запуска приложения, следует выполнить следующие шаги:
+
+1. Склонировать репозиторий на свой ПК.
+2. Убедиться, что у Вас установлена акутальная версия Node.
+3. Ввести в терминале следующую команду:
+
+```sh
+$ npm install
+```
+
+4. Убедитесь, что все зависимости были установлены корректно.
+
+## Запуск
+
+После успешной установки всех необходимых зависимостей, введите в терминал следующую команду:
+
+```sh
+$ npm run start
+```
+
+Если требуется собрать проект в продакшн, то воспользуйтесь данной командой:
+
+```sh
+$ npm run build
+```
+
+## Используемые технологии
+
+* [React](https://github.com/facebook/react)
+* [Redux](https://github.com/reduxjs/redux)
+* [React Redux](https://github.com/reduxjs/react-redux)
+* [Ant Design](https://github.com/ant-design/ant-design)
+* [Moment Timezone](https://github.com/moment/moment-timezone)
+* [Mapbox](https://github.com/mapbox/mapbox-gl-js)
+* [Google Maps](https://cloud.google.com/maps-platform/)
+* [Webpack](https://github.com/webpack/webpack)
+* [Reselect](https://github.com/reduxjs/reselect)
+
+## Демо
+
+Демо доступно по [данной ссылке](https://schedule-team20.netlify.app/).
+
+## Команда
+
+[![](https://i.imgur.com/K6tfENs.png)](https://github.com/akrayushkin)
+[![](https://i.imgur.com/FVcIqTU.png)](https://github.com/ifoba)
+[![](https://i.imgur.com/jCBeRvi.png)](https://github.com/MatusVit)
+[![](https://i.imgur.com/gn3Y2Dc.png)](https://github.com/Yarkin13)
+[![](https://i.imgur.com/fXTKYRc.png)](https://github.com/jenia-shibkova)
+[![](https://i.imgur.com/OZU73g8.png)](https://github.com/ThatcheRRR)
