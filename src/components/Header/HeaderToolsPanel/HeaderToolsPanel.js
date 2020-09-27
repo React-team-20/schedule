@@ -4,7 +4,6 @@ import {
   EyeOutlined,
   MoreOutlined,
   QuestionCircleOutlined,
-  SettingOutlined,
 } from '@ant-design/icons';
 import {Button, Dropdown, Menu, Space, Tooltip} from 'antd';
 import React from 'react';
@@ -14,6 +13,8 @@ import NewEventButton from '../../NewEventButton';
 import TimeZoneSelect from '../../TimeZoneSelect';
 import ScheduleViewSelect from '../ScheduleViewSelect';
 import ExportToGoogle from '../ExportToGoogle';
+import {jsPDF} from 'jspdf';
+import html2canvas from 'html2canvas';
 import './headerToolsPanel.css';
 
 const HeaderToolsPanel = () => {
@@ -24,18 +25,34 @@ const HeaderToolsPanel = () => {
     dispatch(switchVisibilityHiddenEvents());
     localStorage.setItem('visibilityHiddenEvents', visibilityHiddenEvents);
   };
+  const screen = {
+    height: 10,
+    width: (10 * window.innerWidth) / window.innerHeight,
+  }
+  const exportSchedule = () => {
+    const input = document.getElementById('export-container');
+    html2canvas(input).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'in',
+        format: [screen.width, screen.height],
+      });
+      pdf.addImage(imgData, 'JPEG', 0, 0);
+      pdf.save('schedule.pdf');
+    });
+  };
 
   const moreMenu = (
     <Menu className="moreMenu">
       <Menu.Item icon={<ExportOutlined />}>
-        <a href="/"> Export </a>
-      </Menu.Item>
-      <Menu.Item icon={<SettingOutlined />}>
-        <a href="/"> Settings </a>
+        <span onClick={exportSchedule}> Export </span>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item icon={<QuestionCircleOutlined />}>
-        <a href="/"> Help </a>
+        <a href="https://github.com/React-team-20/schedule/tree/documentation#%D0%B4%D0%B5%D0%BC%D0%BE">
+          Help
+        </a>
       </Menu.Item>
     </Menu>
   );
