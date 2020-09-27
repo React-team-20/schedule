@@ -123,22 +123,24 @@ const ScheduleListItem = data => {
     );
   };
 
-  const getMonthAndYearDivider = (events, index) => {
-    const prevIdx = events[index - 1];
-    const currentDate = dateByMonthAndYearParse(events[index].dateTime, events[index].timeZone);
+  let monthAndYear = null;
 
-    if (prevIdx) {
-      const previousDate = dateByMonthAndYearParse(
-        events[index - 1].dateTime,
-        events[index].timeZone
-      );
+  const getMonthAndYearDivider = (item, index) => {
+    const currentDate = dateByMonthAndYearParse(item.dateTime, item.timeZone);
 
-      if (previousDate !== currentDate) {
-        return getDivider(currentDate);
-      }
-    } else {
+    if (!monthAndYear) {
+      monthAndYear = currentDate;
       return getDivider(currentDate);
     }
+
+    if (index === 0 && currentDate === monthAndYear) {
+      return getDivider(monthAndYear);
+    }
+
+    if (monthAndYear !== currentDate) {
+      monthAndYear = currentDate;
+      return getDivider(currentDate);
+    }  
   };
 
   return (
@@ -151,11 +153,12 @@ const ScheduleListItem = data => {
         )}
       </div>
       <List
+        pagination={{defaultCurrent: 1, defaultPageSize: 7,}}
         itemLayout="horizontal"
         dataSource={listData}
         renderItem={(item, index) => (
           <>
-            {getMonthAndYearDivider(data, index)}
+            {getMonthAndYearDivider(item, index)}
             <List.Item
               className={setItemClassName(item)}
               onClickCapture={event => handleClickCapture(event, item.id)}

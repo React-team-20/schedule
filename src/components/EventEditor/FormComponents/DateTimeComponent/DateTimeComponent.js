@@ -15,6 +15,7 @@ const DateTimeComponent = ({deadline}) => {
       ]}
     >
       <DatePicker
+        allowClear={false}
         name={`date${deadline ? 'Deadline' : ''}`}
         style={{width: '100%'}}
         showTime={{format: 'HH:mm'}}

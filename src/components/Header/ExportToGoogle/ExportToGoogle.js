@@ -107,7 +107,7 @@ const ExportToGoogle = () => {
   };
 
   return (
-    <Tooltip title="export to Google calendar">
+    <Tooltip title="Export to Google calendar">
       <Button className="button-center-icon button-export" onClick={handleClick}>
         <ExportOutlined />
       </Button>

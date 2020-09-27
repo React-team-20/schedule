@@ -16,17 +16,17 @@ const ScheduleViewSelect = () => {
 
   return (
     <Radio.Group value={view} onChange={handleChange}>
-      <Tooltip title="table view">
+      <Tooltip title="Table view">
         <Radio.Button className="button-icon-edit" value="table">
           <TableOutlined />
         </Radio.Button>
       </Tooltip>
-      <Tooltip title="list view">
+      <Tooltip title="List view">
         <Radio.Button className="button-icon-edit" value="list">
           <UnorderedListOutlined />
         </Radio.Button>
       </Tooltip>
-      <Tooltip title="list calendar">
+      <Tooltip title="List calendar">
         <Radio.Button className="button-icon-edit" value="calendar">
           <CalendarOutlined />
         </Radio.Button>
