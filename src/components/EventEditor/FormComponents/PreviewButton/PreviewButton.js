@@ -1,12 +1,12 @@
+import {Button, message} from 'antd';
 import React, {useContext} from 'react';
 import {connect} from 'react-redux';
 import {
   hideFormCreationEvent,
   hideFormEditEvent,
-  showPreview,
   scheduleLoaded,
+  showPreview,
 } from '../../../../actions';
-import {Button} from 'antd';
 import {ScheduleServiceContext} from '../../../ScheduleServiceContext';
 
 const PreviewButton = ({
@@ -32,7 +32,7 @@ const PreviewButton = ({
         if (isShowFormСreationEvent) {
           let newEvents = transformEventData([...events, {...currentEvent, id: ''}], tz);
           if (deadline.flag) {
-            const deadlineForCurrentEvent = Object.assign({}, currentEvent);
+            const deadlineForCurrentEvent = {...currentEvent};
             newEvents = transformEventData(
               [
                 ...newEvents,
@@ -51,14 +51,15 @@ const PreviewButton = ({
         }
         if (isShowFormEditEvent) {
           const copyEvents = events.slice();
-          const copyCurrentEvent = Object.assign({}, currentEvent);
+          const copyCurrentEvent = {...currentEvent};
           const editEventIndex = events.findIndex(event => event.id === currentEventId);
           copyEvents[editEventIndex] = {...copyCurrentEvent, previewEdit: true};
           scheduleLoaded(transformEventData(copyEvents, tz));
           hideFormEditEvent();
         }
       })
-      .then(() => showPreview());
+      .then(() => showPreview())
+      .catch(() => message.error('Required form fields'));
   };
 
   return (

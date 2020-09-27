@@ -82,5 +82,5 @@ export default class ScheduleService {
         'Content-Type': 'application/json;charset=utf-8',
       },
     });
-  }
+  };
 }

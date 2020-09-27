@@ -45,7 +45,7 @@
 }
 
 .event-box.expired {
-  opacity:  .5;
+  opacity: 0.5;
 }
 
 .event-box span {
@@ -55,7 +55,7 @@
 .event-box-time {
   margin-right: 3px;
   font-size: 12px;
-  padding-right: 3px ;
+  padding-right: 3px;
 }
 
 @media screen and (max-width: 700px) {

@@ -270,7 +270,7 @@ const CreateEvent = ({
                 setEvent={setEvent}
                 deadline={deadline}
                 form={form}
-              ></PreviewButton>
+              />
             )}
           </div>
           <div>

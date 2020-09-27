@@ -8,7 +8,10 @@ const eventTypeReducer = (state = initialState, {type, payload}) => {
     case ADD_NEW_TYPE:
       return [...state, payload];
     case DELETE_TYPE:
-      localStorage.setItem('eventTypeStyles', JSON.stringify([...state.filter(el => el.value !== payload)]))
+      localStorage.setItem(
+        'eventTypeStyles',
+        JSON.stringify([...state.filter(el => el.value !== payload)])
+      );
       return [...state.filter(el => el.value !== payload)];
     default:
       return state;

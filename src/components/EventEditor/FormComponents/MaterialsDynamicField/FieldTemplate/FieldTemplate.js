@@ -1,7 +1,10 @@
 import {MinusCircleOutlined} from '@ant-design/icons';
 import {Button, Col, Form, Input, Row} from 'antd';
 import React, {useEffect, useState} from 'react';
+import reactComponentDebounce from 'react-component-debounce';
 import './field-template.css';
+
+const InputDeb = reactComponentDebounce(150, 200)(Input);
 
 const FieldTemplate = ({field, remove}) => {
   const [IsRowView, setIsRowView] = useState('');
@@ -33,7 +36,7 @@ const FieldTemplate = ({field, remove}) => {
             },
           ]}
         >
-          <Input allowClear placeholder="Link name" />
+          <InputDeb allowClear placeholder="Link name" maxLength={80} />
         </Form.Item>
       </Col>
       <Col span={24} sm={12}>
@@ -50,7 +53,7 @@ const FieldTemplate = ({field, remove}) => {
             },
           ]}
         >
-          <Input allowClear placeholder="Link" />
+          <InputDeb allowClear placeholder="Link" />
         </Form.Item>
       </Col>
       {IsRowView ? (

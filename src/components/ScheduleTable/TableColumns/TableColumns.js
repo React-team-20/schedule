@@ -22,7 +22,7 @@ const TableColumns = () => [
   {
     title: 'Type',
     dataIndex: 'type',
-    width: 120,
+    width: 150,
     render: (_, record) => {
       return <TypeField type={record.type} />;
     },

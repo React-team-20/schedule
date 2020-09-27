@@ -9,6 +9,6 @@
 .hidden-event:hover {
   opacity: 1 !important;
 }
-.past-event td:not(.ant-table-cell-fix-right)  {
+.past-event td:not(.ant-table-cell-fix-right) {
   opacity: 0.5;
 }

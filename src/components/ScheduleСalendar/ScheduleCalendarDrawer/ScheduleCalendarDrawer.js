@@ -1,10 +1,9 @@
-import React from 'react';
-import moment from 'moment-timezone';
 import {Tag} from 'antd';
+import React from 'react';
+import {connect} from 'react-redux';
+import {showTaskOverview} from '../../../actions';
 import {setTagStyle} from '../../../utils';
 import './ScheduleCalendarDrawer.css';
-import {connect} from 'react-redux';
-import {showTaskOverview } from '../../../actions';
 
 const connector = connect(
   state => ({
@@ -12,15 +11,21 @@ const connector = connect(
     style: state.styles,
   }),
   dispatch => ({
-    showModal: value => dispatch(showTaskOverview(value))
+    showModal: value => dispatch(showTaskOverview(value)),
   })
 );
 
-const ScheduleCalendarDrawer = ({dayEvents, timezone, style, showModal}) => {
+const ScheduleCalendarDrawer = ({dayEvents, style, showModal}) => {
   return (
     <div className="drawer-calendar-container">
       {dayEvents.map(item => (
-        <div className="event-box-drawer" key={item.id} onClick={()=>{showModal(item.id)}}>
+        <div
+          className="event-box-drawer"
+          key={item.id}
+          onClick={() => {
+            showModal(item.id);
+          }}
+        >
           <div className="tag-time">
             <Tag className="calendar-tag-drawer" color={setTagStyle(item.type, style).background}>
               {item.type
@@ -30,11 +35,17 @@ const ScheduleCalendarDrawer = ({dayEvents, timezone, style, showModal}) => {
                 .join('')}
             </Tag>
             <span className="calendar-time-drawer">
-              <b>{moment(item.dateTime).tz(timezone).format('h:mm')}</b>
+              <b>{item.time}</b>
             </span>
           </div>
-          <div><b>Topic: </b>{item.topic}</div>
-          <span><b>Comment: </b>{item.comment}</span>
+          <div>
+            <b>Topic: </b>
+            {item.topic}
+          </div>
+          <span>
+            <b>Comment: </b>
+            {item.comment}
+          </span>
         </div>
       ))}
     </div>

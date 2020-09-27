@@ -1,36 +1,35 @@
-import {List, Tag, Button, Divider} from 'antd';
-import {EyeOutlined} from '@ant-design/icons';
+import {ClockCircleOutlined, EyeOutlined} from '@ant-design/icons';
+import {Button, Divider, List} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setHiddenEvents, removeHiddenEvent, showTaskOverview} from '../../../actions';
-import EventHideButton from '../../ScheduleTable/EventHideButton';
-import {ClockCircleOutlined} from "@ant-design/icons";
-
+import {removeHiddenEvent, setHiddenEvents, showTaskOverview} from '../../../actions';
 import {
-  dateByMonthAndYearParse, 
-  dateByMonthAndDayParse, 
+  dateByMonthAndDayParse,
+  dateByMonthAndYearParse,
   shortDateByDayOfWeekParse,
-  shortDateByDayParse} from '../../../utils';
+  shortDateByDayParse,
+} from '../../../utils';
 import GithubUserLink from '../../GithubUserLink';
+import EventHideButton from '../../ScheduleTable/EventHideButton';
 import TypeField from '../../ScheduleTable/TypeField';
 
-const ScheduleListItem = (data) => {
+const ScheduleListItem = data => {
   const dispatch = useDispatch();
   const {hiddenEvents} = useSelector(state => state.events);
   const [selectedRows, setSelectedRows] = useState([]);
-  const {timezone, isShowPreview} = useSelector(state => state.app); 
+  const {timezone, isShowPreview} = useSelector(state => state.app);
 
   let listData = data.slice();
 
-  const setTimezone = (data, timezone) => {
-    return data.map((item) => {
-      item.timeZone = timezone;
+  const setTimezone = (events, tz) => {
+    return events.map(item => {
+      item.timeZone = tz;
       return item;
     });
   };
 
   listData = setTimezone(listData, timezone);
- 
+
   const handlerEventShow = id => {
     dispatch(removeHiddenEvent(id));
   };
@@ -53,19 +52,9 @@ const ScheduleListItem = (data) => {
       document.removeEventListener('keyup', enableSelection);
     };
   }, []);
-    
-  const handleClickCapture = (event, id) => {
-    if (event.target.id) return false;
-
-    if (event.shiftKey) {
-      onSelectRow(id, true);
-    } else {
-      onSelectRow(id);
-    }
-  };
 
   const onSelectRow = (id, isShift = false) => {
-    if (isShift) {      
+    if (isShift) {
       if (selectedRows.includes(id)) {
         setSelectedRows(selectedRows.filter(i => i !== id));
       } else {
@@ -76,11 +65,21 @@ const ScheduleListItem = (data) => {
     }
   };
 
+  const handleClickCapture = (event, id) => {
+    if (event.target.id) return false;
+
+    if (event.shiftKey) {
+      onSelectRow(id, true);
+    } else {
+      onSelectRow(id);
+    }
+  };
+
   const showTaskInfo = id => {
     dispatch(showTaskOverview(id));
   };
 
-  const setItemClassName = (item) => {
+  const setItemClassName = item => {
     if (selectedRows.includes(item.id)) {
       return 'list-item selected-list-item';
     }
@@ -89,7 +88,7 @@ const ScheduleListItem = (data) => {
     }
     if (hiddenEvents.includes(item.id) && selectedRows.includes(item.id)) {
       return 'list-item selected-list-item';
-    }   
+    }
     if (item.dateTime < Date.now()) {
       return 'list-item past-event';
     }
@@ -97,113 +96,125 @@ const ScheduleListItem = (data) => {
       return 'list-item selected-list-item';
     }
     return 'list-item';
-  }
+  };
 
   const handlerEventHide = () => {
     dispatch(setHiddenEvents(selectedRows));
     setSelectedRows([]);
-  }; 
-  
-  const getDivider = (data) => {
-    return <Divider className="list-item-divider" orientation="left">{data}</Divider>  
-  };  
-  
-  const getTime = (item) => {
+  };
+
+  const getDivider = val => {
     return (
-      <>       
+      <Divider className="list-item-divider" orientation="left">
+        {val}
+      </Divider>
+    );
+  };
+
+  const getTime = item => {
+    return (
+      <>
         <span className="event-date">{dateByMonthAndDayParse(item.dateTime, item.timeZone)}, </span>
         <span className="event-time">
           <ClockCircleOutlined className="event-time-icon" />
           <span className="time-data">{item.time}</span>
         </span>
       </>
-    )
-  }
-  
-  const getMonthAndYearDivider = (data, index) => {
-    const prevIdx = data[index - 1];
-    const currentDate = dateByMonthAndYearParse(data[index].dateTime, data[index].timeZone);
-  
-    if (prevIdx) {      
-      const previousDate = dateByMonthAndYearParse(data[index - 1].dateTime, data[index].timeZone);
+    );
+  };
+
+  const getMonthAndYearDivider = (events, index) => {
+    const prevIdx = events[index - 1];
+    const currentDate = dateByMonthAndYearParse(events[index].dateTime, events[index].timeZone);
+
+    if (prevIdx) {
+      const previousDate = dateByMonthAndYearParse(
+        events[index - 1].dateTime,
+        events[index].timeZone
+      );
 
       if (previousDate !== currentDate) {
         return getDivider(currentDate);
       }
     } else {
       return getDivider(currentDate);
-    }   
-  }
-  
-
+    }
+  };
 
   return (
     <div className="list-item-wrapper">
-      <div className="hide-button-wrapper">        
-          {selectedRows.length && !isShowPreview ? (
-            <EventHideButton handlerEventHide={handlerEventHide} />
-          ) : (
-            ''
-          )}
-      </div> 
+      <div className="hide-button-wrapper">
+        {selectedRows.length && !isShowPreview ? (
+          <EventHideButton handlerEventHide={handlerEventHide} />
+        ) : (
+          ''
+        )}
+      </div>
       <List
         itemLayout="horizontal"
         dataSource={listData}
         renderItem={(item, index) => (
-         <> 
-          {getMonthAndYearDivider(data, index)}
-          <List.Item 
-            className={setItemClassName(item)}
-            onClickCapture={(event) => handleClickCapture(event, item.id)}
-            onDoubleClick={() => showTaskInfo(item.id)}>
-            <div className="button-wrapper">
-              {hiddenEvents.includes(item.id)
-              ? <Button
-                  type="text"
-                  className="show-event-button list-item-button"
-                  onClick={() => handlerEventShow(item.id)}
-                >      
-                  <EyeOutlined />
-                </Button>
-              : ''}  
-            </div>  
-            <div className="item-list-content">
-              <div className="tag-wrapper">
-                <TypeField type={item.type} />
+          <>
+            {getMonthAndYearDivider(data, index)}
+            <List.Item
+              className={setItemClassName(item)}
+              onClickCapture={event => handleClickCapture(event, item.id)}
+              onDoubleClick={() => showTaskInfo(item.id)}
+            >
+              <div className="button-wrapper">
+                {hiddenEvents.includes(item.id) ? (
+                  <Button
+                    type="text"
+                    className="show-event-button list-item-button"
+                    onClick={() => handlerEventShow(item.id)}
+                  >
+                    <EyeOutlined />
+                  </Button>
+                ) : (
+                  ''
+                )}
               </div>
-              <List.Item.Meta
-                title={
-                  <>
-                    <p className="short-date-wrapper">
-                      <span className="date-week">{shortDateByDayParse(item.dateTime, item.timeZone)}</span>
-                      <span className="date-day">{shortDateByDayOfWeekParse(item.dateTime, item.timeZone)}</span>
-                    </p>
-                    <Button
-                      type="link"
-                      className="info-event-button"
-                      onClick={() => showTaskInfo(item.id)}
-                      style={{padding: '0'}}
-                    >
-                     <span className="event-topic">{item.topic}</span> 
-                    </Button>
-                  </>
-                }
-                description={getTime(item)}
-              />              
-              {item.organizer ? (
-                <div className="item-organizer">
-                  <span className="item-organizer-label">organizer:</span>
-                  {GithubUserLink(item.organizer)}
+              <div className="item-list-content">
+                <div className="tag-wrapper">
+                  <TypeField type={item.type} />
                 </div>
-              ) : (
-                ''
-              )}
-            </div> 
-          </List.Item>   
-        </>         
+                <List.Item.Meta
+                  title={
+                    <>
+                      <p className="short-date-wrapper">
+                        <span className="date-week">
+                          {shortDateByDayParse(item.dateTime, item.timeZone)}
+                        </span>
+                        <span className="date-day">
+                          {shortDateByDayOfWeekParse(item.dateTime, item.timeZone)}
+                        </span>
+                      </p>
+                      <Button
+                        type="link"
+                        className="info-event-button"
+                        onClick={() => showTaskInfo(item.id)}
+                        style={{padding: '0'}}
+                      >
+                        <span className="event-topic">{item.topic}</span>
+                      </Button>
+                    </>
+                  }
+                  description={getTime(item)}
+                />
+                {item.organizer ? (
+                  <div className="item-organizer">
+                    <span className="item-organizer-label">organizer:</span>
+                    {GithubUserLink(item.organizer)}
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+            </List.Item>
+          </>
         )}
       />
-    </div>  
+    </div>
   );
 };
 
